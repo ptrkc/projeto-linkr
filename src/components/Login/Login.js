@@ -7,7 +7,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   function Login(){
-    history.push("/sign-up");
+    history.push("/timeline");
   }
   return (
     <>
@@ -24,7 +24,7 @@ export default function Login() {
             <input onChange={e=>setPassword(e.target.value)} value={password} type="password" placeholder="password" required></input>
             <button type="submit">Log In</button>
           </Form>
-          <StyledLink to="/"><span>First time? Create an account!</span></StyledLink>
+          <StyledLink to="/sign-up"><span>First time? Create an account!</span></StyledLink>
         </FormContainer>
       </Container>  
     </>
