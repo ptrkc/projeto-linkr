@@ -9,6 +9,7 @@ export default function CreatePost() {
   const [urlError, setUrlError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const urlInput = useRef();
+  const avatar = user.user.avatar;
 
   function publish(e) {
     e.preventDefault();
@@ -37,6 +38,7 @@ export default function CreatePost() {
       setUrl("");
       setText("");
       setIsLoading(false);
+      //reloadTimeline()
     });
     createPostRequest.catch((error) => {
       console.log(error.response.data);
@@ -44,6 +46,7 @@ export default function CreatePost() {
       setIsLoading(false);
     });
   }
+
   function isURL(url) {
     const re =
       /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
@@ -53,10 +56,10 @@ export default function CreatePost() {
   return (
     <Container>
       <LeftImage>
-        <UserImage />
+        <UserImage avatar={avatar} />
       </LeftImage>
       <PostForm onSubmit={publish}>
-        <p>O que você tem pra favoritar hoje?</p>
+        <p>What do you want to favorite today?</p>
         <input
           value={url}
           onChange={(e) => {
@@ -107,7 +110,7 @@ const UserImage = styled.div`
   border-radius: 50%;
   width: 50px;
   height: 50px;
-  background-image: url("https://www.gplussoccer.com/wp-content/uploads/2019/11/19336/man-behind-hide-the-pain-harold-meme-on-his-unexpected-viral-fame-800x445.png-quality-70-width-808");
+  background-image: url("${(props) => props.avatar}");
   background-size: cover;
   background-position: center;
 `;
