@@ -1,6 +1,6 @@
 import { useState} from 'react';
-//import axios from 'axios';
-//import Loader from "react-loader-spinner";
+import axios from 'axios';
+import { BsThreeDots } from "react-icons/bs";
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -11,18 +11,34 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
-//const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   function newUser(event){
     event.preventDefault();
-    const body = {
-      email,
-      password,
-      name,
-      image
+    if(email !== "" && password !== "" && name !== "" && image !== ""){
+      setLoading(true);
+      const body = {
+        email,
+        password,
+        username: name,
+        pictureUrl: image
+      }
+      const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-up", body);
+      request.then(response => {
+        history.push("/");
+      });
+      request.catch(error=>{
+        console.log(error.response.status);
+        if(error.response.status===400){
+        } else if(error.response.status===403){
+          alert("Não foi possível realizar o cadastro. O email já esta cadastrado.");
+        }
+        setLoading(false);
+      });
+    } else {
+      alert("Preencha todos os campos!");  
     }
-    console.log(body);
-    history.push("/");
+    
   }
 
   return (
@@ -35,11 +51,13 @@ export default function SignUp() {
       </Introduction>
       <FormContainer>
         <Form onSubmit={newUser}>
-          <input onChange={e=>setEmail(e.target.value)} value={email}type="email" placeholder="e-mail" required></input>
-          <input onChange={e=>setPassword(e.target.value)} value={password} type="password" placeholder="password" required></input>
-          <input onChange={e=>setName(e.target.value)} value={name} type="text" placeholder="username" required></input>
-          <input onChange={e=>setImage(e.target.value)} value={image} type="url" placeholder="picture url" required></input>
-          <button type="submit">Sign Up</button>
+          <input disabled={loading} onChange={e=>setEmail(e.target.value)} value={email}type="email" placeholder="e-mail" required></input>
+          <input disabled={loading} onChange={e=>setPassword(e.target.value)} value={password} type="password" placeholder="password" required></input>
+          <input disabled={loading} onChange={e=>setName(e.target.value)} value={name} type="text" placeholder="username" required></input>
+          <input disabled={loading} onChange={e=>setImage(e.target.value)} value={image} type="url" placeholder="picture url" required></input>
+          <button disabled={loading} type="submit" >
+            {loading?<BsThreeDots fontSize="50px"></BsThreeDots>:<>Sign Up</>}
+          </button>
         </Form>
         <StyledLink to="/"><span>Switch back to log in</span></StyledLink>
       </FormContainer>
