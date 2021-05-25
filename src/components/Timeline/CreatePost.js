@@ -1,11 +1,14 @@
+import axios from "axios";
 import { useRef, useState } from "react";
 import styled from "styled-components";
+import { user } from "./LocalUser";
 
 export default function CreatePost() {
   const [url, setUrl] = useState("");
   const [text, setText] = useState("");
   const [urlError, setUrlError] = useState(false);
-  const urlInput = useRef(null);
+  const urlInput = useRef();
+
   function publish(e) {
     e.preventDefault();
     if (!isURL(url)) {
@@ -13,9 +16,27 @@ export default function CreatePost() {
       urlInput.current.focus();
       return;
     }
-    alert(`${url}\n${text}`);
+    const data = {
+      text,
+      link: url,
+    };
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const createPostRequest = axios.post(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts",
+      data,
+      config
+    );
+    createPostRequest.then((response) => {
+      console.log(response.data);
+    });
+    createPostRequest.catch((error) => {
+      console.log(error.response.data);
+    });
   }
-
   function isURL(url) {
     const re =
       /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
