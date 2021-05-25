@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 
 export default function CreatePost() {
   const [url, setUrl] = useState("");
   const [text, setText] = useState("");
   const [urlError, setUrlError] = useState(false);
-
+  const urlInput = useRef(null);
   function publish(e) {
     e.preventDefault();
     if (!isURL(url)) {
       setUrlError(true);
+      urlInput.current.focus();
       return;
     }
     alert(`${url}\n${text}`);
@@ -36,6 +37,7 @@ export default function CreatePost() {
           }}
           className={urlError ? "url-error" : ""}
           placeholder={urlError ? "Preencha uma URL válida" : "http://..."}
+          ref={urlInput}
         ></input>
         <textarea
           value={text}
