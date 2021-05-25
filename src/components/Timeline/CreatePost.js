@@ -7,6 +7,7 @@ export default function CreatePost() {
   const [url, setUrl] = useState("");
   const [text, setText] = useState("");
   const [urlError, setUrlError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const urlInput = useRef();
 
   function publish(e) {
@@ -16,7 +17,8 @@ export default function CreatePost() {
       urlInput.current.focus();
       return;
     }
-    const data = {
+    setIsLoading(true);
+    const body = {
       text,
       link: url,
     };
@@ -27,14 +29,19 @@ export default function CreatePost() {
     };
     const createPostRequest = axios.post(
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts",
-      data,
+      body,
       config
     );
     createPostRequest.then((response) => {
       console.log(response.data);
+      setUrl("");
+      setText("");
+      setIsLoading(false);
     });
     createPostRequest.catch((error) => {
       console.log(error.response.data);
+      alert("There was an error publishing your link");
+      setIsLoading(false);
     });
   }
   function isURL(url) {
@@ -57,16 +64,20 @@ export default function CreatePost() {
             setUrl(e.target.value);
           }}
           className={urlError ? "url-error" : ""}
-          placeholder={urlError ? "Preencha uma URL válida" : "http://..."}
+          placeholder={urlError ? "Fill in a valid URL" : "https://..."}
           ref={urlInput}
+          disabled={isLoading ? true : false}
         ></input>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Muito irado esse link falando de #javascript"
+          placeholder="Check out these awesome tips to improve your #javascript"
+          disabled={isLoading ? true : false}
         ></textarea>
         <div>
-          <button>Publicar</button>
+          <button disabled={isLoading ? true : false}>
+            {isLoading ? "Publishing..." : "Publish"}
+          </button>
         </div>
       </PostForm>
     </Container>
@@ -157,6 +168,9 @@ const PostForm = styled.form`
       font-size: 14px;
       line-height: 17px;
       color: white;
+    }
+    button:disabled {
+      filter: brightness(0.7);
     }
   }
   @media (max-width: 740px) {
