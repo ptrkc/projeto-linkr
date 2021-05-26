@@ -46,14 +46,14 @@ export default function Timeline() {
           {isLoading ? <Loading /> : ""}
           {posts === null ? (
             error ? (
-              <p>
+              <p className="warning">
                 Houve uma falha ao obter os posts, por favor atualize a página
               </p>
             ) : (
               ""
             )
           ) : posts.length === 0 ? (
-            <p>Nenhum post encontrado</p>
+            <p className="warning">Nenhum post encontrado</p>
           ) : (
             <PostsList posts={posts} />
           )}
