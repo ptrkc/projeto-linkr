@@ -16,7 +16,7 @@ export default function App() {
       <BrowserRouter>
         <Switch>
           <Route path="/" exact>
-            <Login />
+            {user?<Timeline/>:<Login />}
           </Route>
           <Route path="/sign-up" exact>
             <SignUp />
