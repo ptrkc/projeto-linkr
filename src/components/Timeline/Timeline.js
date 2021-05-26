@@ -60,16 +60,7 @@ export default function Timeline() {
         </div>
         <div className="page-right">
           <div className="trending">
-            <p>blablabla</p>
-            <p>blablabla</p>
-            <p>blablabla</p>
-            <p>blablabla</p>
-            <p>blablabla</p>
-            <p>blablabla</p>
-            <p>blablabla</p>
-            <p>blablabla</p>
-            <p>blablabla</p>
-            <p>blablabla</p>
+            <p>Esta feature será implementada em breve!</p>
           </div>
         </div>
       </div>
