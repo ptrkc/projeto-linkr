@@ -6,16 +6,24 @@ import UserContext from "../../contexts/UserContexts";
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const history = useHistory();
+  const { user, setUser } = useContext(UserContext);
+  const [avatar, setAvatar] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      setAvatar(user ? user.avatar : "");
+    }
+  }, [user]);
 
   function toggleMenu(e) {
     e.stopPropagation();
     setIsMenuOpen(!isMenuOpen);
   }
+
   function logOut(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    //delete local storage
-    //setUser null
+    console.log(1);
+    localStorage.removeItem("user");
+    setUser("");
     history.push("/");
   }
 
@@ -39,9 +47,7 @@ export default function Header() {
           <Link to="/my-likes">My Likes</Link>
         </li>
         <li onClick={toggleMenu}>
-          <Link to="#" onClick={() => logOut}>
-            Logout
-          </Link>
+          <div onClick={logOut}>Logout</div>
         </li>
       </Menu>
     </>
@@ -136,6 +142,7 @@ const Menu = styled.ul`
   z-index: 2;
   li {
     width: 100%;
+    div,
     a {
       display: flex;
       align-items: center;
@@ -143,6 +150,7 @@ const Menu = styled.ul`
       height: 100%;
       width: 100%;
       padding: 5px 0px 10px;
+      cursor: pointer;
     }
   }
 `;
