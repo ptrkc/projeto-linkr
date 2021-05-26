@@ -10,6 +10,7 @@ import Login from "../Login/Login";
 import SignUp from "../SignUp/SignUp";
 import Timeline from "../Timeline/Timeline";
 import Header from "../Header/Header";
+import UserPage from "../UserPage.js/UserPage";
 
 export default function App() {
   const [user, setUser] = useState();
@@ -27,6 +28,10 @@ export default function App() {
           <Route path="/timeline" exact>
             <Header />
             <Timeline />
+          </Route>
+          <Route path="/user/:userId" exact>
+            <Header />
+            <UserPage />
           </Route>
         </Switch>
       </BrowserRouter>
