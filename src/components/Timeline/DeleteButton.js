@@ -3,13 +3,36 @@ import { FaTrash } from "react-icons/fa";
 import styled from "styled-components";
 import UserContext from "../../contexts/UserContexts";
 import Modal from "react-modal";
+import axios from "axios";
 Modal.setAppElement("#root");
 
-export default function DeleteButton({ postId, userId }) {
+export default function DeleteButton({ postId, userId, reload }) {
   const { user } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
+
   function toggleModal() {
     setIsOpen(!isOpen);
+  }
+
+  function deletePost() {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const deletePostRequest = axios.delete(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${postId}`,
+      config
+    );
+    deletePostRequest.then((response) => {
+      setIsOpen(false);
+      reload();
+      console.log(response.data);
+    });
+    deletePostRequest.catch((error) => {
+      setIsOpen(false);
+      console.log(error.response.data);
+    });
   }
 
   return userId === user.id ? (
@@ -60,7 +83,7 @@ export default function DeleteButton({ postId, userId }) {
             <button className="cancel" onClick={toggleModal}>
               No, go back
             </button>
-            <button>Yes, delete it</button>
+            <button onClick={deletePost}>Yes, delete it</button>
           </div>
         </ModalContent>
       </Modal>

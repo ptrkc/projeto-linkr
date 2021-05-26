@@ -6,7 +6,7 @@ import Post from "../Styles/Post";
 
 import DeleteButton from "./DeleteButton";
 
-export default function PostsList({ posts }) {
+export default function PostsList({ posts, reload }) {
   return (
     <Container>
       {posts.posts.map((p) => {
@@ -26,7 +26,11 @@ export default function PostsList({ posts }) {
                 <a href={`/user/${p.user.id}`} className="username">
                   {p.user.username}
                 </a>
-                <DeleteButton postId={p.id} userId={p.user.id} />
+                <DeleteButton
+                  postId={p.id}
+                  userId={p.user.id}
+                  reload={reload}
+                />
               </div>
               <p className="user-text">
                 <ReactHashtag
