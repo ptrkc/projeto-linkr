@@ -1,19 +1,29 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
+import UserContext from "../../contexts/UserContexts";
 import { user } from "./LocalUser";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const avatar = user.user.avatar;
+  const history = useHistory();
+
   function toggleMenu(e) {
     e.stopPropagation();
     setIsMenuOpen(!isMenuOpen);
   }
+  function logOut(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    //delete local storage
+    //setUser null
+    history.push("/");
+  }
 
   return (
     <>
-      <StyledHeader onClick={isMenuOpen ? toggleMenu : undefined}>
+      <StyledHeader>
         <Link to="/">
           <Logo>linkr</Logo>
         </Link>
@@ -25,13 +35,15 @@ export default function Header() {
       <ContentOverlay isMenuOpen={isMenuOpen} onClick={toggleMenu} />
       <Menu isMenuOpen={isMenuOpen}>
         <li onClick={toggleMenu}>
-          <Link to="/timeline">My Posts</Link>
+          <Link to="/my-posts">My Posts</Link>
         </li>
         <li onClick={toggleMenu}>
-          <Link to="/timeline">My Likes</Link>
+          <Link to="/my-likes">My Likes</Link>
         </li>
         <li onClick={toggleMenu}>
-          <Link to="/timeline">Logout</Link>
+          <Link to="#" onClick={() => logOut}>
+            Logout
+          </Link>
         </li>
       </Menu>
     </>
@@ -60,6 +72,7 @@ const UserImage = styled.div`
   width: 53px;
   height: 53px;
   background-image: url("${(props) => props.avatar}");
+  background-color: #4d4d4d;
   background-size: cover;
   background-position: center;
 `;
@@ -109,7 +122,7 @@ const Chevron = styled.div`
 const Menu = styled.ul`
   background-color: #151515;
   width: 150px;
-  position: absolute;
+  position: fixed;
   top: ${(props) => (props.isMenuOpen ? "72px" : "-50px")};
   right: -20px;
   transition: 0.5s;
