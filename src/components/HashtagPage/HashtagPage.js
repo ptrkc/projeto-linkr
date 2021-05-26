@@ -24,7 +24,7 @@ export default function HashtagPage() {
       }
     }
     getPosts();
-  }, [user]);
+  }, [user, posts]);
 
   function getPosts() {
     const config = {
