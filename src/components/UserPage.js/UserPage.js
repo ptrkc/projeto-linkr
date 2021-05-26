@@ -1,18 +1,18 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router";
 import UserContext from "../../contexts/UserContexts";
 
 import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
-import CreatePost from "./CreatePost";
-import PostsList from "./PostsList";
-import Trending from "../Trending/Trending";
+import PostsList from "../Timeline/PostsList";
 
-export default function Timeline() {
+export default function UserPage() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const { user, setUser } = useContext(UserContext);
+  const { userId } = useParams();
 
   useEffect(() => {
     if (!user) {
@@ -33,7 +33,7 @@ export default function Timeline() {
     };
 
     const request = axios.get(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts",
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/posts`,
       config
     );
 
@@ -48,10 +48,15 @@ export default function Timeline() {
   }
   return (
     <StyledTimeline>
-      <h1>timeline</h1>
+      <h1>
+        {posts === null
+          ? ""
+          : posts.posts.length >= 0
+          ? `${posts.posts[0].user.username}'s posts`
+          : "error"}
+      </h1>
       <div className="main-content">
         <div className="page-left">
-          <CreatePost getPosts={getPosts} user={user} />
           {isLoading ? <Loading /> : ""}
           {posts === null ? (
             error ? (
@@ -69,7 +74,7 @@ export default function Timeline() {
         </div>
         <div className="page-right">
           <div className="trending">
-            <Trending />
+            <p>Esta feature será implementada em breve!</p>
           </div>
         </div>
       </div>
