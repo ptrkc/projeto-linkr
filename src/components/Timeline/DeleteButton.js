@@ -31,12 +31,10 @@ export default function DeleteButton({ postId, userId, reload }) {
       toggleModal();
       setIsLoading(false);
       reload();
-      console.log(response.data);
     });
     deletePostRequest.catch((error) => {
       setError(true);
       setIsLoading(false);
-      console.log(error.response.data);
     });
   }
 
