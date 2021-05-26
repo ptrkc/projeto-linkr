@@ -69,7 +69,7 @@ export default function Trending(){
                     (loading?
                         "carregando..."
                     : 
-                        (trendingList.length>0?trendingList.map(item=><div onClick={()=>goToHashtag(item.name)}># {item.name}</div>):<></>)                   
+                        (trendingList.length>0?trendingList.map(item=><div key={item.id} onClick={()=>goToHashtag(item.name)}># {item.name}</div>):<></>)                   
                     )
                     
                 }
