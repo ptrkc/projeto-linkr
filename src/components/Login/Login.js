@@ -1,13 +1,66 @@
 import {useHistory, Link} from 'react-router-dom';
 import styled from 'styled-components';
-import {useState} from 'react';
+import {useState, useContext, useEffect} from 'react';
+import axios from 'axios';
+
+import UserContext from "../../contexts/UserContexts";
 
 export default function Login() {
+
   let history = useHistory();
+  const {setUser} = useContext(UserContext);
+
+  let userStorage;
+
+  if(localStorage.user){
+      userStorage = JSON.parse(localStorage.user);
+      setUser(userStorage);
+      history.push("/timeline");   
+  }
+     
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  function Login(){
-    history.push("/timeline");
+  const [loading, setLoading] = useState(false);
+
+  function userLogin(event){
+    event.preventDefault();
+    if(email.length > 0 && password.length > 0){
+      setLoading(true);
+
+      const body = {
+        email,
+        password
+      }   
+
+      const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-in", body);
+      request.then(response=>{
+        console.log(response.data);
+        console.log(response.data.token);
+
+        setUser({
+          id: response.data.user.id,
+          token: response.data.token,
+          username: response.data.user.username,
+          avatar: response.data.user.avatar
+        });
+
+        localStorage.setItem('user', JSON.stringify({
+          id: response.data.user.id,
+          token: response.data.token,
+          username: response.data.user.username,
+          avatar: response.data.user.avatar
+        }));
+
+        history.push("/timeline");
+      });
+      request.catch(error=>{
+        alert("Email/senha incorretos.");
+        setLoading(false);
+      });
+    } else {
+      alert("Preencha todos os campos!");
+    }
+    
   }
   return (
     <>
@@ -19,10 +72,10 @@ export default function Login() {
           </div>
         </Introduction>
         <FormContainer>
-          <Form onSubmit={Login}>
-            <input onChange={e=>setEmail(e.target.value)} value={email}type="email" placeholder="e-mail" required></input>
-            <input onChange={e=>setPassword(e.target.value)} value={password} type="password" placeholder="password" required></input>
-            <button type="submit">Log In</button>
+          <Form onSubmit={userLogin}>
+            <input disabled={loading} onChange={e=>setEmail(e.target.value)} value={email}type="email" placeholder="e-mail" required></input>
+            <input disabled={loading} onChange={e=>setPassword(e.target.value)} value={password} type="password" placeholder="password" required></input>
+            <button disabled={loading} type="submit">Log In</button>
           </Form>
           <StyledLink to="/sign-up"><span>First time? Create an account!</span></StyledLink>
         </FormContainer>
