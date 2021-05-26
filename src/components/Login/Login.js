@@ -34,8 +34,6 @@ export default function Login() {
 
       const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-in", body);
       request.then(response=>{
-        console.log(response.data);
-        console.log(response.data.token);
 
         setUser({
           id: response.data.user.id,
