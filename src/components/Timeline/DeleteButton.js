@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import styled from "styled-components";
 import UserContext from "../../contexts/UserContexts";
 import Modal from "react-modal";
