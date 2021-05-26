@@ -15,7 +15,7 @@ export default function SignUp() {
 
   function newUser(event){
     event.preventDefault();
-    if(email !== "" && password !== "" && name !== "" && image !== ""){
+    if(email.length>0 && password.length>0 && name.length>0 && image.length>0){
       localStorage.clear();
       setLoading(true);
       const body = {
