@@ -4,27 +4,23 @@ import UserContext from "../../contexts/UserContexts";
 
 import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
-import CreatePost from "./CreatePost";
-import PostsList from "./PostsList";
+import PostsList from "../Timeline/PostsList";
 
-export default function Timeline() {
+export default function MyPosts() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const { user } = useContext(UserContext);
 
-  console.log(user);
   useEffect(() => {
     const config = {
       headers: {
-        Authorization: `Bearer ${
-          user ? user.token : "e6fcf752-9914-4c3a-b13f-61099c94e97f"
-        }`,
+        Authorization: `Bearer ${user.token}`,
       },
     };
 
     const request = axios.get(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts",
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${user.user.id}/posts`,
       config
     );
 
@@ -40,10 +36,9 @@ export default function Timeline() {
 
   return (
     <StyledTimeline>
-      <h1>timeline</h1>
+      <h1>my posts</h1>
       <div className="main-content">
         <div className="page-left">
-          <CreatePost />
           {isLoading ? <Loading /> : ""}
           {posts === null ? (
             error ? (
