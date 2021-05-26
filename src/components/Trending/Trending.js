@@ -17,7 +17,7 @@ export default function Trending(){
             setLoading(true);
             const config = {
                 headers: {
-                    "Authorization": `Bearer ${user?user.token:""}`
+                    "Authorization": `Bearer ${user.token}`
                 }
             }
             const request = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending",config);
