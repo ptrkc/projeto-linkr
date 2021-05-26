@@ -10,6 +10,7 @@ import Login from "../Login/Login";
 import SignUp from "../SignUp/SignUp";
 import Timeline from "../Timeline/Timeline";
 import MyPosts from "../MyPosts.js/MyPosts";
+import Header from "../Header/Header";
 
 export default function App() {
   const [user, setUser] = useState();
@@ -25,9 +26,11 @@ export default function App() {
             <SignUp />
           </Route>
           <Route path="/timeline" exact>
+            <Header />
             <Timeline />
           </Route>
           <Route path="/my-posts" exact>
+            <Header />
             <MyPosts />
           </Route>
         </Switch>

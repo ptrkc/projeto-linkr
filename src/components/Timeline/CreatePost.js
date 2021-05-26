@@ -1,11 +1,19 @@
-import { useRef, useState } from "react";
+import axios from "axios";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-export default function CreatePost() {
+export default function CreatePost({ getPosts, user }) {
   const [url, setUrl] = useState("");
   const [text, setText] = useState("");
   const [urlError, setUrlError] = useState(false);
-  const urlInput = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const urlInput = useRef();
+  const [avatar, setAvatar] = useState("");
+
+  useEffect(() => {
+    setAvatar(user ? user.avatar : "");
+  }, [user]);
+
   function publish(e) {
     e.preventDefault();
     if (!isURL(url)) {
@@ -13,7 +21,31 @@ export default function CreatePost() {
       urlInput.current.focus();
       return;
     }
-    alert(`${url}\n${text}`);
+    setIsLoading(true);
+    const body = {
+      text,
+      link: url,
+    };
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const createPostRequest = axios.post(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts",
+      body,
+      config
+    );
+    createPostRequest.then((response) => {
+      setUrl("");
+      setText("");
+      setIsLoading(false);
+      getPosts();
+    });
+    createPostRequest.catch((error) => {
+      alert("There was an error publishing your link");
+      setIsLoading(false);
+    });
   }
 
   function isURL(url) {
@@ -25,10 +57,10 @@ export default function CreatePost() {
   return (
     <Container>
       <LeftImage>
-        <UserImage />
+        <UserImage avatar={avatar} />
       </LeftImage>
       <PostForm onSubmit={publish}>
-        <p>O que você tem pra favoritar hoje?</p>
+        <p>What do you want to favorite today?</p>
         <input
           value={url}
           onChange={(e) => {
@@ -36,16 +68,20 @@ export default function CreatePost() {
             setUrl(e.target.value);
           }}
           className={urlError ? "url-error" : ""}
-          placeholder={urlError ? "Preencha uma URL válida" : "http://..."}
+          placeholder={urlError ? "Fill in a valid URL" : "https://..."}
           ref={urlInput}
+          disabled={isLoading ? true : false}
         ></input>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Muito irado esse link falando de #javascript"
+          placeholder="Check out these awesome tips to improve your #javascript"
+          disabled={isLoading ? true : false}
         ></textarea>
         <div>
-          <button>Publicar</button>
+          <button disabled={isLoading ? true : false}>
+            {isLoading ? "Publishing..." : "Publish"}
+          </button>
         </div>
       </PostForm>
     </Container>
@@ -75,7 +111,7 @@ const UserImage = styled.div`
   border-radius: 50%;
   width: 50px;
   height: 50px;
-  background-image: url("https://www.gplussoccer.com/wp-content/uploads/2019/11/19336/man-behind-hide-the-pain-harold-meme-on-his-unexpected-viral-fame-800x445.png-quality-70-width-808");
+  background-image: url("${(props) => props.avatar}");
   background-size: cover;
   background-position: center;
 `;
@@ -136,6 +172,9 @@ const PostForm = styled.form`
       font-size: 14px;
       line-height: 17px;
       color: white;
+    }
+    button:disabled {
+      filter: brightness(0.7);
     }
   }
   @media (max-width: 740px) {
