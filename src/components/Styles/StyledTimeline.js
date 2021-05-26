@@ -20,6 +20,11 @@ const StyledTimeline = styled.div`
       display: flex;
       flex-direction: column;
       width: 100%;
+      .warning {
+        margin: 15px;
+        font-family: "Oswald", sans-serif;
+        font-size: 20px;
+      }
     }
     .page-right {
       margin-left: 25px;
