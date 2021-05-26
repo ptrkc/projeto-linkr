@@ -14,10 +14,14 @@ export default function Header() {
   return (
     <>
       <StyledHeader onClick={isMenuOpen ? toggleMenu : undefined}>
+        <Link to="/">
+          <Logo>linkr</Logo>
+        </Link>
         <ShowMenuButton onClick={toggleMenu}>
           <Chevron isMenuOpen={isMenuOpen} /> <UserImage avatar={avatar} />
         </ShowMenuButton>
       </StyledHeader>
+      <HeaderOverlay isMenuOpen={isMenuOpen} onClick={toggleMenu} />
       <ContentOverlay isMenuOpen={isMenuOpen} onClick={toggleMenu} />
       <Menu isMenuOpen={isMenuOpen}>
         <li onClick={toggleMenu}>
@@ -33,7 +37,12 @@ export default function Header() {
     </>
   );
 }
-
+const Logo = styled.h1`
+  font-family: Passion One;
+  font-weight: bold;
+  font-size: 49px;
+  letter-spacing: 2px;
+`;
 const ContentOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -47,7 +56,7 @@ const ContentOverlay = styled.div`
 `;
 const UserImage = styled.div`
   border-radius: 50%;
-  margin: 0px 16px 0px 26px;
+  margin-left: 26px;
   width: 53px;
   height: 53px;
   background-image: url("${(props) => props.avatar}");
@@ -60,11 +69,21 @@ const StyledHeader = styled.div`
   left: 0;
   right: 0;
   height: 72px;
+  padding: 0px 16px;
   background-color: #151515;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   z-index: 3;
+`;
+const HeaderOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 130px;
+  height: 72px;
+  display: ${(props) => (props.isMenuOpen ? "block" : "none")};
+  z-index: 4;
 `;
 
 const ShowMenuButton = styled.button`
