@@ -12,6 +12,7 @@ import Timeline from "../Timeline/Timeline";
 import MyPosts from "../MyPosts.js/MyPosts";
 import Header from "../Header/Header";
 import HashtagPage from "../HashtagPage/HashtagPage";
+import UserPage from "../UserPage.js/UserPage";
 
 export default function App() {
   const [user, setUser] = useState();
@@ -33,6 +34,10 @@ export default function App() {
           <Route path="/my-posts" exact>
             <Header />
             <MyPosts />
+          </Route>
+          <Route path="/user/:userId" exact>
+            <Header />
+            <UserPage />
           </Route>
           <Route path="/hashtag/:hashtag" exact>
             <Header />
