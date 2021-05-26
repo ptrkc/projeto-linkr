@@ -6,6 +6,7 @@ import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
 import CreatePost from "./CreatePost";
 import PostsList from "./PostsList";
+import Trending from "../Trending/Trending";
 
 export default function Timeline() {
   const [posts, setPosts] = useState(null);
@@ -68,7 +69,7 @@ export default function Timeline() {
         </div>
         <div className="page-right">
           <div className="trending">
-            <p>Esta feature será implementada em breve!</p>
+            <Trending />
           </div>
         </div>
       </div>
