@@ -1,15 +1,18 @@
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { user } from "./LocalUser";
 
-export default function CreatePost() {
+export default function CreatePost({ getPosts, user }) {
   const [url, setUrl] = useState("");
   const [text, setText] = useState("");
   const [urlError, setUrlError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const urlInput = useRef();
-  const avatar = user.user.avatar;
+  const [avatar, setAvatar] = useState("");
+
+  useEffect(() => {
+    setAvatar(user ? user.avatar : "");
+  }, [user]);
 
   function publish(e) {
     e.preventDefault();
@@ -34,14 +37,12 @@ export default function CreatePost() {
       config
     );
     createPostRequest.then((response) => {
-      console.log(response.data);
       setUrl("");
       setText("");
       setIsLoading(false);
-      //reloadTimeline()
+      getPosts();
     });
     createPostRequest.catch((error) => {
-      console.log(error.response.data);
       alert("There was an error publishing your link");
       setIsLoading(false);
     });
