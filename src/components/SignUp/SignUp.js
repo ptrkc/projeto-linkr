@@ -16,7 +16,6 @@ export default function SignUp() {
   function newUser(event){
     event.preventDefault();
     if(email.length>0 && password.length>0 && name.length>0 && image.length>0){
-      localStorage.clear();
       setLoading(true);
       const body = {
         email,
@@ -38,7 +37,6 @@ export default function SignUp() {
     } else {
       alert("Preencha todos os campos!");  
     }
-    
   }
 
   return (
