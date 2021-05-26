@@ -13,22 +13,24 @@ export default function Trending(){
     let history = useHistory();
 
     useEffect(() => {
-        setLoading(true);
-        const config = {
-            headers: {
-                "Authorization": `Bearer ${user?user.token:""}`
+        if(user){
+            setLoading(true);
+            const config = {
+                headers: {
+                    "Authorization": `Bearer ${user?user.token:""}`
+                }
             }
-        }
-		const request = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending",config);
+            const request = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending",config);
 
-        request.then(response=>{
-            setTrendingList(response.data.hashtags);
-            setLoading(false);
-        });
-        request.catch(error=>{
-            handler(error);
-            setLoading(false);
-        });
+            request.then(response=>{
+                setTrendingList(response.data.hashtags);
+                setLoading(false);
+            });
+            request.catch(error=>{
+                handler(error);
+                setLoading(false);
+            });
+        }
 	},[user]);
 
     function goToHashtag(name){
