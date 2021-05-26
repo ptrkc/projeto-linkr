@@ -8,15 +8,15 @@ import UserContext from "../../contexts/UserContexts";
 export default function Login() {
 
   let history = useHistory();
-  const {setUser} = useContext(UserContext);
+  const {setUser} = useContext(UserContext); 
 
-  let userStorage;
-
-  if(localStorage.user){
-      userStorage = JSON.parse(localStorage.user);
+  useEffect(() => {
+		if(localStorage.user){
+      const userStorage = JSON.parse(localStorage.user);
       setUser(userStorage);
-      history.push("/timeline");   
-  }
+      history.push("/timeline");  
+    }
+	});
      
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
