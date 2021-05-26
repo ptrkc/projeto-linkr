@@ -15,7 +15,7 @@ export default function SignUp() {
 
   function newUser(event){
     event.preventDefault();
-    if(email !== "" && password !== "" && name !== "" && image !== ""){
+    if(email.length>0 && password.length>0 && name.length>0 && image.length>0){
       setLoading(true);
       const body = {
         email,
@@ -28,7 +28,6 @@ export default function SignUp() {
         history.push("/");
       });
       request.catch(error=>{
-        console.log(error.response.status);
         if(error.response.status===400){
         } else if(error.response.status===403){
           alert("Não foi possível realizar o cadastro. O email já esta cadastrado.");
@@ -38,7 +37,6 @@ export default function SignUp() {
     } else {
       alert("Preencha todos os campos!");  
     }
-    
   }
 
   return (
