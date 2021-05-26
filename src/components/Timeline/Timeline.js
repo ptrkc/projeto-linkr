@@ -12,14 +12,23 @@ export default function Timeline() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
+    if (!user) {
+      if (localStorage.user) {
+        const userStorage = JSON.parse(localStorage.user);
+        setUser(userStorage);
+        return;
+      }
+    }
+    getPosts();
+  }, [user]);
+
+  function getPosts() {
     const config = {
       headers: {
-        Authorization: `Bearer ${
-          user ? user.token : "e6fcf752-9914-4c3a-b13f-61099c94e97f"
-        }`,
+        Authorization: `Bearer ${user.token}`,
       },
     };
 
@@ -36,14 +45,13 @@ export default function Timeline() {
       setIsLoading(false);
       setError(true);
     });
-  }, [user]);
-
+  }
   return (
     <StyledTimeline>
       <h1>timeline</h1>
       <div className="main-content">
         <div className="page-left">
-          <CreatePost />
+          <CreatePost getPosts={getPosts} user={user} />
           {isLoading ? <Loading /> : ""}
           {posts === null ? (
             error ? (
