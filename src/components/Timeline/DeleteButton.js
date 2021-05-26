@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import styled from "styled-components";
 import UserContext from "../../contexts/UserContexts";
 import Modal from "react-modal";
@@ -9,6 +9,8 @@ Modal.setAppElement("#root");
 export default function DeleteButton({ postId, userId, reload }) {
   const { user } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   function toggleModal() {
     setIsOpen(!isOpen);
@@ -24,13 +26,16 @@ export default function DeleteButton({ postId, userId, reload }) {
       `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${postId}`,
       config
     );
+    setIsLoading(true);
     deletePostRequest.then((response) => {
-      setIsOpen(false);
+      toggleModal();
+      setIsLoading(false);
       reload();
       console.log(response.data);
     });
     deletePostRequest.catch((error) => {
-      setIsOpen(false);
+      setError(true);
+      setIsLoading(false);
       console.log(error.response.data);
     });
   }
@@ -77,16 +82,43 @@ export default function DeleteButton({ postId, userId, reload }) {
         onRequestClose={toggleModal}
         contentLabel="My dialog"
       >
-        <ModalContent>
-          <p>Are you sure you want to delete this post?</p>
-          <div>
-            <button className="cancel" onClick={toggleModal}>
-              No, go back
-            </button>
-            <button onClick={deletePost}>Yes, delete it</button>
-          </div>
+        <ModalContent isLoading={isLoading} error={error}>
+          {error ? (
+            <>
+              <p>Error: Could not delete your post at this time.</p>
+              <div>
+                <button
+                  className="cancel"
+                  onClick={() => {
+                    toggleModal();
+                    setError(false);
+                  }}
+                  disabled={isLoading}
+                >
+                  Ok, go back
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <p>Are you sure you want to delete this post?</p>
+              <div>
+                <button
+                  className="cancel"
+                  onClick={toggleModal}
+                  disabled={isLoading}
+                >
+                  No, go back
+                </button>
+                <button onClick={deletePost} disabled={isLoading}>
+                  {isLoading ? "Deleting..." : "Yes, delete it"}
+                </button>
+              </div>
+            </>
+          )}
         </ModalContent>
       </Modal>
+      <Overlay isLoading={isLoading} />
     </>
   ) : (
     ""
@@ -114,7 +146,7 @@ const ModalContent = styled.div`
   div {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: ${(props) => (props.error ? "center" : "space-between")};
     padding: 0px 30px;
     button {
       width: 134px;
@@ -132,5 +164,18 @@ const ModalContent = styled.div`
       background: #ffffff;
       color: #1877f2;
     }
+    button:disabled {
+      filter: brightness(0.7);
+    }
   }
+`;
+const Overlay = styled.div`
+  display: ${(props) => (props.isLoading ? "block" : "none")};
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: transparent;
+  z-index: 5;
 `;
