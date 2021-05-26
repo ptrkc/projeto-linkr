@@ -22,7 +22,7 @@ export default function Timeline() {
       }
     }
     getPosts();
-  }, [user]);
+  }, [user, getPosts]);
 
   function getPosts() {
     const config = {
