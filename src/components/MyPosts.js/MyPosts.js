@@ -20,7 +20,7 @@ export default function MyPosts() {
     };
 
     const request = axios.get(
-      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${user.user.id}/posts`,
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${user.id}/posts`,
       config
     );
 

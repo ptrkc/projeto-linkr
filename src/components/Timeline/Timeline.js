@@ -13,7 +13,6 @@ export default function Timeline() {
   const [error, setError] = useState(false);
   const { user, setUser } = useContext(UserContext);
 
-  console.log(user);
   useEffect(() => {
     if (!user) {
       if (localStorage.user) {
