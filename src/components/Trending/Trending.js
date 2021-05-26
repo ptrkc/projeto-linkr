@@ -8,33 +8,71 @@ export default function Trending(){
     
     const {user} = useContext(UserContext);
     const [trendingList, setTrendingList] = useState([]);
+    const [requestError, setRequestError] = useState();
+    const [loading, setLoading] = useState(false);
     let history = useHistory();
 
-    console.log(trendingList);
     useEffect(() => {
+        setLoading(true);
         const config = {
             headers: {
                 "Authorization": `Bearer ${user?user.token:""}`
             }
         }
 		const request = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending",config);
-        request.then(response=>{
-            const hashtags=response.data.hashtags;
 
-            setTrendingList(hashtags);
+        request.then(response=>{
+            setTrendingList(response.data.hashtags);
+            setLoading(false);
         });
-        request.catch(error=>console.log(error));
+        request.catch(error=>{
+            handler(error);
+            setLoading(false);
+        });
 	},[user]);
 
     function goToHashtag(name){
         history.push("/hashtag/"+name);
     }
 
+    function handler(error){
+        setRequestError(error.response.statusText);  
+    }
+
+    function refresh(){
+        setLoading(true);
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${user?user.token:""}`
+            }
+        }
+		const request = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending",config);
+        
+        request.then(response=>{
+            setTrendingList(response.data.hashtags);
+            setRequestError();
+            setLoading(false);
+        });
+        request.catch(error=>{
+            handler(error);
+            setLoading(false);
+        });
+    }
+
     return(
         <Container>
             <Title>trending</Title>
             <ContainerList>
-                {trendingList.length>0?trendingList.map(item=><div onClick={()=>goToHashtag(item.name)}># {item.name}</div>):<></>}
+                {requestError?
+                    <div onClick={refresh}>{requestError}</div>
+                :
+                    (loading?
+                        "carregando..."
+                    : 
+                        (trendingList.length>0?trendingList.map(item=><div onClick={()=>goToHashtag(item.name)}># {item.name}</div>):<></>)                   
+                    )
+                    
+                }
             </ContainerList>
         </Container>);
 }
