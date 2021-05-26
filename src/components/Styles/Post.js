@@ -11,7 +11,7 @@ const Post = styled.div`
   margin-top: 30px;
   font-family: Lato;
 
-  div.left {
+  div.post-left {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,7 +38,7 @@ const Post = styled.div`
     }
   }
 
-  div.right {
+  div.post-right {
     width: calc(100% - 70px);
     margin-left: 15px;
     p {
@@ -104,7 +104,7 @@ const Post = styled.div`
     padding: 10px;
     border-radius: 0px;
 
-    div.left {
+    div.post-left {
       a.user-image {
         margin-bottom: 15px;
       }
@@ -117,7 +117,7 @@ const Post = styled.div`
         line-height: 11px;
       }
     }
-    div.right {
+    div.post-right {
       width: calc(100% - 50px);
       a.username {
         font-size: 17px;

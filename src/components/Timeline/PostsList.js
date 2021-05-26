@@ -10,7 +10,7 @@ export default function PostsList({ posts }) {
       {posts.posts.map((p) => {
         return (
           <Post image={p.linkImage} key={p.id}>
-            <div className="left">
+            <div className="post-left">
               <a className="user-image" href={`/user/${p.user.id}`}>
                 <img src={p.user.avatar} alt="user avatar" />
               </a>
@@ -19,7 +19,7 @@ export default function PostsList({ posts }) {
                 {p.likes.length} {p.likes.length === 1 ? "like" : "likes"}
               </p>
             </div>
-            <div className="right">
+            <div className="post-right">
               <a href={`/user/${p.user.id}`} className="username">
                 {p.user.username}
               </a>
