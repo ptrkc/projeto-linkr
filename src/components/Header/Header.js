@@ -1,12 +1,10 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import UserContext from "../../contexts/UserContexts";
-import { user } from "./LocalUser";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const avatar = user.user.avatar;
   const history = useHistory();
 
   function toggleMenu(e) {
