@@ -1,30 +1,49 @@
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
-import Post from "../Styles/Post";
 import styled from "styled-components";
+import ReactHashtag from "react-hashtag";
+
+import Post from "../Styles/Post";
 
 export default function PostsList({ posts }) {
-  const history = useHistory();
   return (
     <Container>
       {posts.posts.map((p) => {
         return (
-          <Post image={p.linkImage}>
+          <Post image={p.linkImage} key={p.id}>
             <div className="left">
-              <Link to={`/user/${p.user.id}`}>
-                <img src={p.user.avatar} />
-              </Link>
+              <a className="user-image" href={`/user/${p.user.id}`}>
+                <img src={p.user.avatar} alt="user avatar" />
+              </a>
               <BiHeart />
               <p className="likes">
                 {p.likes.length} {p.likes.length === 1 ? "like" : "likes"}
               </p>
             </div>
             <div className="right">
-              <Link to={`/user/${p.user.id}`}>
-                <p className="username">{p.user.username}</p>
-              </Link>
-              <p className="user-text">{p.text}</p>
-              <a href={p.link} className="link" target="_blank">
+              <a href={`/user/${p.user.id}`} className="username">
+                {p.user.username}
+              </a>
+              <p className="user-text">
+                <ReactHashtag
+                  renderHashtag={(hashtagValue) => (
+                    <a
+                      href={`/hashtag/${hashtagValue.substring(1)}`}
+                      className="hashtag"
+                    >
+                      {hashtagValue}
+                    </a>
+                  )}
+                >
+                  {p.text}
+                </ReactHashtag>
+              </p>
+              <a
+                href={p.link}
+                className="link"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <div className="texts">
                   <p className="link-title">{p.linkTitle}</p>
                   <p className="link-description">{p.linkDescription}</p>
@@ -43,4 +62,5 @@ export default function PostsList({ posts }) {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px;
 `;

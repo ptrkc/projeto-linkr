@@ -5,7 +5,7 @@ export default function Loading() {
   return (
     <Container>
       <p>Loading</p>
-      <img src={loading} />
+      <img src={loading} alt="loading gif" />
     </Container>
   );
 }

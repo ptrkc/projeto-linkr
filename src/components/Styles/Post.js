@@ -9,29 +9,26 @@ const Post = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 16px;
   margin-top: 30px;
+  font-family: Lato;
 
   div.left {
     display: flex;
     flex-direction: column;
     align-items: center;
 
+    a.user-image {
+      border-radius: 50%;
+      margin-bottom: 20px;
+    }
     img {
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      margin-bottom: 20px;
     }
     svg {
       color: #fff;
       width: 20px;
       height: 18px;
-    }
-    p {
-      font-family: Lato;
-      font-weight: normal;
-      font-size: 11px;
-      line-height: 13px;
-      color: #fff;
     }
     p.likes {
       margin-top: 5px;
@@ -46,9 +43,8 @@ const Post = styled.div`
     margin-left: 15px;
     p {
       margin-bottom: 8px;
-      font-family: Lato;
     }
-    p.username {
+    a.username {
       font-size: 19px;
       line-height: 23px;
       color: #fff;
@@ -56,6 +52,10 @@ const Post = styled.div`
     p.user-text {
       font-size: 17px;
       line-height: 20px;
+    }
+    a.hashtag {
+      font-weight: bold;
+      color: #fff;
     }
     a.link {
       width: 100%;
@@ -67,7 +67,7 @@ const Post = styled.div`
 
       .texts {
         margin: 15px;
-        max-width: 310px;
+        max-width: calc(100% - 175px);
         p.link-title {
           font-size: 16px;
           line-height: 19px;
@@ -101,14 +101,16 @@ const Post = styled.div`
 
   @media (max-width: 740px) {
     margin-top: 15px;
-    padding: 10px 15px;
+    padding: 10px;
     border-radius: 0px;
 
     div.left {
+      a.user-image {
+        margin-bottom: 15px;
+      }
       img {
         height: 40px;
         width: 40px;
-        margin-bottom: 15px;
       }
       p.likes {
         font-size: 9px;
@@ -116,10 +118,34 @@ const Post = styled.div`
       }
     }
     div.right {
-      div.link {
-        img {
+      width: calc(100% - 50px);
+      a.username {
+        font-size: 17px;
+        line-height: 20px;
+      }
+      p.user-text {
+        font-size: 15px;
+        line-height: 18px;
+      }
+      a.link {
+        .texts {
+          margin: 8px;
+          max-width: calc(100% - 110px);
+        }
+        p.link-title {
+          font-size: 11px;
+          line-height: 13px;
+        }
+        p.link-description {
+          font-size: 9px;
+          line-height: 11px;
+        }
+        p.link-url {
+          font-size: 9px;
+          line-height: 11px;
+        }
+        .image {
           width: 95px;
-          height: 115px;
         }
       }
     }

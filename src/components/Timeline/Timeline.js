@@ -9,6 +9,7 @@ import PostsList from "./PostsList";
 export default function Timeline() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
   const { user } = useContext(UserContext);
 
   useEffect(() => {
@@ -28,13 +29,12 @@ export default function Timeline() {
     request.then((response) => {
       setPosts(response.data);
       setIsLoading(false);
-      console.log(response.data);
     });
     request.catch((error) => {
       setIsLoading(false);
-      setPosts([]);
+      setError(true);
     });
-  }, []);
+  }, [user]);
 
   return (
     <StyledTimeline>
@@ -44,7 +44,13 @@ export default function Timeline() {
           <CreatePost />
           {isLoading ? <Loading /> : ""}
           {posts === null ? (
-            ""
+            error ? (
+              <p>
+                Houve uma falha ao obter os posts, por favor atualize a página
+              </p>
+            ) : (
+              ""
+            )
           ) : posts.length === 0 ? (
             <p>Nenhum post encontrado</p>
           ) : (
