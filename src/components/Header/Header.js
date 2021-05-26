@@ -21,7 +21,6 @@ export default function Header() {
   }
 
   function logOut(e) {
-    console.log(1);
     localStorage.removeItem("user");
     setUser("");
     history.push("/");
