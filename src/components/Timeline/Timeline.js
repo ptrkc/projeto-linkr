@@ -1,14 +1,55 @@
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import UserContext from "../../contexts/UserContexts";
+import Loading from "../Loading/Loading";
 import CreatePost from "./CreatePost";
+import PostsList from "./PostsList";
 
 export default function Timeline() {
+  const [posts, setPosts] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${
+          user ? user.token : "e6fcf752-9914-4c3a-b13f-61099c94e97f"
+        }`,
+      },
+    };
+
+    const request = axios.get(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts",
+      config
+    );
+
+    request.then((response) => {
+      setPosts(response.data);
+      setIsLoading(false);
+      console.log(response.data);
+    });
+    request.catch((error) => {
+      setIsLoading(false);
+      setPosts([]);
+    });
+  }, []);
+
   return (
     <StyledTimeline>
       <h1>timeline</h1>
       <MainContent>
         <Left>
           <CreatePost />
-          {/* <Feed /> */}
+          {isLoading ? <Loading /> : ""}
+          {posts === null ? (
+            ""
+          ) : posts.length === 0 ? (
+            <p>Nenhum post encontrado</p>
+          ) : (
+            <PostsList posts={posts} />
+          )}
         </Left>
         <Right>
           <Trending>
