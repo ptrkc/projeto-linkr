@@ -89,7 +89,7 @@ const StyledTimeline = styled.div`
     margin-bottom: 43px;
   }
   @media (max-width: 740px) {
-    margin: 91px auto 0px;
+    margin: 90px auto 0px;
     padding: 0px;
     h1 {
       padding-left: 17px;

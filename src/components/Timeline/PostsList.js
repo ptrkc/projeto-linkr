@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { BiHeart } from "react-icons/bi";
 import styled from "styled-components";
 import ReactHashtag from "react-hashtag";
