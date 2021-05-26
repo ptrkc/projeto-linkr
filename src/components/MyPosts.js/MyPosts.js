@@ -5,6 +5,7 @@ import UserContext from "../../contexts/UserContexts";
 import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
 import PostsList from "../Timeline/PostsList";
+import Trending from "../Trending/Trending";
 
 export default function MyPosts() {
   const [posts, setPosts] = useState(null);
@@ -56,7 +57,7 @@ export default function MyPosts() {
         </div>
         <div className="page-right">
           <div className="trending">
-            <p>Esta feature será implementada em breve!</p>
+            <Trending />
           </div>
         </div>
       </div>
