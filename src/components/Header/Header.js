@@ -20,7 +20,7 @@ export default function Header() {
     setIsMenuOpen(!isMenuOpen);
   }
 
-  function logOut(e) {
+  function logOut() {
     localStorage.removeItem("user");
     setUser("");
     history.push("/");
