@@ -11,9 +11,20 @@ export default function MyPosts() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
+    if (!user) {
+      if (localStorage.user) {
+        const userStorage = JSON.parse(localStorage.user);
+        setUser(userStorage);
+        return;
+      }
+    }
+    getMyPosts();
+  }, [user]);
+
+  function getMyPosts() {
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -33,7 +44,7 @@ export default function MyPosts() {
       setIsLoading(false);
       setError(true);
     });
-  }, [user]);
+  }
 
   return (
     <StyledTimeline>
@@ -52,7 +63,7 @@ export default function MyPosts() {
           ) : posts.posts.length === 0 ? (
             <p className="warning">Nenhum post encontrado</p>
           ) : (
-            <PostsList posts={posts} />
+            <PostsList posts={posts} reload={getMyPosts} />
           )}
         </div>
         <div className="page-right">

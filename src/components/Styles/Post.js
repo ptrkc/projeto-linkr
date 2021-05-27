@@ -10,6 +10,7 @@ const Post = styled.div`
   border-radius: 16px;
   margin-top: 30px;
   font-family: Lato;
+  position: relative;
 
   div.post-left {
     display: flex;
@@ -42,6 +43,11 @@ const Post = styled.div`
     width: calc(100% - 70px);
     margin-left: 15px;
     p {
+      margin-bottom: 8px;
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
       margin-bottom: 8px;
     }
     a.username {

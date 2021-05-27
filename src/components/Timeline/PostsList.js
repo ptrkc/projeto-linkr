@@ -4,7 +4,9 @@ import ReactHashtag from "react-hashtag";
 
 import Post from "../Styles/Post";
 
-export default function PostsList({ posts }) {
+import DeleteButton from "./DeleteButton";
+
+export default function PostsList({ posts, reload }) {
   return (
     <Container>
       {posts.posts.map((p) => {
@@ -20,9 +22,16 @@ export default function PostsList({ posts }) {
               </p>
             </div>
             <div className="post-right">
-              <a href={`/user/${p.user.id}`} className="username">
-                {p.user.username}
-              </a>
+              <div className="top">
+                <a href={`/user/${p.user.id}`} className="username">
+                  {p.user.username}
+                </a>
+                <DeleteButton
+                  postId={p.id}
+                  userId={p.user.id}
+                  reload={reload}
+                />
+              </div>
               <p className="user-text">
                 <ReactHashtag
                   renderHashtag={(hashtagValue) => (
