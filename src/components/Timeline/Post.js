@@ -69,7 +69,7 @@ export default function Post({ post, reload }) {
       },
     };
     const editPostRequest = axios.put(
-      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/AS${id}`,
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${id}`,
       body,
       config
     );
