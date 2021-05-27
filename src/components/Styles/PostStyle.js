@@ -70,6 +70,7 @@ const PostStyle = styled.div`
         border-radius: 7px;
         border: none;
         padding: 4px 9px 0px;
+        resize: none;
       }
       textarea:disabled {
         filter: brightness(0.7);
