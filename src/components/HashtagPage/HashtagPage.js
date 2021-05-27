@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router";
 import UserContext from "../../contexts/UserContexts";
 
 import Loading from "../Loading/Loading";
@@ -7,11 +8,12 @@ import StyledTimeline from "../Styles/StyledTimeline";
 import PostsList from "../Timeline/PostsList";
 import Trending from "../Trending/Trending";
 
-export default function MyPosts() {
+export default function HashtagPage() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const { user, setUser } = useContext(UserContext);
+  const { hashtag } = useParams();
 
   useEffect(() => {
     if (!user) {
@@ -21,10 +23,10 @@ export default function MyPosts() {
         return;
       }
     }
-    getMyPosts();
-  }, [user]);
+    getPosts();
+  }, [user, posts]);
 
-  function getMyPosts() {
+  function getPosts() {
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -32,7 +34,7 @@ export default function MyPosts() {
     };
 
     const request = axios.get(
-      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${user.id}/posts`,
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts`,
       config
     );
 
@@ -45,10 +47,9 @@ export default function MyPosts() {
       setError(true);
     });
   }
-
   return (
     <StyledTimeline>
-      <h1>my posts</h1>
+      <h1># {hashtag}</h1>
       <div className="main-content">
         <div className="page-left">
           {isLoading ? <Loading /> : ""}
@@ -63,7 +64,7 @@ export default function MyPosts() {
           ) : posts.length === 0 ? (
             <p className="warning">Nenhum post encontrado</p>
           ) : (
-            <PostsList posts={posts} reload={getMyPosts} />
+            <PostsList posts={posts} />
           )}
         </div>
         <div className="page-right">
