@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Post = styled.div`
+const PostStyle = styled.div`
   display: flex;
   width: 100%;
   padding: 20px;
@@ -61,6 +61,14 @@ const Post = styled.div`
     p.user-text {
       font-size: 17px;
       line-height: 20px;
+      textarea {
+        width: 100%;
+        min-height: 44px;
+        background: #ffffff;
+        border-radius: 7px;
+        border: none;
+        padding: 4px 9px 0px;
+      }
     }
     a.hashtag {
       font-weight: bold;
@@ -161,4 +169,4 @@ const Post = styled.div`
   }
 `;
 
-export default Post;
+export default PostStyle;

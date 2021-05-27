@@ -3,12 +3,12 @@ import { TiPencil } from "react-icons/ti";
 import styled from "styled-components";
 import UserContext from "../../contexts/UserContexts";
 
-export default function EditButton({ userId }) {
+export default function EditButton({ userId, edit }) {
   const { user } = useContext(UserContext);
 
   return userId === user.id ? (
     <>
-      <PencilButton>
+      <PencilButton onClick={edit}>
         <TiPencil />
       </PencilButton>
     </>
