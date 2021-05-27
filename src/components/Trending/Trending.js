@@ -69,7 +69,7 @@ export default function Trending(){
                     <div onClick={refresh}>{requestError}</div>
                 :
                     (loading?
-                        "carregando..."
+                        "loading..."
                     : 
                         (trendingList.length>0?trendingList.map(item=><div key={item.id} onClick={()=>goToHashtag(item.name)}># {item.name}</div>):<></>)                   
                     )
@@ -103,5 +103,6 @@ const ContainerList = styled.div`
     
     div {
         margin-bottom: 5px;
+        cursor: pointer;
     }
 `;
