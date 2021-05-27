@@ -1,8 +1,8 @@
-import { BiHeart } from "react-icons/bi";
 import styled from "styled-components";
 import ReactHashtag from "react-hashtag";
 
 import Post from "../Styles/Post";
+import Likes from '../Likes/Likes';
 
 export default function PostsList({ posts }) {
   return (
@@ -14,17 +14,14 @@ export default function PostsList({ posts }) {
               <a className="user-image" href={`/user/${p.user.id}`}>
                 <img src={p.user.avatar} alt="user avatar" />
               </a>
-              <BiHeart />
-              <p className="likes">
-                {p.likes.length} {p.likes.length === 1 ? "like" : "likes"}
-              </p>
+              <Likes post={p}></Likes>
             </div>
             <div className="post-right">
               <a href={`/user/${p.user.id}`} className="username">
                 {p.user.username}
               </a>
               <p className="user-text">
-                <ReactHashtag
+                <ReactHashtag 
                   renderHashtag={(hashtagValue) => (
                     <a
                       href={`/hashtag/${hashtagValue.substring(1)}`}

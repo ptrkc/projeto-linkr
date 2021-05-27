@@ -30,12 +30,6 @@ const Post = styled.div`
       width: 20px;
       height: 18px;
     }
-    p.likes {
-      margin-top: 5px;
-      font-size: 11px;
-      line-height: 13px;
-      color: #fff;
-    }
   }
 
   div.post-right {
