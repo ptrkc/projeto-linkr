@@ -3,6 +3,9 @@ import { TiPencil } from "react-icons/ti";
 import styled from "styled-components";
 import UserContext from "../../contexts/UserContexts";
 import Modal from "react-modal";
+
+import "./ModalStyle.css";
+
 Modal.setAppElement("#root");
 
 export default function EditButton({
@@ -20,42 +23,7 @@ export default function EditButton({
         <TiPencil />
       </PencilButton>
       {error && (
-        <Modal
-          style={{
-            overlay: {
-              position: "fixed",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: "rgba(255, 255, 255, 0.90)",
-              zIndex: 4,
-            },
-            content: {
-              position: "relative",
-              inset: "0px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-              border: "none",
-              width: "100%",
-              height: "100%",
-              maxWidth: "600px",
-              maxHeight: "260px",
-              WebkitOverflowScrolling: "touch",
-              outline: "none",
-              padding: "0px",
-              background: "#333333",
-              borderRadius: "50px",
-            },
-          }}
-          isOpen={true}
-          contentLabel="My dialog"
-        >
+        <Modal className="content" overlayClassName="overlay" isOpen={true}>
           <ModalContent>
             <p>Error: Could not edit your post at this time.</p>
             <div>
