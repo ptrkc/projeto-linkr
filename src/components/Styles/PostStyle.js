@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Post = styled.div`
+const PostStyle = styled.div`
   display: flex;
   width: 100%;
   padding: 20px;
@@ -11,6 +11,7 @@ const Post = styled.div`
   margin-top: 30px;
   font-family: Lato;
   position: relative;
+  word-break: break-word;
 
   div.post-left {
     display: flex;
@@ -49,6 +50,9 @@ const Post = styled.div`
       display: flex;
       justify-content: space-between;
       margin-bottom: 8px;
+      div {
+        display: flex;
+      }
     }
     a.username {
       font-size: 19px;
@@ -58,6 +62,19 @@ const Post = styled.div`
     p.user-text {
       font-size: 17px;
       line-height: 20px;
+      textarea {
+        width: 100%;
+        min-height: 44px;
+        color: #4c4c4c;
+        background: #ffffff;
+        border-radius: 7px;
+        border: none;
+        padding: 4px 9px 0px;
+        resize: none;
+      }
+      textarea:disabled {
+        filter: brightness(0.7);
+      }
     }
     a.hashtag {
       font-weight: bold;
@@ -158,4 +175,4 @@ const Post = styled.div`
   }
 `;
 
-export default Post;
+export default PostStyle;
