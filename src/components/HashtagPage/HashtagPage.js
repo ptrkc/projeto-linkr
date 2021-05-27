@@ -8,12 +8,12 @@ import StyledTimeline from "../Styles/StyledTimeline";
 import PostsList from "../Timeline/PostsList";
 import Trending from "../Trending/Trending";
 
-export default function UserPage() {
+export default function HashtagPage() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const { user, setUser } = useContext(UserContext);
-  const { userId } = useParams();
+  const { hashtag } = useParams();
 
   useEffect(() => {
     if (!user) {
@@ -24,7 +24,7 @@ export default function UserPage() {
       }
     }
     getPosts();
-  }, [user]);
+  }, [user, posts]);
 
   function getPosts() {
     const config = {
@@ -34,7 +34,7 @@ export default function UserPage() {
     };
 
     const request = axios.get(
-      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/posts`,
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts`,
       config
     );
 
@@ -49,13 +49,7 @@ export default function UserPage() {
   }
   return (
     <StyledTimeline>
-      <h1>
-        {posts === null
-          ? ""
-          : posts.posts.length >= 0
-          ? `${posts.posts[0].user.username}'s posts`
-          : "error"}
-      </h1>
+      <h1># {hashtag}</h1>
       <div className="main-content">
         <div className="page-left">
           {isLoading ? <Loading /> : ""}
