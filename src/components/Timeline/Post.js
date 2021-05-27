@@ -5,18 +5,50 @@ import PostStyle from "../Styles/PostStyle";
 
 import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Post({ post, reload }) {
   const { linkImage, linkTitle, linkDescription, id, user, likes, link, text } =
     post;
   const [isEditing, setIsEditing] = useState(false);
-  function editPost() {
-    setIsEditing(true);
+  const [isLoading, isLoading] = useState(false);
+  const [newText, setNewText] = useState(text);
+  const editorRef = useRef();
+
+  useEffect(() => {
+    if (isEditing) {
+      editorRef.current.focus();
+      editorRef.current.selectionStart = editorRef.current.value.length;
+      editorRef.current.selectionEnd = editorRef.current.value.length;
+    }
+  }, [isEditing]);
+
+  function editToggle() {
+    if (isEditing) {
+      cancelEditing();
+      return;
+    } else {
+      setIsEditing(true);
+    }
+  }
+
+  function cancelEditing() {
+    setNewText(text);
+    setIsEditing(false);
+  }
+
+  function keyActions(e) {
+    if (e.keyCode === 27) {
+      cancelEditing();
+    }
+    if (e.keyCode === 13) {
+      setIsEditing(false);
+      return;
+    }
   }
 
   return (
-    <PostStyle image={linkImage} key={id}>
+    <PostStyle image={linkImage}>
       <div className="post-left">
         <a className="user-image" href={`/user/${user.id}`}>
           <img src={user.avatar} alt="user avatar" />
@@ -32,13 +64,18 @@ export default function Post({ post, reload }) {
             {user.username}
           </a>
           <div>
-            <EditButton userId={user.id} edit={editPost} />
+            <EditButton userId={user.id} edit={editToggle} />
             <DeleteButton postId={id} userId={user.id} reload={reload} />
           </div>
         </div>
         <p className="user-text">
           {isEditing ? (
-            <textarea>{text}</textarea>
+            <textarea
+              value={newText}
+              onChange={(e) => setNewText(e.target.value)}
+              onKeyDown={(e) => keyActions(e)}
+              ref={editorRef}
+            ></textarea>
           ) : (
             <ReactHashtag
               renderHashtag={(hashtagValue) => (
@@ -50,7 +87,7 @@ export default function Post({ post, reload }) {
                 </a>
               )}
             >
-              {text}
+              {text === newText ? text : newText}
             </ReactHashtag>
           )}
         </p>

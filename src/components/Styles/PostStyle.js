@@ -11,6 +11,7 @@ const PostStyle = styled.div`
   margin-top: 30px;
   font-family: Lato;
   position: relative;
+  word-break: break-word;
 
   div.post-left {
     display: flex;
@@ -64,6 +65,7 @@ const PostStyle = styled.div`
       textarea {
         width: 100%;
         min-height: 44px;
+        color: #4c4c4c;
         background: #ffffff;
         border-radius: 7px;
         border: none;
