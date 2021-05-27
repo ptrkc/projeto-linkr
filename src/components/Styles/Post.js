@@ -49,6 +49,9 @@ const Post = styled.div`
       display: flex;
       justify-content: space-between;
       margin-bottom: 8px;
+      div {
+        display: flex;
+      }
     }
     a.username {
       font-size: 19px;

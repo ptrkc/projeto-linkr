@@ -4,6 +4,7 @@ import ReactHashtag from "react-hashtag";
 
 import Post from "../Styles/Post";
 
+import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
 
 export default function PostsList({ posts, reload }) {
@@ -26,11 +27,18 @@ export default function PostsList({ posts, reload }) {
                 <a href={`/user/${p.user.id}`} className="username">
                   {p.user.username}
                 </a>
-                <DeleteButton
-                  postId={p.id}
-                  userId={p.user.id}
-                  reload={reload}
-                />
+                <div>
+                  <EditButton
+                    postId={p.id}
+                    userId={p.user.id}
+                    reload={reload}
+                  />
+                  <DeleteButton
+                    postId={p.id}
+                    userId={p.user.id}
+                    reload={reload}
+                  />
+                </div>
               </div>
               <p className="user-text">
                 <ReactHashtag
