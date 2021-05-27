@@ -13,7 +13,7 @@ import MyPosts from "../MyPosts/MyPosts";
 import LikedPosts from "../LikedPosts/LikedPosts";
 import Header from "../Header/Header";
 import HashtagPage from "../HashtagPage/HashtagPage";
-import UserPage from "../UserPage.js/UserPage";
+import UserPage from "../UserPage/UserPage";
 
 export default function App() {
   const [user, setUser] = useState();
