@@ -1,18 +1,19 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router";
 import UserContext from "../../contexts/UserContexts";
 
 import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
-import CreatePost from "./CreatePost";
-import PostsList from "./PostsList";
+import PostsList from "../Timeline/PostsList";
 import Trending from "../Trending/Trending";
 
-export default function Timeline() {
+export default function LikedPosts() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const { user, setUser } = useContext(UserContext);
+  const { hashtag } = useParams();
 
   useEffect(() => {
     if (!user) {
@@ -33,7 +34,7 @@ export default function Timeline() {
     };
 
     const request = axios.get(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts",
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked`,
       config
     );
 
@@ -48,10 +49,9 @@ export default function Timeline() {
   }
   return (
     <StyledTimeline>
-      <h1>timeline</h1>
+      <h1>my likes</h1>
       <div className="main-content">
         <div className="page-left">
-          <CreatePost getPosts={getPosts} user={user} />
           {isLoading ? <Loading /> : ""}
           {posts === null ? (
             error ? (
@@ -64,7 +64,7 @@ export default function Timeline() {
           ) : posts.posts.length === 0 ? (
             <p className="warning">Nenhum post encontrado</p>
           ) : (
-            <PostsList posts={posts} reload={getPosts} />
+            <PostsList posts={posts} />
           )}
         </div>
         <div className="page-right">

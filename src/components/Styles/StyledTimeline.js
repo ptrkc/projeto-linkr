@@ -33,7 +33,7 @@ const StyledTimeline = styled.div`
       .trending {
         width: 100%;
         max-width: 300px;
-        background-color: black;
+        background-color: #171717;
         border-radius: 16px;
       }
       @media (max-width: 740px) {
