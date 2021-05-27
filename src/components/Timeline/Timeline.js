@@ -64,7 +64,7 @@ export default function Timeline() {
           ) : posts.length === 0 ? (
             <p className="warning">Nenhum post encontrado</p>
           ) : (
-            <PostsList posts={posts} />
+            <PostsList posts={posts} reload={getPosts} />
           )}
         </div>
         <div className="page-right">
