@@ -27,12 +27,12 @@ export default function DeleteButton({ postId, userId, reload }) {
       config
     );
     setIsLoading(true);
-    deletePostRequest.then((response) => {
+    deletePostRequest.then(() => {
       toggleModal();
       setIsLoading(false);
       reload();
     });
-    deletePostRequest.catch((error) => {
+    deletePostRequest.catch(() => {
       setError(true);
       setIsLoading(false);
     });
