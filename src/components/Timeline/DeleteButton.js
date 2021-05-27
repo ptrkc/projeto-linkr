@@ -80,7 +80,7 @@ export default function DeleteButton({ postId, userId, reload }) {
         onRequestClose={toggleModal}
         contentLabel="My dialog"
       >
-        <ModalContent isLoading={isLoading} error={error}>
+        <ModalContent error={error}>
           {error ? (
             <>
               <p>Error: Could not delete your post at this time.</p>
@@ -116,7 +116,7 @@ export default function DeleteButton({ postId, userId, reload }) {
           )}
         </ModalContent>
       </Modal>
-      <Overlay isLoading={isLoading} />
+      {isLoading && <Overlay />}
     </>
   ) : (
     ""
@@ -168,7 +168,6 @@ const ModalContent = styled.div`
   }
 `;
 const Overlay = styled.div`
-  display: ${(props) => (props.isLoading ? "block" : "none")};
   position: fixed;
   top: 0;
   bottom: 0;
