@@ -1,18 +1,23 @@
 import { BiHeart } from "react-icons/bi";
 import ReactHashtag from "react-hashtag";
+import axios from "axios";
+import { useContext, useEffect, useRef, useState } from "react";
+import UserContext from "../../contexts/UserContexts";
 
 import PostStyle from "../Styles/PostStyle";
 
 import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
-import { useEffect, useRef, useState } from "react";
 
 export default function Post({ post, reload }) {
   const { linkImage, linkTitle, linkDescription, id, user, likes, link, text } =
     post;
+  const userToken = useContext(UserContext).user.token;
   const [isEditing, setIsEditing] = useState(false);
-  const [isLoading, isLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [newText, setNewText] = useState(text);
+  const [alteredText, setAlteredText] = useState(text);
   const editorRef = useRef();
 
   useEffect(() => {
@@ -24,6 +29,9 @@ export default function Post({ post, reload }) {
   }, [isEditing]);
 
   function editToggle() {
+    if (isLoading) {
+      return;
+    }
     if (isEditing) {
       cancelEditing();
       return;
@@ -33,18 +41,47 @@ export default function Post({ post, reload }) {
   }
 
   function cancelEditing() {
-    setNewText(text);
+    setNewText(alteredText);
     setIsEditing(false);
   }
 
   function keyActions(e) {
+    if (isLoading) {
+      return;
+    }
     if (e.keyCode === 27) {
+      e.preventDefault();
       cancelEditing();
     }
     if (e.keyCode === 13) {
-      setIsEditing(false);
+      e.preventDefault();
+      sendEdit();
       return;
     }
+  }
+
+  function sendEdit() {
+    setIsLoading(true);
+    const body = { text: newText };
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    };
+    const editPostRequest = axios.put(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/AS${id}`,
+      body,
+      config
+    );
+    editPostRequest.then(() => {
+      setAlteredText(newText);
+      setIsEditing(false);
+      setIsLoading(false);
+    });
+    editPostRequest.catch(() => {
+      setIsLoading(false);
+      setError(true);
+    });
   }
 
   return (
@@ -64,7 +101,13 @@ export default function Post({ post, reload }) {
             {user.username}
           </a>
           <div>
-            <EditButton userId={user.id} edit={editToggle} />
+            <EditButton
+              userId={user.id}
+              edit={editToggle}
+              error={error}
+              setError={setError}
+              setIsEditing={setIsEditing}
+            />
             <DeleteButton postId={id} userId={user.id} reload={reload} />
           </div>
         </div>
@@ -75,6 +118,7 @@ export default function Post({ post, reload }) {
               onChange={(e) => setNewText(e.target.value)}
               onKeyDown={(e) => keyActions(e)}
               ref={editorRef}
+              disabled={isLoading}
             ></textarea>
           ) : (
             <ReactHashtag
@@ -87,7 +131,7 @@ export default function Post({ post, reload }) {
                 </a>
               )}
             >
-              {text === newText ? text : newText}
+              {alteredText}
             </ReactHashtag>
           )}
         </p>

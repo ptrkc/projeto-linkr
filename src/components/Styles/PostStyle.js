@@ -71,6 +71,9 @@ const PostStyle = styled.div`
         border: none;
         padding: 4px 9px 0px;
       }
+      textarea:disabled {
+        filter: brightness(0.7);
+      }
     }
     a.hashtag {
       font-weight: bold;
