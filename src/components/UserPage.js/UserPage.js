@@ -66,7 +66,7 @@ export default function UserPage() {
             ) : (
               ""
             )
-          ) : posts.length === 0 ? (
+          ) : posts.posts.length === 0 ? (
             <p className="warning">Nenhum post encontrado</p>
           ) : (
             <PostsList posts={posts} />
