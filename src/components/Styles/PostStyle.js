@@ -60,6 +60,7 @@ const PostStyle = styled.div`
     p.user-text {
       font-size: 17px;
       line-height: 20px;
+      word-break: break-word;
       textarea {
         width: 100%;
         min-height: 44px;
