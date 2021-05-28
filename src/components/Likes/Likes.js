@@ -84,9 +84,9 @@ export default function Likes({ post }) {
         setTooltip(
           "You, " +
             namesNotMine[0] +
-            " and other " +
+            " and " +
             (likes.length - 2) +
-            " people"
+            " other people"
         );
       }
     } else {
@@ -106,9 +106,9 @@ export default function Likes({ post }) {
           namesNotMine[0] +
             ", " +
             namesNotMine[1] +
-            ", and other " +
+            ", and " +
             (likes.length - 2) +
-            " people"
+            " other people"
         );
       }
     }
