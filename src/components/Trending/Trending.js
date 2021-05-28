@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useContext, useState } from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
 import UserContext from "../../contexts/UserContexts";
 
 export default function Trending() {
@@ -9,7 +8,6 @@ export default function Trending() {
   const [trendingList, setTrendingList] = useState([]);
   const [requestError, setRequestError] = useState();
   const [loading, setLoading] = useState(false);
-  let history = useHistory();
 
   useEffect(() => {
     if (user) {
@@ -34,10 +32,6 @@ export default function Trending() {
       });
     }
   }, [user]);
-
-  function goToHashtag(name) {
-    history.push("/hashtag/" + name);
-  }
 
   function handler(error) {
     setRequestError(error.response.statusText);

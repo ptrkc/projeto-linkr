@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { BsThreeDots } from "react-icons/bs";
 import { Link, useHistory } from "react-router-dom";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 export default function SignUp() {
   let history = useHistory();
