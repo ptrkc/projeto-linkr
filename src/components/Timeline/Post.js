@@ -10,7 +10,7 @@ import EditArea from "./EditArea";
 
 import Likes from '../Likes/Likes';
 
-export default function Post({ post, reload }) {
+export default function Post({ post, reload, again }) {
   const { linkImage, linkTitle, linkDescription, id, user, link, text } =
     post;
   const [isEditing, setIsEditing] = useState(false);
@@ -36,7 +36,7 @@ export default function Post({ post, reload }) {
         <a className="user-image" href={`/user/${user.id}`}>
           <img src={user.avatar} alt="user avatar" />
         </a>
-        <Likes post={post}></Likes>
+        <Likes post={post} again={again}></Likes>
       </div>
       <div className="post-right">
         <div className="top">
