@@ -142,20 +142,21 @@ const Introduction = styled.div`
     width: 100%;
     height: 175px;
     align-items: center;
-    padding: 0px;
+    justify-content: flex-start;
+    padding: 10px 0px 0px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
     .page-title {
-      margin: 0px, auto;
+      margin: 0px auto;
       font-size: 76px;
-      line-height: 84px;
+      line-height: 76px;
       letter-spacing: 0.05em;
     }
     .page-subtitle {
-      margin: 0px, auto;
+      margin: 0px auto;
       max-width: 240px;
       font-size: 23px;
-      line-height: 34px;
+      line-height: 30px;
     }
   }
 `;
