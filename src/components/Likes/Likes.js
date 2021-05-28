@@ -64,7 +64,7 @@ export default function Likes({ post }) {
       });
       setLikes(newLikes);
     });
-    request.catch((error) => alert("Error setting likes"));
+    request.catch(() => alert("Error setting likes"));
   }
   useEffect(() => {
     getTooltip();
@@ -74,19 +74,19 @@ export default function Likes({ post }) {
     const namesNotMine = notMe.map((item) => item.username);
     if (likes.filter((item) => item.id === user.id).length > 0) {
       if (namesNotMine.length === 0) {
-        setTooltip("Você");
+        setTooltip("You");
       }
       if (namesNotMine.length === 1) {
-        setTooltip("Você e " + namesNotMine[0]);
+        setTooltip("You and " + namesNotMine[0]);
       } else if (namesNotMine.length === 2) {
-        setTooltip("Você, " + namesNotMine[0] + " e outra pessoa");
+        setTooltip("You, " + namesNotMine[0] + " and another person");
       } else if (namesNotMine.length > 2) {
         setTooltip(
-          "Você, " +
+          "You, " +
             namesNotMine[0] +
-            " e outras " +
+            " and " +
             (likes.length - 2) +
-            " pessoas"
+            " other people"
         );
       }
     } else {
@@ -99,16 +99,16 @@ export default function Likes({ post }) {
         setTooltip(namesNotMine[0] + " e " + namesNotMine[1]);
       } else if (namesNotMine.length === 3) {
         setTooltip(
-          namesNotMine[0] + ", " + namesNotMine[1] + ", e outra pessoas"
+          namesNotMine[0] + ", " + namesNotMine[1] + ", and another person"
         );
       } else if (namesNotMine.length > 3) {
         setTooltip(
           namesNotMine[0] +
             ", " +
             namesNotMine[1] +
-            ", e outras " +
+            ", and " +
             (likes.length - 2) +
-            " pessoas"
+            " other people"
         );
       }
     }
