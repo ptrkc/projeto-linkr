@@ -60,6 +60,7 @@ export default function Trending() {
     });
   }
 
+
   return (
     <Container>
       <Title>trending</Title>
@@ -67,7 +68,7 @@ export default function Trending() {
         {requestError ? (
           <div onClick={refresh}>Try again</div>
         ) : loading ? (
-          "carregando..."
+          "loading..."
         ) : trendingList.length > 0 ? (
           trendingList.map((item) => (
             <a key={item.id} href={`/hashtag/${item.name}`}>

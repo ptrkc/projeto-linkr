@@ -21,11 +21,15 @@ const PostStyle = styled.div`
     a.user-image {
       border-radius: 50%;
       margin-bottom: 20px;
-    }
-    img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
+      div {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-image: url("${(props) => props.avatar}");
+        background-color: #4d4d4d;
+        background-size: cover;
+        background-position: center;
+      }
     }
     svg {
       color: #fff;
