@@ -87,6 +87,7 @@ const PostStyle = styled.div`
       display: flex;
       justify-content: space-between;
       position: relative;
+      min-height: 115px;
 
       .texts {
         margin: 15px;
@@ -95,17 +96,33 @@ const PostStyle = styled.div`
           font-size: 16px;
           line-height: 19px;
           color: #cecece;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         p.link-description {
           font-size: 11px;
           line-height: 13px;
           color: #9b9595;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-height: 40px;
         }
         p.link-url {
           font-size: 11px;
           line-height: 13px;
           color: #cecece;
           word-break: break-all;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
       .image {

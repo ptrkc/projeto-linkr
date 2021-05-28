@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router";
 import UserContext from "../../contexts/UserContexts";
 
 import Loading from "../Loading/Loading";
@@ -13,7 +12,6 @@ export default function LikedPosts() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const { user, setUser } = useContext(UserContext);
-  const { hashtag } = useParams();
 
   useEffect(() => {
     if (!user) {
