@@ -91,10 +91,10 @@ export default function Login() {
               required
             ></input>
             <button disabled={loading} type="submit">
-              Log In
+              {loading ? "Logging In..." : "Log In"}
             </button>
           </Form>
-          <StyledLink to="/sign-up">
+          <StyledLink disabled={loading} to="/sign-up">
             <p>First time? Create an account!</p>
           </StyledLink>
         </FormContainer>
@@ -142,20 +142,21 @@ const Introduction = styled.div`
     width: 100%;
     height: 175px;
     align-items: center;
-    padding: 0px;
+    justify-content: flex-start;
+    padding: 10px 0px 0px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
     .page-title {
-      margin: 0px, auto;
+      margin: 0px auto;
       font-size: 76px;
-      line-height: 84px;
+      line-height: 76px;
       letter-spacing: 0.05em;
     }
     .page-subtitle {
-      margin: 0px, auto;
+      margin: 0px auto;
       max-width: 240px;
       font-size: 23px;
-      line-height: 34px;
+      line-height: 30px;
     }
   }
 `;
@@ -187,7 +188,7 @@ const Form = styled.form`
   input {
     width: 100%;
     height: 65px;
-    background: #ffffff;
+    background-color: #ffffff;
     border-radius: 6px;
     padding: 15px;
     color: #151515;
@@ -195,6 +196,9 @@ const Form = styled.form`
     margin-bottom: 15px;
     font-size: 27px;
     line-height: 40px;
+    opacity: ${(props) => (props.children[0].props.disabled ? "0.7" : "1")};
+    pointer-events: ${(props) =>
+      props.children[0].props.disabled ? "none" : "auto"};
   }
   input::placeholder {
     font-size: 27px;
@@ -210,6 +214,9 @@ const Form = styled.form`
     font-size: 27px;
     line-height: 40px;
     color: #ffffff;
+    opacity: ${(props) => (props.children[0].props.disabled ? "0.7" : "1")};
+    pointer-events: ${(props) =>
+      props.children[0].props.disabled ? "none" : "auto"};
   }
 
   @media (max-width: 740px) {
@@ -229,6 +236,8 @@ const Form = styled.form`
 
 const StyledLink = styled(Link)`
   margin-top: 20px;
+  opacity: ${(props) => (props.disabled ? "0.7" : "1")};
+  pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
   p {
     font-family: Lato;
     font-style: normal;

@@ -21,11 +21,15 @@ const PostStyle = styled.div`
     a.user-image {
       border-radius: 50%;
       margin-bottom: 20px;
-    }
-    img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
+      div {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-image: url("${(props) => props.avatar}");
+        background-color: #4d4d4d;
+        background-size: cover;
+        background-position: center;
+      }
     }
     svg {
       color: #fff;
@@ -81,6 +85,7 @@ const PostStyle = styled.div`
       display: flex;
       justify-content: space-between;
       position: relative;
+      min-height: 115px;
 
       .texts {
         margin: 15px;
@@ -89,17 +94,33 @@ const PostStyle = styled.div`
           font-size: 16px;
           line-height: 19px;
           color: #cecece;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         p.link-description {
           font-size: 11px;
           line-height: 13px;
           color: #9b9595;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-height: 40px;
         }
         p.link-url {
           font-size: 11px;
           line-height: 13px;
           color: #cecece;
           word-break: break-all;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
       .image {

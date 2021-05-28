@@ -31,10 +31,10 @@ export default function Post({ post, reload, again }) {
   }
 
   return (
-    <PostStyle image={linkImage}>
+    <PostStyle avatar={user.avatar} image={linkImage}>
       <div className="post-left">
         <a className="user-image" href={`/user/${user.id}`}>
-          <img src={user.avatar} alt="user avatar" />
+          <div />
         </a>
         <Likes post={post} again={again}></Likes>
       </div>
