@@ -85,7 +85,6 @@ const PostStyle = styled.div`
       display: flex;
       justify-content: space-between;
       position: relative;
-      min-height: 115px;
 
       .texts {
         margin: 15px;
