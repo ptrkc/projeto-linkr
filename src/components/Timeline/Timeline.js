@@ -19,7 +19,7 @@ export default function Timeline() {
       if (localStorage.user) {
         const userStorage = JSON.parse(localStorage.user);
         setUser(userStorage);
-        return;
+        return; 
       }
     }
     getPosts();
@@ -64,7 +64,7 @@ export default function Timeline() {
           ) : posts.posts.length === 0 ? (
             <p className="warning">Nenhum post encontrado</p>
           ) : (
-            <PostsList posts={posts} reload={getPosts} />
+            <PostsList posts={posts} reload={getPosts} again="false"/>
           )}
         </div>
         <div className="page-right">

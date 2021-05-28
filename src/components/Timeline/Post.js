@@ -8,8 +8,10 @@ import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
 import EditArea from "./EditArea";
 
-export default function Post({ post, reload }) {
-  const { linkImage, linkTitle, linkDescription, id, user, likes, link, text } =
+import Likes from '../Likes/Likes';
+
+export default function Post({ post, reload, again }) {
+  const { linkImage, linkTitle, linkDescription, id, user, link, text } =
     post;
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,10 +36,7 @@ export default function Post({ post, reload }) {
         <a className="user-image" href={`/user/${user.id}`}>
           <div />
         </a>
-        <BiHeart />
-        <p className="likes">
-          {likes.length} {likes.length === 1 ? "like" : "likes"}
-        </p>
+        <Likes post={post} again={again}></Likes>
       </div>
       <div className="post-right">
         <div className="top">
