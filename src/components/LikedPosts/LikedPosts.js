@@ -13,7 +13,6 @@ export default function LikedPosts() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const { user, setUser } = useContext(UserContext);
-  const { hashtag } = useParams();
 
   useEffect(() => {
     if (!user) {

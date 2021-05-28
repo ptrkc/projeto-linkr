@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { BsThreeDots } from "react-icons/bs";
 import { Link, useHistory } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export default function SignUp() {
   let history = useHistory();
@@ -37,6 +37,7 @@ export default function SignUp() {
       });
       request.catch((error) => {
         if (error.response.status === 400) {
+          alert("Erro ao cadastrar dados, tente novamente");
         } else if (error.response.status === 403) {
           alert(
             "Não foi possível realizar o cadastro. O email já esta cadastrado."
@@ -191,7 +192,7 @@ const Form = styled.form`
   input {
     width: 100%;
     height: 65px;
-    background: #ffffff;
+    background-color: #ffffff;
     border-radius: 6px;
     padding: 15px;
     color: #151515;
@@ -199,6 +200,9 @@ const Form = styled.form`
     margin-bottom: 15px;
     font-size: 27px;
     line-height: 40px;
+    opacity: ${(props) => (props.children[0].props.disabled ? "0.7" : "1")};
+    pointer-events: ${(props) =>
+      props.children[0].props.disabled ? "none" : "auto"};
   }
   input::placeholder {
     font-size: 27px;
@@ -214,6 +218,9 @@ const Form = styled.form`
     font-size: 27px;
     line-height: 40px;
     color: #ffffff;
+    opacity: ${(props) => (props.children[0].props.disabled ? "0.7" : "1")};
+    pointer-events: ${(props) =>
+      props.children[0].props.disabled ? "none" : "auto"};
   }
 
   @media (max-width: 740px) {
@@ -233,6 +240,8 @@ const Form = styled.form`
 
 const StyledLink = styled(Link)`
   margin-top: 20px;
+  opacity: ${(props) => (props.disabled ? "0.7" : "1")};
+  pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
   p {
     font-family: Lato;
     font-style: normal;
