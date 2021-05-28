@@ -1,8 +1,8 @@
-import { useState} from 'react';
-import axios from 'axios';
+import { useState } from "react";
+import axios from "axios";
 import { BsThreeDots } from "react-icons/bs";
-import { Link, useHistory } from 'react-router-dom';
-import styled from 'styled-components';
+import { Link, useHistory } from "react-router-dom";
+import styled from "styled-components";
 
 export default function SignUp() {
   let history = useHistory();
@@ -13,185 +13,248 @@ export default function SignUp() {
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  function newUser(event){
+  function newUser(event) {
     event.preventDefault();
-    if(email.length>0 && password.length>0 && name.length>0 && image.length>0){
+    if (
+      email.length > 0 &&
+      password.length > 0 &&
+      name.length > 0 &&
+      image.length > 0
+    ) {
       setLoading(true);
       const body = {
         email,
         password,
         username: name,
-        pictureUrl: image
-      }
-      const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-up", body);
-      request.then(response => {
+        pictureUrl: image,
+      };
+      const request = axios.post(
+        "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-up",
+        body
+      );
+      request.then((response) => {
         history.push("/");
       });
-      request.catch(error=>{
-        if(error.response.status===400){
-        } else if(error.response.status===403){
-          alert("Não foi possível realizar o cadastro. O email já esta cadastrado.");
+      request.catch((error) => {
+        if (error.response.status === 400) {
+          alert("Erro ao cadastrar dados, tente novamente");
+        } else if (error.response.status === 403) {
+          alert(
+            "Não foi possível realizar o cadastro. O email já esta cadastrado."
+          );
         }
         setLoading(false);
       });
     } else {
-      alert("Preencha todos os campos!");  
+      alert("Preencha todos os campos!");
     }
   }
 
   return (
-    <Container>   
+    <Container>
       <Introduction>
-        <div>
-          <div>linkr</div>
-          <div>save, share and discover<br></br>the best links on the web</div>
-        </div>
+        <p className="page-title">linkr</p>
+        <p className="page-subtitle">
+          save, share and discover the best links on the web
+        </p>
       </Introduction>
       <FormContainer>
         <Form onSubmit={newUser}>
-          <input disabled={loading} onChange={e=>setEmail(e.target.value)} value={email}type="email" placeholder="e-mail" required></input>
-          <input disabled={loading} onChange={e=>setPassword(e.target.value)} value={password} type="password" placeholder="password" required></input>
-          <input disabled={loading} onChange={e=>setName(e.target.value)} value={name} type="text" placeholder="username" required></input>
-          <input disabled={loading} onChange={e=>setImage(e.target.value)} value={image} type="url" placeholder="picture url" required></input>
-          <button disabled={loading} type="submit" >
-            {loading?<BsThreeDots fontSize="50px"></BsThreeDots>:<>Sign Up</>}
+          <input
+            disabled={loading}
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            type="email"
+            placeholder="e-mail"
+            required
+          ></input>
+          <input
+            disabled={loading}
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            type="password"
+            placeholder="password"
+            required
+          ></input>
+          <input
+            disabled={loading}
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+            type="text"
+            placeholder="username"
+            required
+          ></input>
+          <input
+            disabled={loading}
+            onChange={(e) => setImage(e.target.value)}
+            value={image}
+            type="url"
+            placeholder="picture url"
+            required
+          ></input>
+          <button disabled={loading} type="submit">
+            {loading ? (
+              <BsThreeDots fontSize="50px"></BsThreeDots>
+            ) : (
+              <>Sign Up</>
+            )}
           </button>
         </Form>
-        <StyledLink to="/"><span>Switch back to log in</span></StyledLink>
+        <StyledLink to="/">
+          <p>Switch back to log in</p>
+        </StyledLink>
       </FormContainer>
-    </Container>  
+    </Container>
   );
 }
 
-
 const Container = styled.div`
-  height: 100%;
-  background-color: #151515;
+  height: 100vh;
+  width: 100%;
+  display: flex;
 
-  @media (min-width: 800px) {
-    display: flex;
-    height: 1024px;
+  @media (max-width: 740px) {
+    flex-direction: column;
   }
-
 `;
 const Introduction = styled.div`
-  font-weight: bold;
-  letter-spacing: 0.05em;
-  width: 100%;
-  color: #FFFFFF;
+  height: 100%;
+  width: 60vw;
+  background-color: #151515;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  font-family: 'Oswald', sans-serif;
-  font-size: 23px;
-  line-height: 34px;
-  margin-bottom: 25px;
+  justify-content: center;
+  font-weight: bold;
+  color: #ffffff;
+  box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
+  padding-left: 5vw;
+  padding-right: 20px;
 
-  div div:first-of-type{
-    font-family: 'Passion One', cursive;
-    font-size: 76px;
-    line-height: 84px;
+  .page-title {
+    font-family: Passion One;
+    font-size: 106px;
+    line-height: 117px;
     letter-spacing: 0.05em;
-    text-align: center;
-    margin-top: 15px;
   }
-
-  @media (min-width: 800px) {
+  .page-subtitle {
+    max-width: 445px;
+    font-family: Oswald;
     font-size: 43px;
     line-height: 64px;
-    width: 60%;
-    margin-bottom: 0px;
-    justify-content: center;
-      
-    div div:first-of-type {
-      text-align:start;
-      font-size: 106px;
-      line-height: 117px;
+  }
+
+  @media (max-width: 740px) {
+    width: 100%;
+    height: 175px;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 0px 0px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    .page-title {
+      margin: 0px auto;
+      font-size: 76px;
+      line-height: 76px;
+      letter-spacing: 0.05em;
+    }
+    .page-subtitle {
+      margin: 0px auto;
+      max-width: 240px;
+      font-size: 23px;
+      line-height: 30px;
     }
   }
 `;
 
 const FormContainer = styled.div`
-  height: 100%;
-  width:  100%;
-  background-color: #333333;
+  width: 40vw;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  padding-right: 4%;
+  padding-left: 4%;
 
-  @media (min-width: 800px) {
-    width: 40%;
+  @media (max-width: 740px) {
+    padding-right: 8%;
+    padding-left: 8%;
+    width: 100vw;
   }
 `;
 
 const Form = styled.form`
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  font-family: Oswald;
+  font-weight: bold;
+
+  input {
     width: 100%;
+    height: 65px;
+    background-color: #ffffff;
+    border-radius: 6px;
+    padding: 15px;
+    color: #151515;
+    border: none;
+    margin-bottom: 15px;
+    font-size: 27px;
+    line-height: 40px;
+    opacity: ${(props) => (props.children[0].props.disabled ? "0.7" : "1")};
+    pointer-events: ${(props) =>
+      props.children[0].props.disabled ? "none" : "auto"};
+  }
+  input::placeholder {
+    font-size: 27px;
+    line-height: 40px;
+    color: #9f9f9f;
+  }
+  button {
+    width: 100%;
+    height: 65px;
+    background: #1877f2;
+    border-radius: 6px;
+    border: none;
+    font-size: 27px;
+    line-height: 40px;
+    color: #ffffff;
+    opacity: ${(props) => (props.children[0].props.disabled ? "0.7" : "1")};
+    pointer-events: ${(props) =>
+      props.children[0].props.disabled ? "none" : "auto"};
+  }
+
+  @media (max-width: 740px) {
     margin-top: 40px;
-    align-items: center;
-    
+
     input {
-      width: 330px;
       height: 55px;
-      border-radius: 6px;
-      margin-bottom: 11px;
-      font-family: 'Oswald', sans-serif;
-      font-weight: bold;
       font-size: 22px;
       line-height: 33px;
-      padding-left: 10px;
     }
     input::placeholder {
-      color: #9f9f9f;
-    }
-    button {
-      width: 330px;
-      height: 55px;
-      background: #1877F2;
-      border-radius: 6px;
-      color:#FFFFFF;
-      font-weight: bold;
       font-size: 22px;
       line-height: 33px;
-      font-family: 'Oswald', sans-serif;
-    }
-
-  @media (min-width: 800px) {
-    input {
-      width: 430px;
-      height: 65px;
-      font-size: 27px;
-      line-height: 40px;
-    }
-    button {
-      width: 430px;
-      height: 65px;
-      font-size: 27px;
-      line-height: 40px;
     }
   }
 `;
 
 const StyledLink = styled(Link)`
-  width: 330px;
-  height: 55px;
-  border-radius: 6px;
-  color:#FFFFFF;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Lato', sans-serif;
-  margin-bottom: 90px;
-  span {
-    padding-bottom: 2px;
-    border-bottom: 1px solid #FFFFFF;
+  margin-top: 20px;
+  opacity: ${(props) => (props.disabled ? "0.7" : "1")};
+  pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
+  p {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 24px;
+    text-decoration-line: underline;
+    color: #ffffff;
   }
-  @media (min-width: 800px) {
-      width: 430px;
-      height: 65px;
-      font-size: 27px;
-      line-height: 40px;
+
+  @media (max-width: 740px) {
+    font-size: 17px;
+    line-height: 20px;
   }
 `;
