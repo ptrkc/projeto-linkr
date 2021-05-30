@@ -1,4 +1,3 @@
-import { BiHeart } from "react-icons/bi";
 import ReactHashtag from "react-hashtag";
 import { useState } from "react";
 
@@ -10,7 +9,7 @@ import EditArea from "./EditArea";
 
 import Likes from '../Likes/Likes';
 
-export default function Post({ post, reload, again }) {
+export default function Post({ post, reload }) {
   const { linkImage, linkTitle, linkDescription, id, user, link, text } =
     post;
   const [isEditing, setIsEditing] = useState(false);
@@ -36,7 +35,7 @@ export default function Post({ post, reload, again }) {
         <a className="user-image" href={`/user/${user.id}`}>
           <div />
         </a>
-        <Likes post={post} again={again}></Likes>
+        <Likes post={post}></Likes>
       </div>
       <div className="post-right">
         <div className="top">

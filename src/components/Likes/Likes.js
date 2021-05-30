@@ -22,11 +22,7 @@ export default function Likes({ post }) {
     }
   });
 
-  console.log(post.likes);
-
   const [likes, setLikes] = useState(initialLikes);
-
-  console.log(initialLikes);
 
   const [tooltip, setTooltip] = useState("");
   function likeThis() {
