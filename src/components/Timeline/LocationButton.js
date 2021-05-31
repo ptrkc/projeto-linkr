@@ -2,10 +2,9 @@ import { useState } from "react";
 import { IoLocationOutline } from "react-icons/io5";
 import styled from "styled-components";
 
-export default function LocationButton() {
+export default function LocationButton({ isLoading, setLocation }) {
   const [locationEnabled, setLocationEnabled] = useState(false);
   const [isGettingLocation, setIsGettingLocation] = useState(false);
-
   function toggleLocation() {
     if (!locationEnabled) {
       if (navigator.geolocation) {
@@ -18,16 +17,15 @@ export default function LocationButton() {
       }
     } else {
       setLocationEnabled(false);
+      setLocation(false);
     }
   }
 
   function getLocation(position) {
-    alert(
-      "Latitude: " +
-        position.coords.latitude +
-        "Longitude: " +
-        position.coords.longitude
-    );
+    setLocation({
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+    });
     setIsGettingLocation(false);
   }
 
@@ -40,8 +38,10 @@ export default function LocationButton() {
   return (
     <StyledLocation
       locationEnabled={locationEnabled}
+      isGettingLocation={isGettingLocation}
       onClick={() => toggleLocation()}
-      disabled={isGettingLocation}
+      disabled={isLoading || isGettingLocation}
+      type="button"
     >
       <IoLocationOutline />
       <span>
@@ -62,7 +62,12 @@ const StyledLocation = styled.button`
   height: 100%;
   cursor: pointer;
   border: none;
-  color: ${(props) => (props.locationEnabled ? "#238700" : "#949494")};
+  color: ${(props) =>
+    props.locationEnabled
+      ? props.isGettingLocation
+        ? "#cf6400"
+        : "#238700"
+      : "#949494"};
   background-color: transparent;
   span {
     margin: 0px 5px;

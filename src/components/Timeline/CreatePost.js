@@ -8,6 +8,7 @@ export default function CreatePost({ getPosts, user }) {
   const [text, setText] = useState("");
   const [urlError, setUrlError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [location, setLocation] = useState(false);
   const urlInput = useRef();
   const [avatar, setAvatar] = useState("");
 
@@ -20,6 +21,7 @@ export default function CreatePost({ getPosts, user }) {
     if (!isURL(url)) {
       setUrlError(true);
       urlInput.current.focus();
+      console.log("wtf");
       return;
     }
     setIsLoading(true);
@@ -27,6 +29,11 @@ export default function CreatePost({ getPosts, user }) {
       text,
       link: url,
     };
+    if (location) {
+      body.geolocation = {};
+      body.geolocation.latitude = location.latitude;
+      body.geolocation.longitude = location.longitude;
+    }
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -37,7 +44,7 @@ export default function CreatePost({ getPosts, user }) {
       body,
       config
     );
-    createPostRequest.then((response) => {
+    createPostRequest.then(() => {
       setUrl("");
       setText("");
       setIsLoading(false);
@@ -71,17 +78,17 @@ export default function CreatePost({ getPosts, user }) {
           className={urlError ? "url-error" : ""}
           placeholder={urlError ? "Fill in a valid URL" : "https://..."}
           ref={urlInput}
-          disabled={isLoading ? true : false}
+          disabled={isLoading}
         ></input>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Check out these awesome tips to improve your #javascript"
-          disabled={isLoading ? true : false}
+          disabled={isLoading}
         ></textarea>
         <div>
-          <LocationButton />
-          <button className="btn-publish" disabled={isLoading ? true : false}>
+          <LocationButton isLoading={isLoading} setLocation={setLocation} />
+          <button className="btn-publish" disabled={isLoading}>
             {isLoading ? "Publishing..." : "Publish"}
           </button>
         </div>
