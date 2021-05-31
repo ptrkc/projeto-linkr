@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import Post from "./Post";
 
-export default function PostsList({ posts, reload, again }) {
+export default function PostsList({ posts, reload }) {
   return (
     <Container>
       {posts.posts.map((post) => {
-        return <Post post={post} key={post.id} reload={reload} again={again}/>;
+        return <Post post={post} key={post.id} reload={reload}/>;
       })}
     </Container>
   );
