@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import LocationButton from "./LocationButton";
 
 export default function CreatePost({ getPosts, user }) {
   const [url, setUrl] = useState("");
@@ -79,7 +80,8 @@ export default function CreatePost({ getPosts, user }) {
           disabled={isLoading ? true : false}
         ></textarea>
         <div>
-          <button disabled={isLoading ? true : false}>
+          <LocationButton />
+          <button className="btn-publish" disabled={isLoading ? true : false}>
             {isLoading ? "Publishing..." : "Publish"}
           </button>
         </div>
@@ -161,8 +163,8 @@ const PostForm = styled.form`
   div {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    button {
+    justify-content: space-between;
+    .btn-publish {
       width: 112px;
       height: 31px;
       background: #1877f2;
@@ -173,7 +175,7 @@ const PostForm = styled.form`
       line-height: 17px;
       color: white;
     }
-    button:disabled {
+    .btn-publish:disabled {
       filter: brightness(0.7);
     }
   }
