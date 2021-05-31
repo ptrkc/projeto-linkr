@@ -1,255 +1,230 @@
-import { useHistory, Link } from "react-router-dom";
-import styled from "styled-components";
-import { useState, useContext, useEffect } from "react";
-import axios from "axios";
+import {useHistory, Link} from 'react-router-dom';
+import styled from 'styled-components';
+import {useState, useContext, useEffect} from 'react';
+import axios from 'axios';
 
 import UserContext from "../../contexts/UserContexts";
 
 export default function Login() {
-  let history = useHistory();
-  const { setUser } = useContext(UserContext);
 
-  useEffect(() => {
-    if (localStorage.user) {
+  let history = useHistory();
+  const {setUser} = useContext(UserContext); 
+
+  useEffect(() => {   
+		if(localStorage.user){
       const userStorage = JSON.parse(localStorage.user);
       setUser(userStorage);
-      history.push("/timeline");
+      history.push("/timeline");  
     }
-  });
-
+	});
+     
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  function userLogin(event) {
+  function userLogin(event){
     event.preventDefault();
-    if (email.length > 0 && password.length > 0) {
+    if(email.trim().length > 0 && password.trim().length > 0){
       setLoading(true);
 
       const body = {
         email,
-        password,
-      };
+        password
+      }   
 
-      const request = axios.post(
-        "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-in",
-        body
-      );
-      request.then((response) => {
+      const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-in", body);
+      request.then(response=>{
+
         setUser({
           id: response.data.user.id,
           token: response.data.token,
           username: response.data.user.username,
-          avatar: response.data.user.avatar,
+          avatar: response.data.user.avatar
         });
 
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            id: response.data.user.id,
-            token: response.data.token,
-            username: response.data.user.username,
-            avatar: response.data.user.avatar,
-          })
-        );
+        localStorage.setItem('user', JSON.stringify({
+          id: response.data.user.id,
+          token: response.data.token,
+          username: response.data.user.username,
+          avatar: response.data.user.avatar
+        }));
 
         history.push("/timeline");
       });
-      request.catch((error) => {
-        alert("Email/senha incorretos.");
+      request.catch(error=>{
+        if(error.response.data.message){
+            alert(`Login error. ${error.response.data.message}. Please try again.`);
+          } else {
+            alert("Registration error. Please try again.");
+          }
         setLoading(false);
       });
     } else {
-      alert("Preencha todos os campos!");
+      alert("Fill in all fields on the form.");
     }
+    
   }
   return (
     <>
-      <Container>
+      <Container>   
         <Introduction>
-          <p className="page-title">linkr</p>
-          <p className="page-subtitle">
-            save, share and discover the best links on the web
-          </p>
+          <div>
+            <div>linkr</div>
+            <div>save, share and discover<br></br>the best links on the web</div>
+          </div>
         </Introduction>
         <FormContainer>
           <Form onSubmit={userLogin}>
-            <input
-              disabled={loading}
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              type="email"
-              placeholder="e-mail"
-              required
-            ></input>
-            <input
-              disabled={loading}
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-              type="password"
-              placeholder="password"
-              required
-            ></input>
-            <button disabled={loading} type="submit">
-              {loading ? "Logging In..." : "Log In"}
+            <input disabled={loading} onChange={e=>setEmail(e.target.value)} value={email}type="email" placeholder="e-mail" required></input>
+            <input disabled={loading} onChange={e=>setPassword(e.target.value)} value={password} type="password" placeholder="password" required></input>
+            <button disabled={loading} type="submit">{loading ? 
+              (<>Logging In...</>) 
+              : 
+              (  <>Log In</>)
+              }
             </button>
           </Form>
-          <StyledLink disabled={loading} to="/sign-up">
-            <p>First time? Create an account!</p>
-          </StyledLink>
+          <StyledLink to="/sign-up"><span>First time? Create an account!</span></StyledLink>
         </FormContainer>
-      </Container>
+      </Container>  
     </>
   );
 }
 
 const Container = styled.div`
-  height: 100vh;
-  width: 100%;
-  display: flex;
+  height: 100%;
+  background-color: #151515;
 
-  @media (max-width: 740px) {
-    flex-direction: column;
+  @media (min-width: 800px) {
+    display: flex;
+    height: 1024px;
   }
+
 `;
 const Introduction = styled.div`
-  height: 100%;
-  width: 60vw;
-  background-color: #151515;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  width: 100%;
+  color: #FFFFFF;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  font-weight: bold;
-  color: #ffffff;
-  box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
-  padding-left: 5vw;
-  padding-right: 20px;
+  align-items: center;
+  font-family: 'Oswald', sans-serif;
+  font-size: 23px;
+  line-height: 34px;
+  margin-bottom: 25px;
 
-  .page-title {
-    font-family: Passion One;
-    font-size: 106px;
-    line-height: 117px;
+  div div:first-of-type{
+    font-family: 'Passion One', cursive;
+    font-size: 76px;
+    line-height: 84px;
     letter-spacing: 0.05em;
+    text-align: center;
+    margin-top: 15px;
   }
-  .page-subtitle {
-    max-width: 445px;
-    font-family: Oswald;
+
+  @media (min-width: 800px) {
     font-size: 43px;
     line-height: 64px;
-  }
-
-  @media (max-width: 740px) {
-    width: 100%;
-    height: 175px;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 10px 0px 0px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-
-    .page-title {
-      margin: 0px auto;
-      font-size: 76px;
-      line-height: 76px;
-      letter-spacing: 0.05em;
-    }
-    .page-subtitle {
-      margin: 0px auto;
-      max-width: 240px;
-      font-size: 23px;
-      line-height: 30px;
+    width: 60%;
+    margin-bottom: 0px;
+    justify-content: center;
+      
+    div div:first-of-type {
+      text-align:start;
+      font-size: 106px;
+      line-height: 117px;
     }
   }
 `;
 
 const FormContainer = styled.div`
-  width: 40vw;
+  height: 100%;
+  width:  100%;
+  background-color: #333333;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  padding-right: 4%;
-  padding-left: 4%;
+  align-items: center;
 
-  @media (max-width: 740px) {
-    padding-right: 8%;
-    padding-left: 8%;
-    width: 100vw;
+  @media (min-width: 800px) {
+    width: 40%;
   }
 `;
 
 const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  font-family: Oswald;
-  font-weight: bold;
-
-  input {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    height: 65px;
-    background-color: #ffffff;
-    border-radius: 6px;
-    padding: 15px;
-    color: #151515;
-    border: none;
-    margin-bottom: 15px;
-    font-size: 27px;
-    line-height: 40px;
-    opacity: ${(props) => (props.children[0].props.disabled ? "0.7" : "1")};
-    pointer-events: ${(props) =>
-      props.children[0].props.disabled ? "none" : "auto"};
-  }
-  input::placeholder {
-    font-size: 27px;
-    line-height: 40px;
-    color: #9f9f9f;
-  }
-  button {
-    width: 100%;
-    height: 65px;
-    background: #1877f2;
-    border-radius: 6px;
-    border: none;
-    font-size: 27px;
-    line-height: 40px;
-    color: #ffffff;
-    opacity: ${(props) => (props.children[0].props.disabled ? "0.7" : "1")};
-    pointer-events: ${(props) =>
-      props.children[0].props.disabled ? "none" : "auto"};
-  }
-
-  @media (max-width: 740px) {
     margin-top: 40px;
-
+    align-items: center;
+    
     input {
+      width: 330px;
       height: 55px;
+      border-radius: 6px;
+      margin-bottom: 11px;
+      font-family: 'Oswald', sans-serif;
+      font-weight: bold;
       font-size: 22px;
       line-height: 33px;
+      padding-left: 10px;
     }
     input::placeholder {
+      color: #9f9f9f;
+    }
+    input:disabled { 
+    filter: brightness(.7);
+    }
+    button {
+      width: 330px;
+      height: 55px;
+      background: #1877F2;
+      border-radius: 6px;
+      color:#FFFFFF;
+      font-weight: bold;
       font-size: 22px;
       line-height: 33px;
+      font-family: 'Oswald', sans-serif;
+    }
+    button:disabled { 
+    filter: brightness(.7);
+    }
+
+  @media (min-width: 800px) {
+    input {
+      width: 430px;
+      height: 65px;
+      font-size: 27px;
+      line-height: 40px;
+    }
+    button {
+      width: 430px;
+      height: 65px;
+      font-size: 27px;
+      line-height: 40px;
     }
   }
 `;
 
 const StyledLink = styled(Link)`
-  margin-top: 20px;
-  opacity: ${(props) => (props.disabled ? "0.7" : "1")};
-  pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
-  p {
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 20px;
-    line-height: 24px;
-    text-decoration-line: underline;
-    color: #ffffff;
+  width: 330px;
+  height: 55px;
+  border-radius: 6px;
+  color:#FFFFFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Lato', sans-serif;
+  margin-bottom: 90px;
+  span {
+    padding-bottom: 2px;
+    border-bottom: 1px solid #FFFFFF;
   }
-
-  @media (max-width: 740px) {
-    font-size: 17px;
-    line-height: 20px;
+  @media (min-width: 800px) {
+      width: 430px;
+      height: 65px;
+      font-size: 27px;
+      line-height: 40px;
   }
 `;

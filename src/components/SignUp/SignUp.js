@@ -1,6 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-import { BsThreeDots } from "react-icons/bs";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 
@@ -16,10 +15,10 @@ export default function SignUp() {
   function newUser(event) {
     event.preventDefault();
     if (
-      email.length > 0 &&
-      password.length > 0 &&
-      name.length > 0 &&
-      image.length > 0
+      validateEmail(email) &&
+      password.trim().length > 0 &&
+      name.trim().length > 0 &&
+      isURL(image)
     ) {
       setLoading(true);
       const body = {
@@ -35,19 +34,47 @@ export default function SignUp() {
       request.then((response) => {
         history.push("/");
       });
+
       request.catch((error) => {
-        if (error.response.status === 400) {
-          alert("Erro ao cadastrar dados, tente novamente");
-        } else if (error.response.status === 403) {
+        if (error.response.status === 403) {
           alert(
-            "Não foi possível realizar o cadastro. O email já esta cadastrado."
+            "Registration error. Email already registered."
           );
+        } else {
+            if(error.response.data.message){
+              alert(`Registration error. ${error.response.data.message}. Please try again.`);
+            } else {
+              alert("Registration error. Please try again.");
+            }
         }
         setLoading(false);
       });
     } else {
-      alert("Preencha todos os campos!");
+        if(!validateEmail(email)){
+          alert("Incorrect format email.");
+          return;
+        }
+        if(!isURL(image)){
+          alert("Incorrect format URL.");
+          return;
+        }
+        if(password.trim().length === 0){
+          alert("Password field filled in blank.");
+          return;
+        }
+        if(name.trim().length === 0){
+          alert("Name field filled in blank.");
+        }
     }
+  }
+  function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
+  function isURL(url) {
+    const re =
+      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
+    return re.test(String(url).toLowerCase());
   }
 
   return (
@@ -94,7 +121,7 @@ export default function SignUp() {
           ></input>
           <button disabled={loading} type="submit">
             {loading ? (
-              <BsThreeDots fontSize="50px"></BsThreeDots>
+              <>Signing Up...</>
             ) : (
               <>Sign Up</>
             )}
@@ -150,6 +177,7 @@ const Introduction = styled.div`
     justify-content: flex-start;
     padding: 10px 0px 0px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    padding-bottom: 30px;
 
     .page-title {
       margin: 0px auto;
@@ -201,9 +229,9 @@ const Form = styled.form`
     margin-bottom: 15px;
     font-size: 27px;
     line-height: 40px;
-    opacity: ${(props) => (props.children[0].props.disabled ? "0.7" : "1")};
-    pointer-events: ${(props) =>
-      props.children[0].props.disabled ? "none" : "auto"};
+  }
+  input:disabled { 
+    filter: brightness(.7);
   }
   input::placeholder {
     font-size: 27px;
@@ -219,9 +247,9 @@ const Form = styled.form`
     font-size: 27px;
     line-height: 40px;
     color: #ffffff;
-    opacity: ${(props) => (props.children[0].props.disabled ? "0.7" : "1")};
-    pointer-events: ${(props) =>
-      props.children[0].props.disabled ? "none" : "auto"};
+  }
+  button:disabled { 
+    filter: brightness(.7);
   }
 
   @media (max-width: 740px) {
@@ -256,5 +284,6 @@ const StyledLink = styled(Link)`
   @media (max-width: 740px) {
     font-size: 17px;
     line-height: 20px;
+    margin-bottom: 65px;
   }
 `;

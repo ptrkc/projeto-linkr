@@ -8,10 +8,10 @@ const PostStyle = styled.div`
   color: #707070;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 16px;
-  margin-top: 30px;
   font-family: Lato;
   position: relative;
   word-break: break-word;
+  margin-bottom: 30px;
 
   div.post-left {
     display: flex;
