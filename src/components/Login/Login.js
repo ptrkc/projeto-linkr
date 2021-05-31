@@ -173,6 +173,9 @@ const Form = styled.form`
     input::placeholder {
       color: #9f9f9f;
     }
+    input:disabled { 
+    filter: brightness(.7);
+    }
     button {
       width: 330px;
       height: 55px;
@@ -183,7 +186,9 @@ const Form = styled.form`
       font-size: 22px;
       line-height: 33px;
       font-family: 'Oswald', sans-serif;
-      opacity: ${(props) => (props.children[0].props.disabled ? "0.7" : "1")};
+    }
+    button:disabled { 
+    filter: brightness(.7);
     }
 
   @media (min-width: 800px) {

@@ -229,9 +229,9 @@ const Form = styled.form`
     margin-bottom: 15px;
     font-size: 27px;
     line-height: 40px;
-    opacity: ${(props) => (props.children[0].props.disabled ? "0.7" : "1")};
-    pointer-events: ${(props) =>
-      props.children[0].props.disabled ? "none" : "auto"};
+  }
+  input:disabled { 
+    filter: brightness(.7);
   }
   input::placeholder {
     font-size: 27px;
@@ -247,9 +247,9 @@ const Form = styled.form`
     font-size: 27px;
     line-height: 40px;
     color: #ffffff;
-    opacity: ${(props) => (props.children[0].props.disabled ? "0.7" : "1")};
-    pointer-events: ${(props) =>
-      props.children[0].props.disabled ? "none" : "auto"};
+  }
+  button:disabled { 
+    filter: brightness(.7);
   }
 
   @media (max-width: 740px) {
