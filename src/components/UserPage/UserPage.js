@@ -9,6 +9,7 @@ import PostsList from "../Timeline/PostsList";
 import Trending from "../Trending/Trending";
 
 import styled from "styled-components";
+import useInterval from "../useInterval/useInterval";
 
 export default function UserPage() {
   const [posts, setPosts] = useState(null);
@@ -88,6 +89,11 @@ export default function UserPage() {
     });
   }
 
+  useInterval(() => {
+    getFollows();
+    getPosts();
+  }, 15000);
+
   function follow() {
     setLoadingFollow(true);
     const config = {
@@ -126,7 +132,7 @@ export default function UserPage() {
       config
     );
 
-    request.then((response) => {
+    request.then(() => {
       setFollowing(false);
       setLoadingFollow(false);
     });

@@ -7,6 +7,7 @@ import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
 import PostsList from "../Timeline/PostsList";
 import Trending from "../Trending/Trending";
+import useInterval from "../useInterval/useInterval";
 
 export default function HashtagPage() {
   const [posts, setPosts] = useState(null);
@@ -47,6 +48,11 @@ export default function HashtagPage() {
       setError(true);
     });
   }
+
+  useInterval(() => {
+    getPosts();
+  }, 15000);
+
   return (
     <StyledTimeline>
       <h1># {hashtag}</h1>
@@ -64,7 +70,7 @@ export default function HashtagPage() {
           ) : posts.length === 0 ? (
             <p className="warning">Nenhum post encontrado</p>
           ) : (
-            <PostsList posts={posts} reload={getPosts}/>
+            <PostsList posts={posts} reload={getPosts} />
           )}
         </div>
         <div className="page-right">
