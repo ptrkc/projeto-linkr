@@ -29,6 +29,7 @@ export default function Post({ post, reload }) {
   const [loadedComments, setLoadedComments] = useState(false);
   const [alteredText, setAlteredText] = useState(text);
   const [error, setError] = useState(false);
+  const [counter, setCounter] = useState(post.commentCount);
   function editToggle() {
     if (isLoading) {
       return;
@@ -54,6 +55,7 @@ export default function Post({ post, reload }) {
           <Likes post={post}></Likes>
           <CommentsButton
             post={post}
+            counter={counter}
             loadedComments={loadedComments}
             setLoadedComments={setLoadedComments}
             showingComments={showingComments}
@@ -122,7 +124,9 @@ export default function Post({ post, reload }) {
         </div>
       </div>
       <div className="comment-section">
-        {loadedComments ? <CommentsSection post={post} /> : null}
+        {loadedComments ? (
+          <CommentsSection post={post} setCounter={setCounter} />
+        ) : null}
       </div>
     </PostStyle>
   );

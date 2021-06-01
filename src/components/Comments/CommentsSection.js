@@ -1,5 +1,4 @@
 import axios from "axios";
-import { AiOutlineComment } from "react-icons/ai";
 import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/UserContexts";
@@ -7,12 +6,16 @@ import CreateComment from "./CreateComment";
 import Avatar from "./Avatar";
 import { Link } from "react-router-dom";
 
-export default function CommentSection({ post }) {
+export default function CommentSection({ post, setCounter }) {
   const { user } = useContext(UserContext);
   const [comments, setComments] = useState([]);
+  const [following, setFollowing] = useState([]);
+
   useEffect(() => {
     getComments();
+    getFollowing();
   }, []);
+
   function getComments() {
     const config = {
       headers: {
@@ -24,42 +27,63 @@ export default function CommentSection({ post }) {
       config
     );
     commentsRequest.then((response) => {
-      console.log(response);
       setComments(response.data.comments);
+      setCounter(response.data.comments.length);
     });
-    commentsRequest.catch((error) => {
-      console.log(error.response);
+    commentsRequest.catch(() => {
+      alert("Could not get comments");
     });
   }
-  console.log(post);
+
+  function getFollowing() {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const followingRequest = axios.get(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows`,
+      config
+    );
+    followingRequest.then((response) => {
+      const ids = response.data.users.map(user => user.id)
+      setFollowing(ids);
+    });
+    followingRequest.catch(() => {
+      alert("Could not get who you follow");
+    });
+  }
+
   return (
     <StyledCommentsSection initial={!comments.length}>
-      {comments.length === 0 ? (
-        post.commentCount !== 0 ? (
-          <div className="comment-box">Loading...</div>
+      <div className="comments">
+        {comments.length === 0 ? (
+          post.commentCount !== 0 ? (
+            <div className="comment-box">Loading...</div>
+          ) : (
+            <div className="comment-box">No comments yet</div>
+          )
         ) : (
-          <div className="comment-box">No comments yet</div>
-        )
-      ) : (
-        <></>
-      )}
-      {comments.map((comment) => {
-        return (
-          <div className="comment-box" key={comment.id}>
-            <Avatar avatar={comment.user.avatar} id={comment.user.id} />
-            <div>
-              <p>
-                <Link to={`/user/${comment.user.id}`}>
-                  {comment.user.username}
-                </Link>
-                <span> • following</span>
-              </p>
-              <p className="comment">{comment.text}</p>
+          <></>
+        )}
+        {comments.map((comment) => {
+          return (
+            <div className="comment-box" key={comment.id}>
+              <Avatar avatar={comment.user.avatar} id={comment.user.id} />
+              <div>
+                <p>
+                  <Link to={`/user/${comment.user.id}`}>
+                    {comment.user.username}
+                  </Link>
+                  <span>{(post.user.id === comment.user.id) && " • post's author"}{(following.includes(comment.user.id)) && " • following"}</span>
+                </p>
+                <p className="comment">{comment.text}</p>
+              </div>
             </div>
-          </div>
-        );
-      })}
-      <CreateComment />
+          );
+        })}
+      </div>
+      <CreateComment post={post} getComments={getComments} />
     </StyledCommentsSection>
   );
 }
@@ -73,24 +97,29 @@ const StyledCommentsSection = styled.div`
   transition: 0.5s;
   font-size: 14px;
   line-height: 17px;
-  .comment-box {
-    padding: 0px 20px;
-    display: flex;
-    align-items: center;
-    min-height: 70px;
-    border-bottom: 1px solid #353535;
-    p {
-      margin-bottom: 3px;
-    }
-    a {
-      font-weight: bold;
-    }
-    span {
-      color: #565656;
-    }
-    .comment {
-      color: #acacac;
-      word-break: break-word;
+  .comments {
+    overflow-y: auto;
+    max-height: ${(props) => (props.initial ? "140px" : "420px")};
+
+    .comment-box {
+      padding: 0px 20px;
+      display: flex;
+      align-items: center;
+      min-height: 70px;
+      border-bottom: 1px solid #353535;
+      p {
+        margin-bottom: 3px;
+      }
+      a {
+        font-weight: bold;
+      }
+      span {
+        color: #565656;
+      }
+      .comment {
+        color: #acacac;
+        word-break: break-word;
+      }
     }
   }
 `;

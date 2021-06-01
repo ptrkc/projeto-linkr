@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Avatar({ avatar, id }) {
-  console.log(avatar);
   return <AvatarStyle avatar={avatar} to={`/user/${id}`}></AvatarStyle>;
 }
 
