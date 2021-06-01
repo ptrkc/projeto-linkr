@@ -19,6 +19,7 @@ export default function UserPage() {
 
   const [displayButton, setDisplayButton] = useState(true);
   const [following, setFollowing] = useState(false);
+  const [loadingFollow, setLoadingFollow] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -34,7 +35,7 @@ export default function UserPage() {
 
     getFollows();
     getPosts();
-  }, [user]);
+  },[user]);
 
   function getPosts() {
     const config = {
@@ -55,6 +56,7 @@ export default function UserPage() {
     request.catch((error) => {
       setIsLoading(false);
       setError(true);
+      alert(error.response.data.message);
     });
   }
 
@@ -71,23 +73,21 @@ export default function UserPage() {
     );
 
     request.then((response) => {
-      console.log(response.data.users, userId);
-      const sigo = response.data.users.filter(item => item.id === Number(userId));
-      if(sigo.length>0){
+      const userFollows = response.data.users.filter(item => item.id === Number(userId));
+      if(userFollows.length>0){
         setFollowing(true);
-        console.log("seguindo");
       }else {
         setFollowing(false);
-        console.log("não seguindo");
       }
     });
 
     request.catch((error) => {
-      console.log(error.response);
+      alert(error.response.data.message);
     });
   }
   
   function follow(){
+    setLoadingFollow(true);
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -101,15 +101,17 @@ export default function UserPage() {
     );
 
     request.then((response) => {
-      console.log(response.data, "FOLLOW");
       setFollowing(true);
+      setLoadingFollow(false);
     });
     request.catch((error) => {
-      alert(`Operation not possible due to ${error.data}. FOLLOW`);
+      setLoadingFollow(false);
+      alert(`Operation not possible due to ${error.response.data.message}.`);
     });
   }
 
   function unfollow(){
+    setLoadingFollow(true);
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -123,27 +125,27 @@ export default function UserPage() {
     );
 
     request.then((response) => {
-      console.log(response.data, "UNFOLLOW");
       setFollowing(false);
+      setLoadingFollow(false);
     });
     request.catch((error) => {
-      alert(`Operation not possible due to ${error.data}. UNFOLLOW`);
+      alert(`Operation not possible due to ${error.response.data.message}.`);
+      setLoadingFollow(false);
     });
   }
 
-  console.log(following, displayButton);
   return (
     <StyledTimeline>
-      <h1>
+      <h1 className="userpagefix">
         {posts === null
           ? ""
           : posts.posts.length >= 0
-          ? <Introduction>
+          ? <Introduction >
               <div>
-                <div>(Avatar)</div>
+                <Avatar url={posts.posts[0].user.avatar}/>
                 <h1>{posts.posts[0].user.username}'s posts</h1>
               </div>
-              <FollowButton onClick={following?unfollow:follow} followinguser={following} display={displayButton}>Follow</FollowButton>
+              <FollowButton onClick={following?unfollow:follow} followinguser={following} display={displayButton} disabled={loadingFollow}>{following?"Unfollow":"Follow"}</FollowButton>
             </Introduction>
           : "error"}
       </h1>
@@ -179,29 +181,44 @@ const Introduction = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  div {
+  > div {
     display: flex;
+    width: 100%;
+    align-items: center;
+    padding-left: 20px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+  > div div {
+    margin-right: 18px;
+    flex-shrink: 0;
   }
 
   h1{
     margin: 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+  @media (max-width: 740px) {
+
+    margin-left:10px;
+
+    > div {
+    padding-left: 0px;
+    }
+    > div div {
+    margin-right: 0;
+    flex-shrink: 0;
+    }
+    h1 {
+      padding-right: 5px;
+    }
+    button {
+      margin-right: 10px;
+    }
   }
 
-  button {
-      width: 112px;
-      height: 31px;
-      background: #1877F2;
-      border-radius: 5px;
-      border: none;
-      font-weight: bold;
-      font-size: 14px;
-      line-height: 17px;
-      color: white;
-      font-family: Lato;
-    }
-    button:disabled {
-      filter: brightness(0.7);
-    }
 `;
 
 const FollowButton = styled.button`
@@ -216,4 +233,21 @@ const FollowButton = styled.button`
   line-height: 17px;
   color: ${props => props.followinguser? "#1877F2":"white"};
   font-family: Lato;
+  flex-shrink: 0;
+  cursor: pointer;
+
+  :disabled {
+      filter: brightness(0.7);
+  }
+`;
+
+const Avatar = styled.div`
+  background-image: url(${(props) => props.url});
+  width: 50px;
+  height: 50px;;
+  border-radius: 26.5px;
+  background-size: cover;
+  background-position: center;
+  top: 0;
+  right: 0;
 `;

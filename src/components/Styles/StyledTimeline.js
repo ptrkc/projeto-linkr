@@ -49,6 +49,9 @@ const StyledTimeline = styled.div`
       margin-bottom: 19px;
       font-size: 33px;
     }
+    .userpagefix{
+      padding-left:0;
+    }
   }
 `;
 
