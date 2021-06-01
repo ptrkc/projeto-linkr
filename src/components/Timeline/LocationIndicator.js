@@ -10,9 +10,7 @@ Modal.setAppElement("#root");
 
 export default function LocationIndicator({ user, geolocation }) {
   const [isOpen, setIsOpen] = useState(false);
-  //   const [isLoading, setIsLoading] = useState(false);
-  //   const [error, setError] = useState(false);
-
+  const gkey = process.env.REACT_APP_GOOGLE_API_KEY;
   function toggleModal() {
     setIsOpen(!isOpen);
   }
@@ -34,11 +32,14 @@ export default function LocationIndicator({ user, geolocation }) {
             <AiOutlineClose />
           </button>
         </Header>
-        <p>Location</p>
-        <div>
-          {geolocation.latitude}
-          {geolocation.longitude}
-        </div>
+        <MapsFrame>
+          <p>Loading location...</p>
+          <iframe
+            loading="lazy"
+            allowFullScreen
+            src={`https://www.google.com/maps/embed/v1/place?q=${geolocation.latitude},${geolocation.longitude}&key=${gkey}`}
+          ></iframe>
+        </MapsFrame>
       </Modal>
     </>
   );
@@ -72,5 +73,29 @@ const Header = styled.div`
     align-items: center;
     height: 100%;
     padding: 0px;
+  }
+`;
+
+const MapsFrame = styled.div`
+  font-family: Oswald;
+  position: relative;
+  font-size: 24px;
+  width: 100%;
+  height: 100%;
+  max-width: 715px;
+  height: 240px;
+  margin-bottom: 23px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  iframe {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 715px;
+    height: 240px;
+    margin-bottom: 23px;
   }
 `;
