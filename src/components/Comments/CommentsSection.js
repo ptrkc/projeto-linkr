@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/UserContexts";
 import CreateComment from "./CreateComment";
 import Avatar from "./Avatar";
+import { Link } from "react-router-dom";
 
 export default function CommentSection({ post }) {
   const { user } = useContext(UserContext);
@@ -33,18 +34,27 @@ export default function CommentSection({ post }) {
   console.log(post);
   return (
     <StyledCommentsSection initial={!comments.length}>
-      {comments.length === 0
-        ? post.commentCount !== 0
-          ? "Loading..."
-          : "No comments yet"
-        : ""}
+      {comments.length === 0 ? (
+        post.commentCount !== 0 ? (
+          <div className="comment-box">Loading...</div>
+        ) : (
+          <div className="comment-box">No comments yet</div>
+        )
+      ) : (
+        <></>
+      )}
       {comments.map((comment) => {
         return (
-          <div key={comment.id}>
+          <div className="comment-box" key={comment.id}>
             <Avatar avatar={comment.user.avatar} id={comment.user.id} />
             <div>
-              <p>{comment.user.username}</p>
-              <p>{comment.text}</p>
+              <p>
+                <Link to={`/user/${comment.user.id}`}>
+                  {comment.user.username}
+                </Link>
+                <span> • following</span>
+              </p>
+              <p className="comment">{comment.text}</p>
             </div>
           </div>
         );
@@ -55,15 +65,32 @@ export default function CommentSection({ post }) {
 }
 
 const StyledCommentsSection = styled.div`
-  margin: 15px 0px;
   width: 100%;
-  max-height: ${(props) => (props.initial ? "50px" : "600px")};
+  max-height: ${(props) => (props.initial ? "140px" : "600px")};
   padding: 0;
   border: none;
   background-color: transparent;
-  color: inherit;
   transition: 0.5s;
-  & > div {
+  font-size: 14px;
+  line-height: 17px;
+  .comment-box {
+    padding: 0px 20px;
     display: flex;
+    align-items: center;
+    min-height: 70px;
+    border-bottom: 1px solid #353535;
+    p {
+      margin-bottom: 3px;
+    }
+    a {
+      font-weight: bold;
+    }
+    span {
+      color: #565656;
+    }
+    .comment {
+      color: #acacac;
+      word-break: break-word;
+    }
   }
 `;
