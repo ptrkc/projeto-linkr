@@ -22,6 +22,7 @@ const Container = styled.div`
     font-family: "Oswald", sans-serif;
     font-size: 36px;
     padding: 20px 0;
+    margin-top: 65px;
   }
   @media (max-width: 740px) {
     height: calc(100vh - 350px);

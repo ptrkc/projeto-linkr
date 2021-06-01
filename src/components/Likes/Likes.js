@@ -13,7 +13,7 @@ export default function Likes({ post }) {
     return {
       id: item["user.id"],
       username: item["user.username"],
-    };
+    };    
   });
 
   const [likes, setLikes] = useState(initialLikes);

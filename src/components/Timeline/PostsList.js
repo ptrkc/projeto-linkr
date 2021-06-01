@@ -5,7 +5,8 @@ export default function PostsList({ posts, reload }) {
   return (
     <Container>
       {posts.posts.map((post) => {
-        return <Post post={post} key={post.id} reload={reload}/>;
+        const postKey = post.repostId ? post.repostId : post.id;
+        return <Post post={post} key={postKey} reload={reload} />;
       })}
     </Container>
   );
