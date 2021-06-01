@@ -8,18 +8,12 @@ import UserContext from "../../contexts/UserContexts";
 export default function Likes({ post }) {
 
   const { user } = useContext(UserContext);
+
   const initialLikes = post.likes.map((item) => {
-    if (window.location.pathname === "/my-likes") {
-      return {
-        id: item.id,
-        username: item.username,
-      };
-    } else {
-      return {
-        id: item["user.id"],
-        username: item["user.username"],
-      };
-    }
+    return {
+      id: item["user.id"],
+      username: item["user.username"],
+    };    
   });
 
   const [likes, setLikes] = useState(initialLikes);
