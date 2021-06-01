@@ -3,6 +3,7 @@ import { AiOutlineComment } from "react-icons/ai";
 import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/UserContexts";
+import CreateComment from "./CreateComment";
 
 export default function CommentSection({ post }) {
   const { user } = useContext(UserContext);
@@ -30,7 +31,8 @@ export default function CommentSection({ post }) {
   }
 
   return (
-    <StyledCommentsSection>
+    <StyledCommentsSection initial={!comments.length}>
+      {comments.length === 0 ? "Loading..." : ""}
       {comments.map((comment) => {
         return (
           <>
@@ -39,6 +41,7 @@ export default function CommentSection({ post }) {
           </>
         );
       })}
+      <CreateComment />
     </StyledCommentsSection>
   );
 }
@@ -46,8 +49,10 @@ export default function CommentSection({ post }) {
 const StyledCommentsSection = styled.div`
   margin: 15px 0px;
   width: 100%;
+  max-height: ${(props) => (props.initial ? "50px" : "600px")};
   padding: 0;
   border: none;
   background-color: transparent;
   color: inherit;
+  transition: 0.5s;
 `;
