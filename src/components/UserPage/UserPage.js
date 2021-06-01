@@ -8,7 +8,8 @@ import StyledTimeline from "../Styles/StyledTimeline";
 import PostsList from "../Timeline/PostsList";
 import Trending from "../Trending/Trending";
 
-import styled from  "styled-components";
+import styled from "styled-components";
+import useInterval from "../useInterval/useInterval";
 
 export default function UserPage() {
   const [posts, setPosts] = useState(null);
@@ -29,13 +30,13 @@ export default function UserPage() {
         return;
       }
     }
-    if(user.id===Number(userId)){
+    if (user.id === Number(userId)) {
       setDisplayButton(false);
-    } 
+    }
 
     getFollows();
     getPosts();
-  },[user]);
+  }, [user]);
 
   function getPosts() {
     const config = {
@@ -60,7 +61,7 @@ export default function UserPage() {
     });
   }
 
-  function getFollows(){
+  function getFollows() {
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -73,10 +74,12 @@ export default function UserPage() {
     );
 
     request.then((response) => {
-      const userFollows = response.data.users.filter(item => item.id === Number(userId));
-      if(userFollows.length>0){
+      const userFollows = response.data.users.filter(
+        (item) => item.id === Number(userId)
+      );
+      if (userFollows.length > 0) {
         setFollowing(true);
-      }else {
+      } else {
         setFollowing(false);
       }
     });
@@ -85,8 +88,13 @@ export default function UserPage() {
       alert(error.response.data.message);
     });
   }
-  
-  function follow(){
+
+  useInterval(() => {
+    getFollows();
+    getPosts();
+  }, 15000);
+
+  function follow() {
     setLoadingFollow(true);
     const config = {
       headers: {
@@ -110,7 +118,7 @@ export default function UserPage() {
     });
   }
 
-  function unfollow(){
+  function unfollow() {
     setLoadingFollow(true);
     const config = {
       headers: {
@@ -137,17 +145,26 @@ export default function UserPage() {
   return (
     <StyledTimeline>
       <h1 className="userpagefix">
-        {posts === null
-          ? ""
-          : posts.posts.length >= 0
-          ? <Introduction >
-              <div>
-                <Avatar url={posts.posts[0].user.avatar}/>
-                <h1>{posts.posts[0].user.username}'s posts</h1>
-              </div>
-              <FollowButton onClick={following?unfollow:follow} followinguser={following} display={displayButton} disabled={loadingFollow}>{following?"Unfollow":"Follow"}</FollowButton>
-            </Introduction>
-          : "error"}
+        {posts === null ? (
+          ""
+        ) : posts.posts.length >= 0 ? (
+          <Introduction>
+            <div>
+              <Avatar url={posts.posts[0].user.avatar} />
+              <h1>{posts.posts[0].user.username}'s posts</h1>
+            </div>
+            <FollowButton
+              onClick={following ? unfollow : follow}
+              followinguser={following}
+              display={displayButton}
+              disabled={loadingFollow}
+            >
+              {following ? "Unfollow" : "Follow"}
+            </FollowButton>
+          </Introduction>
+        ) : (
+          "error"
+        )}
       </h1>
       <div className="main-content">
         <div className="page-left">
@@ -194,22 +211,21 @@ const Introduction = styled.div`
     flex-shrink: 0;
   }
 
-  h1{
+  h1 {
     margin: 0;
     overflow-wrap: break-word;
     word-wrap: break-word;
     word-break: break-word;
   }
   @media (max-width: 740px) {
-
-    margin-left:10px;
+    margin-left: 10px;
 
     > div {
-    padding-left: 0px;
+      padding-left: 0px;
     }
     > div div {
-    margin-right: 0;
-    flex-shrink: 0;
+      margin-right: 0;
+      flex-shrink: 0;
     }
     h1 {
       padding-right: 5px;
@@ -218,33 +234,32 @@ const Introduction = styled.div`
       margin-right: 10px;
     }
   }
-
 `;
 
 const FollowButton = styled.button`
-  display: ${props => props.display? "block":"none"};
+  display: ${(props) => (props.display ? "block" : "none")};
   width: 112px;
   height: 31px;
-  background: ${props => props.followinguser? "white":"#1877F2"};
+  background: ${(props) => (props.followinguser ? "white" : "#1877F2")};
   border-radius: 5px;
   border: none;
   font-weight: bold;
   font-size: 14px;
   line-height: 17px;
-  color: ${props => props.followinguser? "#1877F2":"white"};
+  color: ${(props) => (props.followinguser ? "#1877F2" : "white")};
   font-family: Lato;
   flex-shrink: 0;
   cursor: pointer;
 
   :disabled {
-      filter: brightness(0.7);
+    filter: brightness(0.7);
   }
 `;
 
 const Avatar = styled.div`
   background-image: url(${(props) => props.url});
   width: 50px;
-  height: 50px;;
+  height: 50px;
   border-radius: 26.5px;
   background-size: cover;
   background-position: center;
