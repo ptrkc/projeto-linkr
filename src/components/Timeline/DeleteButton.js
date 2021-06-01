@@ -98,7 +98,6 @@ const TrashButton = styled.button`
   display: flex;
   justify-content: flex-end;
   background-color: transparent;
-  cursor: pointer;
   color: white;
   border: none;
 `;
@@ -125,7 +124,6 @@ const ModalContent = styled.div`
       font-size: 18px;
       line-height: 22px;
       border: none;
-      cursor: pointer;
       color: #ffffff;
       background: #1877f2;
     }
