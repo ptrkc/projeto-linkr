@@ -17,6 +17,11 @@ const PostStyle = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-size: 11px;
+    line-height: 13px;
+    text-align: center;
+    color: #ffffff;
+    width: 67px;
 
     a.user-image {
       border-radius: 50%;

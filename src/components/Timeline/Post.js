@@ -7,16 +7,15 @@ import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
 import EditArea from "./EditArea";
 
-import Likes from '../Likes/Likes';
+import Likes from "../Likes/Likes";
+import CommentsButton from "../Comments/CommentsButton";
 
 export default function Post({ post, reload }) {
-  const { linkImage, linkTitle, linkDescription, id, user, link, text } =
-    post;
+  const { linkImage, linkTitle, linkDescription, id, user, link, text } = post;
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [alteredText, setAlteredText] = useState(text);
   const [error, setError] = useState(false);
-
   function editToggle() {
     if (isLoading) {
       return;
@@ -36,6 +35,7 @@ export default function Post({ post, reload }) {
           <div />
         </a>
         <Likes post={post}></Likes>
+        <CommentsButton post={post} />
       </div>
       <div className="post-right">
         <div className="top">
