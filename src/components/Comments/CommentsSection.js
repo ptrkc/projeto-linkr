@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/UserContexts";
 import CreateComment from "./CreateComment";
+import Avatar from "./Avatar";
 
 export default function CommentSection({ post }) {
   const { user } = useContext(UserContext);
@@ -29,16 +30,23 @@ export default function CommentSection({ post }) {
       console.log(error.response);
     });
   }
-
+  console.log(post);
   return (
     <StyledCommentsSection initial={!comments.length}>
-      {comments.length === 0 ? "Loading..." : ""}
+      {comments.length === 0
+        ? post.commentCount !== 0
+          ? "Loading..."
+          : "No comments yet"
+        : ""}
       {comments.map((comment) => {
         return (
-          <>
-            {comment.user.username}, {comment.text}
-            <br />
-          </>
+          <div key={comment.id}>
+            <Avatar avatar={comment.user.avatar} id={comment.user.id} />
+            <div>
+              <p>{comment.user.username}</p>
+              <p>{comment.text}</p>
+            </div>
+          </div>
         );
       })}
       <CreateComment />
@@ -55,4 +63,7 @@ const StyledCommentsSection = styled.div`
   background-color: transparent;
   color: inherit;
   transition: 0.5s;
+  & > div {
+    display: flex;
+  }
 `;

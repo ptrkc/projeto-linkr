@@ -24,7 +24,7 @@ export default function UserPage() {
       }
     }
     getPosts();
-  }, [user]);
+  }, [user, userId]);
 
   function getPosts() {
     const config = {
