@@ -62,7 +62,7 @@ export default function LikedPosts() {
           ) : posts.posts.length === 0 ? (
             <p className="warning">Nenhum post encontrado</p>
           ) : (
-            <PostsList posts={posts} again="true"/>
+            <PostsList posts={posts} reload={getPosts}/>
           )}
         </div>
         <div className="page-right">

@@ -10,7 +10,7 @@ import EditArea from "./EditArea";
 import Likes from "../Likes/Likes";
 import LocationIndicator from "./LocationIndicator";
 
-export default function Post({ post, reload, again }) {
+export default function Post({ post, reload }) {
   const {
     linkImage,
     linkTitle,
@@ -21,6 +21,7 @@ export default function Post({ post, reload, again }) {
     text,
     geolocation,
   } = post;
+
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [alteredText, setAlteredText] = useState(text);
@@ -44,7 +45,7 @@ export default function Post({ post, reload, again }) {
         <a className="user-image" href={`/user/${user.id}`}>
           <div />
         </a>
-        <Likes post={post} again={again}></Likes>
+        <Likes post={post}></Likes>
       </div>
       <div className="post-right">
         <div className="top">

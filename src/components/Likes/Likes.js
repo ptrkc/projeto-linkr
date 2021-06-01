@@ -6,6 +6,7 @@ import { FaHeart } from "react-icons/fa";
 import ReactTooltip from "react-tooltip";
 import UserContext from "../../contexts/UserContexts";
 export default function Likes({ post }) {
+
   const { user } = useContext(UserContext);
   const initialLikes = post.likes.map((item) => {
     if (window.location.pathname === "/my-likes") {
@@ -20,7 +21,9 @@ export default function Likes({ post }) {
       };
     }
   });
+
   const [likes, setLikes] = useState(initialLikes);
+
   const [tooltip, setTooltip] = useState("");
   function likeThis() {
     const config = {
@@ -66,9 +69,12 @@ export default function Likes({ post }) {
     });
     request.catch(() => alert("Error setting likes"));
   }
+
   useEffect(() => {
     getTooltip();
   }, [likes]);
+
+
   function getTooltip() {
     const notMe = likes.filter((item) => item.id !== user.id);
     const namesNotMine = notMe.map((item) => item.username);

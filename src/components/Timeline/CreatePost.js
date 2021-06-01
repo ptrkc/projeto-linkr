@@ -105,6 +105,7 @@ const Container = styled.div`
   color: #707070;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 16px;
+  margin-bottom: 30px;
   @media (max-width: 740px) {
     padding: 10px 15px;
     border-radius: 0px;
