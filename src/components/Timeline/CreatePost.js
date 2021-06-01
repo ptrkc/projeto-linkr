@@ -201,7 +201,7 @@ const PostForm = styled.form`
     }
     div {
       button {
-        width: 112px;
+        min-width: 112px;
         height: 22px;
         font-size: 13px;
       }
