@@ -38,7 +38,6 @@ export default function Post({ post, reload }) {
       setIsEditing(true);
     }
   }
-  console.log(geolocation);
   return (
     <PostStyle avatar={user.avatar} image={linkImage}>
       <div className="post-left">

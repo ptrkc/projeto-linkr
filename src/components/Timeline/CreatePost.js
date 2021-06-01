@@ -21,7 +21,6 @@ export default function CreatePost({ getPosts, user }) {
     if (!isURL(url)) {
       setUrlError(true);
       urlInput.current.focus();
-      console.log("wtf");
       return;
     }
     setIsLoading(true);
