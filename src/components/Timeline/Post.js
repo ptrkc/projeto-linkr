@@ -10,9 +10,19 @@ import EditArea from "./EditArea";
 import Likes from "../Likes/Likes";
 import CommentsButton from "../Comments/CommentsButton";
 import CommentsSection from "../Comments/CommentsSection";
+import LocationIndicator from "./LocationIndicator";
 
 export default function Post({ post, reload }) {
-  const { linkImage, linkTitle, linkDescription, id, user, link, text } = post;
+  const {
+    linkImage,
+    linkTitle,
+    linkDescription,
+    id,
+    user,
+    link,
+    text,
+    geolocation,
+  } = post;
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showingComments, setShowingComments] = useState(false);
@@ -30,7 +40,6 @@ export default function Post({ post, reload }) {
       setIsEditing(true);
     }
   }
-
   return (
     <PostStyle
       avatar={user.avatar}
@@ -53,9 +62,17 @@ export default function Post({ post, reload }) {
         </div>
         <div className="post-right">
           <div className="top">
-            <a href={`/user/${user.id}`} className="username">
-              {user.username}
-            </a>
+            <div>
+              <a href={`/user/${user.id}`} className="username">
+                {user.username}
+              </a>
+              {geolocation && (
+                <LocationIndicator
+                  user={user.username}
+                  geolocation={geolocation}
+                />
+              )}
+            </div>
             <div>
               <EditButton
                 userId={user.id}

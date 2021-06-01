@@ -17,6 +17,10 @@ textarea
     font-size: inherit;
     font-weight: inherit;
 }
+
+button {
+    cursor: pointer;
+}
 `;
 
 export default GlobalStyle;
