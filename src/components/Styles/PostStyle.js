@@ -50,6 +50,8 @@ const PostStyle = styled.div`
       margin-bottom: 8px;
       div {
         display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
     a.username {
