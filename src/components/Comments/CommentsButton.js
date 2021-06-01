@@ -1,9 +1,22 @@
 import { AiOutlineComment } from "react-icons/ai";
 import styled from "styled-components";
 
-export default function CommentsButton({ post }) {
+export default function CommentsButton({
+  post,
+  loadedComments,
+  setLoadedComments,
+  showingComments,
+  setShowingComments,
+}) {
+  function toggleComments() {
+    if (!loadedComments) {
+      setLoadedComments(true);
+    }
+    setShowingComments(!showingComments);
+  }
+
   return (
-    <StyledComments>
+    <StyledComments onClick={toggleComments}>
       <AiOutlineComment />
       <p>
         {post.commentCount} comment{post.commentCount > 0 ? "s" : null}
