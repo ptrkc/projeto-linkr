@@ -1,5 +1,7 @@
 import ReactHashtag from "react-hashtag";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { BiRepost } from "react-icons/bi";
 
 import PostStyle from "../Styles/PostStyle";
 
@@ -7,13 +9,12 @@ import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
 import RepostButton from "./RepostButton";
 import EditArea from "./EditArea";
-
 import Likes from "../Likes/Likes";
 import CommentsButton from "../Comments/CommentsButton";
 import CommentsSection from "../Comments/CommentsSection";
 import LocationIndicator from "./LocationIndicator";
 
-export default function Post({ post, reload }) {
+export default function Post({ post, reload, userId }) {
   const {
     linkImage,
     linkTitle,
@@ -43,12 +44,25 @@ export default function Post({ post, reload }) {
       setIsEditing(true);
     }
   }
+
+  console.log(user);
   return (
     <PostStyle
       avatar={user.avatar}
       image={linkImage}
       showingComments={showingComments}
     >
+      {post.repostId && (
+        <div className="repost">
+          <BiRepost />
+          <span>
+            Reposted by{" "}
+            <Link to={`/user/${post.repostedBy.id}`}>
+              {post.repostedBy.id === userId ? "you" : post.repostedBy.username}
+            </Link>
+          </span>
+        </div>
+      )}
       <div className="post-content">
         <div className="post-left">
           <a className="user-image" href={`/user/${user.id}`}>
