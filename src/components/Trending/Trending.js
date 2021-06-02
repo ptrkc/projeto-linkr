@@ -9,14 +9,19 @@ export default function Trending() {
   const [trending, setTrending] = useState([]);
   const [requestError, setRequestError] = useState(false);
   const [hashtag, setHashtag] = useState("");
-  const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const [lastUpdate, setLastUpdate] = useState(Date.now());
 
   useEffect(() => {
     if (user) {
       getTrending();
     }
   }, [user]);
+
+  if (Date.now() - lastUpdate > 60000) {
+    setLastUpdate(Date.now());
+    getTrending();
+  }
 
   function getTrending() {
     const config = {
@@ -45,6 +50,7 @@ export default function Trending() {
     }
     history.push(`/hashtag/${hashtag}`);
   }
+
   return (
     <TrendingContainer>
       <div>
@@ -130,7 +136,7 @@ const TrendingContainer = styled.div`
       }
     }
   }
-  @media (max-width: 960px) {
+  @media (max-width: 950px) {
     right: 5px;
   }
   @media (max-width: 740px) {
