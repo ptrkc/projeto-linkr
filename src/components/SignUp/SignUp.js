@@ -51,19 +51,19 @@ export default function SignUp() {
       });
     } else {
       if (!validateEmail(email)) {
-        alert("Incorrect format email.");
+        alert("Please check your email.");
         return;
       }
       if (!isURL(image)) {
-        alert("Incorrect format URL.");
+        alert("Please check your image URL.");
         return;
       }
       if (password.trim().length === 0) {
-        alert("Password field filled in blank.");
+        alert("Plase type a password.");
         return;
       }
       if (name.trim().length === 0) {
-        alert("Name field filled in blank.");
+        alert("Please type your name.");
       }
     }
   }

@@ -11,7 +11,7 @@ import styled from "styled-components";
 import useInterval from "../useInterval/useInterval";
 
 export default function UserPage() {
-  const [posts, setPosts] = useState(null);
+  const [posts, setPosts] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
@@ -34,8 +34,8 @@ export default function UserPage() {
       setDisplayButton(false);
     }
     getInfo();
-    getFollows();
     getPosts();
+    getFollows();
   }, [user, userId]);
 
   function getInfo() {
@@ -167,34 +167,48 @@ export default function UserPage() {
     });
   }
 
+  function getInfo() {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const request = axios.get(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}`,
+      config
+    );
+
+    request.then((response) => {
+      setUserInfo(response.data.user);
+    });
+    request.catch((error) => {
+      alert(error.response.data.message);
+    });
+  }
+
   return (
     <StyledTimeline>
       <h1 className="userpagefix">
-        {posts === null ? (
-          ""
-        ) : posts.posts.length >= 0 ? (
-          <Introduction>
-            <div>
-              <Avatar url={userInfo && userInfo.avatar} />
-              <h1>{userInfo && userInfo.username}'s posts</h1>
-            </div>
-            <FollowButton
-              onClick={following ? unfollow : follow}
-              followinguser={following}
-              display={displayButton}
-              disabled={loadingFollow}
-            >
-              {following ? "Unfollow" : "Follow"}
-            </FollowButton>
-          </Introduction>
-        ) : (
-          "error"
-        )}
+        <Introduction>
+          <div>
+            <Avatar url={userInfo && userInfo.avatar} />
+            {userInfo && <h1>{userInfo.username}'s posts</h1>}
+          </div>
+          <FollowButton
+            onClick={following ? unfollow : follow}
+            followinguser={following}
+            display={displayButton}
+            disabled={loadingFollow}
+          >
+            {following ? "Unfollow" : "Follow"}
+          </FollowButton>
+        </Introduction>
       </h1>
       <div className="main-content">
         <div className="page-left">
           {isLoading ? <Loading /> : ""}
-          {posts === null ? (
+          {posts === null || posts === undefined ? (
             error ? (
               <p className="warning">
                 Could not get posts right now. Please try again.
