@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import UserContext from "../../contexts/UserContexts";
 
@@ -7,6 +8,7 @@ export default function Trending() {
   const { user } = useContext(UserContext);
   const [trendingList, setTrendingList] = useState([]);
   const [requestError, setRequestError] = useState();
+  const [hashtag, setHashtag] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -60,10 +62,13 @@ export default function Trending() {
     });
   }
 
-
+  function goToHashtag(e) {
+    e.preventDefault();
+    alert(hashtag);
+  }
   return (
-    <Container>
-      <Title>trending</Title>
+    <TrendingContainer>
+      <p className="title">trending</p>
       <ContainerList>
         {requestError ? (
           <div onClick={refresh}>Try again</div>
@@ -71,40 +76,79 @@ export default function Trending() {
           "loading..."
         ) : trendingList.length > 0 ? (
           trendingList.map((item) => (
-            <a key={item.id} href={`/hashtag/${item.name}`}>
+            <Link key={item.id} to={`/hashtag/${item.name}`}>
               # {item.name}
-            </a>
+            </Link>
           ))
         ) : (
           <></>
         )}
       </ContainerList>
-    </Container>
+      <form onSubmit={goToHashtag}>
+        <span>#</span>
+        <input
+          value={hashtag}
+          onChange={(e) => setHashtag(e.target.value)}
+          type="text"
+          placeholder="type a hashtag"
+        />
+      </form>
+    </TrendingContainer>
   );
 }
 
-const Container = styled.div``;
-
-const Title = styled.div`
-  font-family: "Oswald", sans-serif;
+const TrendingContainer = styled.div`
   font-weight: bold;
-  font-size: 27px;
-  line-height: 40px;
-  display: flex;
-  border-bottom: 1px solid #484848;
-  padding: 16px;
+
+  .title {
+    font-family: "Oswald", sans-serif;
+    font-size: 27px;
+    line-height: 40px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0px 16px;
+    border-bottom: 1px solid #484848;
+  }
+  form {
+    padding: 0px 16px 15px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    span {
+      position: absolute;
+      font-size: 19px;
+      left: 29px;
+    }
+    input {
+      font-family: Lato;
+      font-weight: normal;
+      font-size: 16px;
+      color: white;
+      height: 35px;
+      background: #252525;
+      border-radius: 8px;
+      width: 100%;
+      border: none;
+      padding: 0px 12px 0px 36px;
+    }
+    input::placeholder {
+      color: #575757;
+      font-style: italic;
+    }
+  }
 `;
 
 const ContainerList = styled.div`
   font-family: "Lato", sans-serif;
-  font-weight: bold;
   font-size: 19px;
   line-height: 23px;
   letter-spacing: 0.05em;
-  padding: 26px 16px;
+  padding: 24px 16px 10px;
   display: flex;
   flex-direction: column;
-
+  justify-content: space-between;
+  height: 330px;
   a {
     margin-bottom: 5px;
     width: fit-content;
