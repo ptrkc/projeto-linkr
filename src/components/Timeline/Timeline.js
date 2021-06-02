@@ -6,7 +6,6 @@ import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
 import CreatePost from "./CreatePost";
 import PostsList from "./PostsList";
-import Trending from "../Trending/Trending";
 import useInterval from "../useInterval/useInterval";
 
 export default function Timeline() {

@@ -6,7 +6,6 @@ import UserContext from "../../contexts/UserContexts";
 import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
 import PostsList from "../Timeline/PostsList";
-import Trending from "../Trending/Trending";
 import useInterval from "../useInterval/useInterval";
 
 export default function HashtagPage() {
