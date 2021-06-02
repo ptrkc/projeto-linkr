@@ -29,7 +29,7 @@ export default function Header() {
   return (
     <>
       <StyledHeader>
-        <Link to="/">
+        <Link to="/timeline">
           <Logo>linkr</Logo>
         </Link>
         <ShowMenuButton onClick={toggleMenu}>

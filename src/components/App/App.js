@@ -14,6 +14,7 @@ import LikedPosts from "../LikedPosts/LikedPosts";
 import Header from "../Header/Header";
 import HashtagPage from "../HashtagPage/HashtagPage";
 import UserPage from "../UserPage/UserPage";
+import Trending from "../Trending/Trending";
 
 export default function App() {
   const [user, setUser] = useState();
@@ -31,22 +32,27 @@ export default function App() {
           <Route path="/timeline" exact>
             <Header />
             <Timeline />
+            <Trending />
           </Route>
           <Route path="/my-posts" exact>
             <Header />
             <MyPosts />
+            <Trending />
           </Route>
           <Route path="/my-likes" exact>
             <Header />
             <LikedPosts />
+            <Trending />
           </Route>
           <Route path="/user/:userId" exact>
             <Header />
             <UserPage />
+            <Trending />
           </Route>
           <Route path="/hashtag/:hashtag" exact>
             <Header />
             <HashtagPage />
+            <Trending />
           </Route>
         </Switch>
       </BrowserRouter>

@@ -6,7 +6,6 @@ import UserContext from "../../contexts/UserContexts";
 import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
 import PostsList from "../Timeline/PostsList";
-import Trending from "../Trending/Trending";
 
 import styled from "styled-components";
 import useInterval from "../useInterval/useInterval";
@@ -183,11 +182,7 @@ export default function UserPage() {
             <PostsList posts={posts} reload={getPosts} />
           )}
         </div>
-        <div className="page-right">
-          <div className="trending">
-            <Trending />
-          </div>
-        </div>
+        <div className="page-right"></div>
       </div>
     </StyledTimeline>
   );

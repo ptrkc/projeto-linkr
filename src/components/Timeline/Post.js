@@ -11,6 +11,7 @@ import Likes from "../Likes/Likes";
 import CommentsButton from "../Comments/CommentsButton";
 import CommentsSection from "../Comments/CommentsSection";
 import LocationIndicator from "./LocationIndicator";
+import { Link } from "react-router-dom";
 
 export default function Post({ post, reload }) {
   const {
@@ -49,9 +50,9 @@ export default function Post({ post, reload }) {
     >
       <div className="post-content">
         <div className="post-left">
-          <a className="user-image" href={`/user/${user.id}`}>
+          <Link className="user-image" to={`/user/${user.id}`}>
             <div />
-          </a>
+          </Link>
           <Likes post={post}></Likes>
           <CommentsButton
             post={post}
@@ -65,9 +66,9 @@ export default function Post({ post, reload }) {
         <div className="post-right">
           <div className="top">
             <div>
-              <a href={`/user/${user.id}`} className="username">
+              <Link to={`/user/${user.id}`} className="username">
                 {user.username}
-              </a>
+              </Link>
               {geolocation && (
                 <LocationIndicator
                   user={user.username}
@@ -101,12 +102,13 @@ export default function Post({ post, reload }) {
             ) : (
               <ReactHashtag
                 renderHashtag={(hashtagValue) => (
-                  <a
-                    href={`/hashtag/${hashtagValue.substring(1)}`}
+                  <Link
+                    to={`/hashtag/${hashtagValue.substring(1)}`}
                     className="hashtag"
+                    key={hashtagValue}
                   >
                     {hashtagValue}
-                  </a>
+                  </Link>
                 )}
               >
                 {alteredText}
