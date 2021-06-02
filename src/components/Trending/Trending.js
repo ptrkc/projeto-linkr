@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import UserContext from "../../contexts/UserContexts";
 
@@ -10,6 +10,7 @@ export default function Trending() {
   const [requestError, setRequestError] = useState();
   const [hashtag, setHashtag] = useState("");
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     if (user) {
@@ -43,7 +44,7 @@ export default function Trending() {
     setLoading(true);
     const config = {
       headers: {
-        Authorization: `Bearer ${user ? user.token : ""}`,
+        Authorization: `Bearer ${user.token}`,
       },
     };
     const request = axios.get(
@@ -64,7 +65,10 @@ export default function Trending() {
 
   function goToHashtag(e) {
     e.preventDefault();
-    alert(hashtag);
+    if (!hashtag) {
+      return;
+    }
+    history.push(`/hashtag/${hashtag}`);
   }
   return (
     <TrendingContainer>
@@ -88,7 +92,7 @@ export default function Trending() {
         <span>#</span>
         <input
           value={hashtag}
-          onChange={(e) => setHashtag(e.target.value)}
+          onChange={(e) => setHashtag(e.target.value.replace(/[\W_]+/, ""))}
           type="text"
           placeholder="type a hashtag"
         />
@@ -124,6 +128,7 @@ const TrendingContainer = styled.div`
       font-family: Lato;
       font-weight: normal;
       font-size: 16px;
+      letter-spacing: 0.05em;
       color: white;
       height: 35px;
       background: #252525;
@@ -135,6 +140,7 @@ const TrendingContainer = styled.div`
     input::placeholder {
       color: #575757;
       font-style: italic;
+      opacity: 1;
     }
   }
 `;
