@@ -8,7 +8,7 @@ import { useContext, useState } from "react";
 
 Modal.setAppElement("#root");
 
-export default function RepostButton({ post, counter, setCounter }) {
+export default function RepostButton({ post, reload }) {
   const { user } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -29,8 +29,7 @@ export default function RepostButton({ post, counter, setCounter }) {
     repostRequest.then(() => {
       setIsOpen(false);
       setIsLoading(false);
-      setCounter(counter + 1);
-      //   reload();
+      reload();
     });
     repostRequest.catch(() => {
       setError(true);
@@ -43,7 +42,7 @@ export default function RepostButton({ post, counter, setCounter }) {
       <StyledRepostButton onClick={() => setIsOpen(true)}>
         <BiRepost />
         <p>
-          {counter} repost{counter > 0 ? "s" : null}
+          {post.repostCount} repost{post.repostCount > 0 ? "s" : null}
         </p>
       </StyledRepostButton>
       <Modal

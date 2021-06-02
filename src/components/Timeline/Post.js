@@ -32,7 +32,6 @@ export default function Post({ post, reload, userId }) {
   const [alteredText, setAlteredText] = useState(text);
   const [error, setError] = useState(false);
   const [commentCounter, setCommentCounter] = useState(post.commentCount);
-  const [repostCounter, setRepostCounter] = useState(post.repostCount);
   function editToggle() {
     if (isLoading) {
       return;
@@ -83,11 +82,7 @@ export default function Post({ post, reload, userId }) {
             showingComments={showingComments}
             setShowingComments={setShowingComments}
           />
-          <RepostButton
-            post={post}
-            counter={repostCounter}
-            setCounter={setRepostCounter}
-          />
+          <RepostButton post={post} reload={reload} />
         </div>
         <div className="post-right">
           <div className="top">
