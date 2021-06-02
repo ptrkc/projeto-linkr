@@ -6,20 +6,27 @@ const PostStyle = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 16px;
   transition: 0.5s;
-  .repost {
+  div.repost {
     height: 33px;
     display: flex;
     align-items: center;
-    font-size: 22px;
+    justify-content: space-between;
     color: #ffffff;
     padding: 0px 13px;
-    span {
+    div {
+      display: flex;
+      align-items: center;
       margin-left: 6px;
       font-size: 11px;
       line-height: 13px;
-    }
-    a {
-      font-weight: bold;
+      svg {
+        font-size: 22px;
+        margin-right: 5px;
+      }
+      a {
+        margin-left: 3px;
+        font-weight: bold;
+      }
     }
   }
   .post-content {

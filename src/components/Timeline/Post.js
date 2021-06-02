@@ -45,7 +45,6 @@ export default function Post({ post, reload, userId }) {
     }
   }
 
-  console.log(user);
   return (
     <PostStyle
       avatar={user.avatar}
@@ -54,13 +53,20 @@ export default function Post({ post, reload, userId }) {
     >
       {post.repostId && (
         <div className="repost">
-          <BiRepost />
-          <span>
+          <div>
+            <BiRepost />
             Reposted by{" "}
             <Link to={`/user/${post.repostedBy.id}`}>
               {post.repostedBy.id === userId ? "you" : post.repostedBy.username}
             </Link>
-          </span>
+          </div>
+          {post.repostedBy.id === userId && (
+            <DeleteButton
+              postId={post.repostId}
+              userId={post.repostedBy.id}
+              reload={reload}
+            />
+          )}
         </div>
       )}
       <div className="post-content">

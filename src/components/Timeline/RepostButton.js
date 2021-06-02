@@ -38,7 +38,6 @@ export default function RepostButton({ post, counter, setCounter }) {
     });
   }
 
-  console.log(post);
   return (
     <>
       <StyledRepostButton onClick={() => setIsOpen(true)}>
