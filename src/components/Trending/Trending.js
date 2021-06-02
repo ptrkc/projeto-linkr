@@ -3,45 +3,23 @@ import { useEffect, useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import UserContext from "../../contexts/UserContexts";
+import TrendingContext from "../../contexts/TrendingContext";
 
 export default function Trending() {
   const { user } = useContext(UserContext);
-  const [trendingList, setTrendingList] = useState([]);
-  const [requestError, setRequestError] = useState();
+  const { trending, setTrending } = useContext(TrendingContext);
+  const [requestError, setRequestError] = useState(false);
   const [hashtag, setHashtag] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
     if (user) {
-      setLoading(true);
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      const request = axios.get(
-        "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending",
-        config
-      );
-
-      request.then((response) => {
-        setTrendingList(response.data.hashtags);
-        setLoading(false);
-      });
-      request.catch((error) => {
-        handler(error);
-        setLoading(false);
-      });
+      getTrending();
     }
   }, [user]);
 
-  function handler(error) {
-    setRequestError(error.response.statusText);
-  }
-
-  function refresh() {
-    setLoading(true);
+  function getTrending() {
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -51,15 +29,13 @@ export default function Trending() {
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending",
       config
     );
-
     request.then((response) => {
-      setTrendingList(response.data.hashtags);
-      setRequestError();
-      setLoading(false);
+      setTrending(response.data.hashtags);
+      setRequestError(false);
     });
-    request.catch((error) => {
-      handler(error);
-      setLoading(false);
+    setRequestError(false);
+    request.catch(() => {
+      setRequestError(true);
     });
   }
 
@@ -74,18 +50,21 @@ export default function Trending() {
     <TrendingContainer>
       <p className="title">trending</p>
       <ContainerList>
-        {requestError ? (
-          <div onClick={refresh}>Try again</div>
-        ) : loading ? (
-          "loading..."
-        ) : trendingList.length > 0 ? (
-          trendingList.map((item) => (
-            <Link key={item.id} to={`/hashtag/${item.name}`}>
-              # {item.name}
-            </Link>
-          ))
+        {!requestError ? (
+          trending.length > 0 ? (
+            trending.map((item) => (
+              <Link key={item.id} to={`/hashtag/${item.name}`}>
+                # {item.name}
+              </Link>
+            ))
+          ) : (
+            <>Loading...</>
+          )
         ) : (
-          <></>
+          <a href="#" onClick={getTrending}>
+            <p>Could not get trending.</p>
+            <p>Try again?</p>
+          </a>
         )}
       </ContainerList>
       <form onSubmit={goToHashtag}>

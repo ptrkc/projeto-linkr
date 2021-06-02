@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import UserContext from "../../contexts/UserContexts";
+import TrendingContext from "../../contexts/TrendingContext";
 
 import "../../css/reset.css";
 import "../../css/styles.css";
@@ -17,39 +18,42 @@ import UserPage from "../UserPage/UserPage";
 
 export default function App() {
   const [user, setUser] = useState();
+  const [trending, setTrending] = useState([]);
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <GlobalStyle />
-      <BrowserRouter>
-        <Switch>
-          <Route path="/" exact>
-            <Login />
-          </Route>
-          <Route path="/sign-up" exact>
-            <SignUp />
-          </Route>
-          <Route path="/timeline" exact>
-            <Header />
-            <Timeline />
-          </Route>
-          <Route path="/my-posts" exact>
-            <Header />
-            <MyPosts />
-          </Route>
-          <Route path="/my-likes" exact>
-            <Header />
-            <LikedPosts />
-          </Route>
-          <Route path="/user/:userId" exact>
-            <Header />
-            <UserPage />
-          </Route>
-          <Route path="/hashtag/:hashtag" exact>
-            <Header />
-            <HashtagPage />
-          </Route>
-        </Switch>
-      </BrowserRouter>
+      <TrendingContext.Provider value={{ trending, setTrending }}>
+        <GlobalStyle />
+        <BrowserRouter>
+          <Switch>
+            <Route path="/" exact>
+              <Login />
+            </Route>
+            <Route path="/sign-up" exact>
+              <SignUp />
+            </Route>
+            <Route path="/timeline" exact>
+              <Header />
+              <Timeline />
+            </Route>
+            <Route path="/my-posts" exact>
+              <Header />
+              <MyPosts />
+            </Route>
+            <Route path="/my-likes" exact>
+              <Header />
+              <LikedPosts />
+            </Route>
+            <Route path="/user/:userId" exact>
+              <Header />
+              <UserPage />
+            </Route>
+            <Route path="/hashtag/:hashtag" exact>
+              <Header />
+              <HashtagPage />
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      </TrendingContext.Provider>
     </UserContext.Provider>
   );
 }
