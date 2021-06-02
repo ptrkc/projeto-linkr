@@ -6,13 +6,12 @@ import UserContext from "../../contexts/UserContexts";
 import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
 import PostsList from "../Timeline/PostsList";
-import Trending from "../Trending/Trending";
 
 import styled from "styled-components";
 import useInterval from "../useInterval/useInterval";
 
 export default function UserPage() {
-  const [posts, setPosts] = useState(null);
+  const [posts, setPosts] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(false);
@@ -22,6 +21,7 @@ export default function UserPage() {
   const [displayButton, setDisplayButton] = useState(true);
   const [following, setFollowing] = useState(false);
   const [loadingFollow, setLoadingFollow] = useState(false);
+  const [userProfile, setUserProfile] = useState();
 
   useEffect(() => {
     if (!user) {
@@ -34,10 +34,10 @@ export default function UserPage() {
     if (user.id === Number(userId)) {
       setDisplayButton(false);
     }
-
-    getFollows();
     getPosts();
-  }, [user]);
+    getFollows();
+    getInfo();
+  }, [user, userId]);
 
   function getPosts() {
     const config = {
@@ -157,7 +157,7 @@ export default function UserPage() {
       config
     );
 
-    request.then((response) => {
+    request.then(() => {
       setFollowing(false);
       setLoadingFollow(false);
     });
@@ -167,52 +167,75 @@ export default function UserPage() {
     });
   }
 
+  function getInfo() {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const request = axios.get(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}`,
+      config
+    );
+
+    request.then((response) => {
+      setUserProfile(response.data.user);
+    });
+    request.catch((error) => {
+      alert(error.response.data.message);
+    });
+  }
+
   return (
     <StyledTimeline>
       <h1 className="userpagefix">
-        {posts === null ? (
+        {posts === undefined || posts === null ? (
           ""
         ) : posts.length >= 0 ? (
           <Introduction>
             <div>
-              <Avatar url={posts[0].user.avatar} />
-              <h1>{posts[0].user.username}'s posts</h1>
+              <Avatar
+                url={userProfile !== undefined ? userProfile.avatar : "error"}
+              />
+              <h1>
+                {userProfile !== undefined
+                  ? userProfile.username
+                  : `Error - id:${userId}`}
+                's posts
+              </h1>
             </div>
             <FollowButton
               onClick={following ? unfollow : follow}
               followinguser={following}
-              display={displayButton}
+              display={displayButton ? 1 : 0}
               disabled={loadingFollow}
             >
               {following ? "Unfollow" : "Follow"}
             </FollowButton>
           </Introduction>
         ) : (
-          "error"
+          <div>There was a failure.</div>
         )}
       </h1>
       <div className="main-content">
         <div className="page-left">
           {isLoading ? <Loading /> : ""}
-          {posts === null ? (
+          {posts === null || posts === undefined ? (
             error ? (
               <p className="warning">
-                Houve uma falha ao obter os posts, por favor atualize a página
+                Failed to get posts, please refresh page.
               </p>
             ) : (
               ""
             )
           ) : posts.length === 0 ? (
-            <p className="warning">Nenhum post encontrado</p>
+            <p className="warning">This user has no posts at the moment.</p>
           ) : (
             <PostsList posts={posts} reload={getPosts} hasMore={hasMore} />
           )}
         </div>
-        <div className="page-right">
-          <div className="trending">
-            <Trending />
-          </div>
-        </div>
+        <div className="page-right"></div>
       </div>
     </StyledTimeline>
   );

@@ -6,7 +6,6 @@ import UserContext from "../../contexts/UserContexts";
 import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
 import PostsList from "../Timeline/PostsList";
-import Trending from "../Trending/Trending";
 import useInterval from "../useInterval/useInterval";
 
 export default function HashtagPage() {
@@ -26,7 +25,7 @@ export default function HashtagPage() {
       }
     }
     getPosts();
-  }, [user]);
+  }, [user, hashtag]);
 
   function getPosts() {
     const config = {
@@ -88,23 +87,17 @@ export default function HashtagPage() {
           {isLoading ? <Loading /> : ""}
           {posts === null ? (
             error ? (
-              <p className="warning">
-                Houve uma falha ao obter os posts, por favor atualize a página
-              </p>
+              <p className="warning">Error getting posts, please try again.</p>
             ) : (
               ""
             )
           ) : posts.length === 0 ? (
-            <p className="warning">Nenhum post encontrado</p>
+            <p className="warning">No post found.</p>
           ) : (
             <PostsList posts={posts} reload={getPosts} hasMore={hasMore} />
           )}
         </div>
-        <div className="page-right">
-          <div className="trending">
-            <Trending />
-          </div>
-        </div>
+        <div className="page-right"></div>
       </div>
     </StyledTimeline>
   );

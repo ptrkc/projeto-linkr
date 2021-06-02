@@ -75,7 +75,7 @@ export default function Login() {
         </Introduction>
         <FormContainer>
           <Form onSubmit={userLogin}>
-            <input disabled={loading} onChange={e=>setEmail(e.target.value)} value={email}type="email" placeholder="e-mail" required></input>
+            <input disabled={loading} onChange={e=>setEmail(e.target.value)} value={email} type="email" placeholder="e-mail" required></input>
             <input disabled={loading} onChange={e=>setPassword(e.target.value)} value={password} type="password" placeholder="password" required></input>
             <button disabled={loading} type="submit">{loading ? 
               (<>Logging In...</>) 
