@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useContext, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import UserContext from "../../contexts/UserContexts";
 
@@ -11,6 +11,7 @@ export default function Trending() {
   const [hashtag, setHashtag] = useState("");
   const history = useHistory();
   const [lastUpdate, setLastUpdate] = useState(Date.now());
+  const location = useLocation();
 
   useEffect(() => {
     if (user) {
@@ -18,10 +19,13 @@ export default function Trending() {
     }
   }, [user]);
 
-  if (Date.now() - lastUpdate > 60000) {
-    setLastUpdate(Date.now());
-    getTrending();
-  }
+  useEffect(() => {
+    console.log(location.pathname, Date.now() - lastUpdate);
+    if (Date.now() - lastUpdate > 60000) {
+      setLastUpdate(Date.now());
+      getTrending();
+    }
+  }, [location]);
 
   function getTrending() {
     const config = {

@@ -41,7 +41,7 @@ export default function Timeline() {
       setPosts(response.data);
       setIsLoading(false);
     });
-    request.catch((error) => {
+    request.catch(() => {
       setIsLoading(false);
       setError(true);
     });
