@@ -81,13 +81,13 @@ export default function MyPosts() {
           {posts === null ? (
             error ? (
               <p className="warning">
-                Houve uma falha ao obter os posts, por favor atualize a página
+                Could not get posts right now. Please try again.
               </p>
             ) : (
               ""
             )
           ) : posts.length === 0 ? (
-            <p className="warning">Nenhum post encontrado</p>
+            <p className="warning">You have not posted yet!</p>
           ) : (
             <PostsList posts={posts} reload={getMyPosts} hasMore={hasMore} />
           )}

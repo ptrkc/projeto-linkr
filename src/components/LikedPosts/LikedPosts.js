@@ -81,13 +81,13 @@ export default function LikedPosts() {
           {posts === null ? (
             error ? (
               <p className="warning">
-                Houve uma falha ao obter os posts, por favor atualize a página
+                Could not get posts right now. Please try again.
               </p>
             ) : (
               ""
             )
           ) : posts.length === 0 ? (
-            <p className="warning">Nenhum post encontrado</p>
+            <p className="warning">No liked posts yet!</p>
           ) : (
             <PostsList posts={posts} reload={getPosts} hasMore={hasMore} />
           )}

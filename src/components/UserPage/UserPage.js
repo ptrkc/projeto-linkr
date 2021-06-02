@@ -16,13 +16,13 @@ export default function UserPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
   const { user, setUser } = useContext(UserContext);
   const { userId } = useParams();
 
   const [displayButton, setDisplayButton] = useState(true);
   const [following, setFollowing] = useState(false);
   const [loadingFollow, setLoadingFollow] = useState(false);
-  const [userProfile, setUserProfile] = useState();
 
   useEffect(() => {
     if (!user) {
@@ -35,10 +35,33 @@ export default function UserPage() {
     if (user.id === Number(userId)) {
       setDisplayButton(false);
     }
+    getInfo();
     getPosts();
     getFollows();
-    getInfo();
   }, [user, userId]);
+
+  function getInfo() {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const request = axios.get(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}`,
+      config
+    );
+
+    request.then((response) => {
+      setUserInfo(response.data.user);
+      setIsLoading(false);
+    });
+    request.catch((error) => {
+      setIsLoading(false);
+      setError(true);
+      alert(error.response.data.message);
+    });
+  }
 
   function getPosts(newPosts) {
     const config = {
@@ -138,7 +161,7 @@ export default function UserPage() {
       config
     );
 
-    request.then((response) => {
+    request.then(() => {
       setFollowing(true);
       setLoadingFollow(false);
     });
@@ -185,7 +208,7 @@ export default function UserPage() {
     );
 
     request.then((response) => {
-      setUserProfile(response.data.user);
+      setUserInfo(response.data.user);
     });
     request.catch((error) => {
       alert(error.response.data.message);
@@ -195,33 +218,20 @@ export default function UserPage() {
   return (
     <StyledTimeline>
       <h1 className="userpagefix">
-        {posts === undefined || posts === null ? (
-          ""
-        ) : posts.length >= 0 ? (
-          <Introduction>
-            <div>
-              <Avatar
-                url={userProfile !== undefined ? userProfile.avatar : "error"}
-              />
-              <h1>
-                {userProfile !== undefined
-                  ? userProfile.username
-                  : `Error - id:${userId}`}
-                's posts
-              </h1>
-            </div>
-            <FollowButton
-              onClick={following ? unfollow : follow}
-              followinguser={following}
-              display={displayButton ? 1 : 0}
-              disabled={loadingFollow}
-            >
-              {following ? "Unfollow" : "Follow"}
-            </FollowButton>
-          </Introduction>
-        ) : (
-          <div>There was a failure.</div>
-        )}
+        <Introduction>
+          <div>
+            <Avatar url={userInfo && userInfo.avatar} />
+            {userInfo && <h1>{userInfo.username}'s posts</h1>}
+          </div>
+          <FollowButton
+            onClick={following ? unfollow : follow}
+            followinguser={following}
+            show={displayButton}
+            disabled={loadingFollow}
+          >
+            {following ? "Unfollow" : "Follow"}
+          </FollowButton>
+        </Introduction>
       </h1>
       <div className="main-content">
         <div className="page-left">
@@ -229,13 +239,13 @@ export default function UserPage() {
           {posts === null || posts === undefined ? (
             error ? (
               <p className="warning">
-                Failed to get posts, please refresh page.
+                Could not get posts right now. Please try again.
               </p>
             ) : (
               ""
             )
           ) : posts.length === 0 ? (
-            <p className="warning">This user has no posts at the moment.</p>
+            <p className="warning">This person has not posted yet!</p>
           ) : (
             <PostsList posts={posts} reload={getPosts} hasMore={hasMore} />
           )}
@@ -290,7 +300,7 @@ const Introduction = styled.div`
 `;
 
 const FollowButton = styled.button`
-  display: ${(props) => (props.display ? "block" : "none")};
+  display: ${(props) => (props.show ? "block" : "none")};
   width: 112px;
   height: 31px;
   background: ${(props) => (props.followinguser ? "white" : "#1877F2")};
