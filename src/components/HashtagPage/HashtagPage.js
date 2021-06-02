@@ -71,11 +71,7 @@ export default function HashtagPage() {
             <PostsList posts={posts} reload={getPosts} />
           )}
         </div>
-        <div className="page-right">
-          <div className="trending">
-            <Trending />
-          </div>
-        </div>
+        <div className="page-right"></div>
       </div>
     </StyledTimeline>
   );

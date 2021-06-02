@@ -71,11 +71,7 @@ export default function MyPosts() {
             <PostsList posts={posts} reload={getMyPosts} />
           )}
         </div>
-        <div className="page-right">
-          <div className="trending">
-            <Trending />
-          </div>
-        </div>
+        <div className="page-right"></div>
       </div>
     </StyledTimeline>
   );
