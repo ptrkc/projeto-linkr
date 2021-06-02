@@ -1,74 +1,112 @@
 import styled from "styled-components";
 import { HiSearch } from "react-icons/hi";
-import { useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
+import {useHistory} from "react-router-dom";
 
 import UserContext from "../../contexts/UserContexts";
+import {DebounceInput} from 'react-debounce-input';
 
 export default function SearchBar(){
 
     const { user } = useContext(UserContext);
+    const history = useHistory();
 
-    const [userInput, setUserInput] = useState("");
-    const [outline, setOutline] = useState(false);
-    const [usersList, setUsersList] = useState();
+    const [userInput, setUserInput] = useState();
+    const [orderedUsers, setOrderedUsers] = useState();
     const [tab, setTab] = useState(false);
+    const [input, setInput] =useState(false);
 
     function searchPeople(event){
-        event.preventDefault();
+        if(event.type === "submit"){
+            event.preventDefault();
+        }
 
+        let param = userInput;
+        if(event.target.value!==undefined){
+            param = event.target.value;
+        }
         const config = {
             headers: {
               Authorization: `Bearer ${user.token}`,
             },
         };
 
-        const request = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/search?username=${userInput}`,config);
+        const request = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/search?username=${param}`,config);
         request.then(response=>{
-            console.log(response.data.users);
-            setUsersList(response.data.users);
-            setTab(true);
+            if(response.data.users.length>0){
+                setTab(true);
+            }
+            const iFollowArray = response.data.users.filter(item=>item.isFollowingLoggedUser);
+            const iDontFollowArray = response.data.users.filter(item=>!item.isFollowingLoggedUser);
+            setOrderedUsers(iFollowArray.concat(iDontFollowArray));
         });
-        request.catch(error=> console.log(error.response));
+        request.catch(error=>alert(error.response.data.message));
     }
-    function onFocusOutline(){
-        setOutline(true);
-        setTab(true);
+    function onFocusInput(){
+        setInput(true); 
     }
-    function onBlurOutline(){
-        setOutline(false);
-        setTab(false);
+    function onBlurInput(){
+        setInput(false);
 
     }
-
-    console.log(usersList);
+    function goToUserPage(event,id){
+        event.preventDefault();
+        history.push(`/user/${id}`);
+    }
     return(
         
         <Container>
             <ContainerSupport>
-                <ContainerSearch onSubmit={searchPeople} onFocus={onFocusOutline} onBlur={onBlurOutline} outlineStatus={outline}>
-                    <form >  
-                        <SearchInput 
-                            onChange={e=>setUserInput(e.target.value)}
-                            value={userInput}
-                            type="text"
+                <ContainerSearch onSubmit={searchPeople} onFocus={onFocusInput} onBlur={onBlurInput} inputStatus={input} tabStatus={tab}>
+                    <form >
+                        <DebounceInput className="search-input" onSubmit={searchPeople}
                             placeholder="Search for people and friends"
-                        ></SearchInput>
+                            minLength={3}
+                            debounceTimeout={500}
+                            onChange={event => {
+                                setUserInput(event.target.value);
+                                if(this){
+                                    this.setState({value: event.target.value});
+                                }
+                                if(event.target.value.length>2){
+                                    searchPeople(event);   
+                                }                             
+                            }}
+                            type="text"
+                            value={userInput} 
+                        />
                         <div><button type="submit"><HiSearch color="#C6C6C6" className="icon"/></button></div>
                     </form>
                 </ContainerSearch>
-                <ContainerShow status={tab}>
+                <ContainerShow tabStatus={tab} inputStatus={input}>
                     {
-                        usersList?
-                            usersList.map(item=><div>{item.username}</div>)
+                        orderedUsers?
+                            orderedUsers.map(item=><a 
+                                key={item.id}
+                                onMouseDown={(event)=>goToUserPage(event,item.id)}
+                                href={`/user/${item.id}`}
+                            >
+                                <Avatar url={item.avatar}/>
+                                <div>
+                                    <div>{item.username}</div>
+                                    <div>{item.isFollowingLoggedUser?
+                                        <div>● following</div>
+                                        :
+                                        null
+                                    }
+                                    </div>
+                                </div>
+                            </a>)
                             :
-                            <div>Bad</div>
+                            null
                     }
                 </ContainerShow>
             </ContainerSupport>
         </Container>
     );
 }
+
 const Container = styled.div`
     display: flex;
     flex-direction: column;    
@@ -87,13 +125,36 @@ const ContainerSupport = styled.div`
 `;
 
 const ContainerShow = styled.div`
-    display:  ${props => props.status? "flex": "none"};;
+    display:  ${props => props.inputStatus? "flex": "none"};
     flex-direction: column;
     width: 100%;
     color: #6d6d6d; 
     border-radius:  0 0 8px 8px;
     background-color: #e7e7e7;   
-    padding: 10px;
+    padding: ${props => props.tabStatus? "17px": "0"};
+
+    > a {
+        padding: 4px 0;
+        display: flex;
+        align-items: center;
+
+        > div {
+            display: flex;
+            align-items: center;
+            font-family: Lato;
+            font-size: 19px;
+            line-height: 23px;
+            color: #515151;
+
+            div {
+                margin-left: 10px;
+            }            
+            
+            div:last-of-type {
+                color: #C5C5C5;  
+            }
+        }
+    }
 `;
 
 const ContainerSearch = styled.div`
@@ -102,7 +163,28 @@ const ContainerSearch = styled.div`
     align-items: center;
     border-radius: 8px 8px 0 0;
     //border: 1px solid red;
-    //border: ${props => props.outlineStatus? "2px solid #e7e7e7": "none"};
+
+    .search-input{
+        width: 563px;
+        height: 45px;
+        background: #FFFFFF;
+        border-radius: 8px 0 0 8px;
+        border: none;
+        padding-left: 17px;
+        font-family: Lato;
+        font-size: 19px;
+        line-height: 23px;
+
+        ::placeholder {
+            color: #C6C6C6;
+        }
+        :focus {
+            outline: none;
+        }
+        @media (max-width: 860px){
+            width:100%;
+        }
+    }
 
     > form {
         //border: 1px solid yellow;
@@ -111,7 +193,7 @@ const ContainerSearch = styled.div`
         justify-content: center;
         align-items: center;
         width: 100%;
-        background-color: ${props => props.outlineStatus? "#e7e7e7": "transparent"};     
+        background-color: ${props => props.tabStatus? "#e7e7e7": "transparent"};     
         
         > div {
             background-color: white;
@@ -129,7 +211,7 @@ const ContainerSearch = styled.div`
                 align-items: center;
                 background-color: white;
                 border: none;
-                width:40px;
+                width:32px;
             }
         }
     }
@@ -145,24 +227,15 @@ const ContainerSearch = styled.div`
     }
 `;
 
-const SearchInput = styled.input`
-    width: 563px;
-    height: 45px;
-    background: #FFFFFF;
-    border-radius: 8px 0 0 8px;
-    border: none;
-    padding-left: 17px;
-    font-family: Lato;
-    font-size: 19px;
-    line-height: 23px;
-
-    ::placeholder {
-        color: #C6C6C6;
-    }
-    :focus {
-        outline: none;
-    }
-    @media (max-width: 860px){
-        width:100%;
-    }
+  
+const Avatar = styled.div`
+ background-image: url(${(props) => props.url});
+ width: 40px;
+ height: 40px;;
+ border-radius: 26.5px;
+ background-size: cover;
+ background-position: center;
+ top: 0;
+ right: 0;
+ margin-right: 4px; 
 `;
