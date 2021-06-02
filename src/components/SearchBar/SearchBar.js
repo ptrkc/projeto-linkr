@@ -90,7 +90,9 @@ export default function SearchBar() {
           </form>
         </ContainerSearch>
         <ContainerShow tabStatus={tab} inputStatus={input}>
-          {orderedUsers && !orderedUsers.length ? <p>No users found</p> : null}
+          {orderedUsers && orderedUsers.length === 0 ? (
+            <p>No users found</p>
+          ) : null}
           {orderedUsers
             ? orderedUsers.map((item) => (
                 <Link
