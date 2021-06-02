@@ -5,6 +5,7 @@ import PostStyle from "../Styles/PostStyle";
 
 import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
+import RepostButton from "./RepostButton";
 import EditArea from "./EditArea";
 
 import Likes from "../Likes/Likes";
@@ -29,7 +30,8 @@ export default function Post({ post, reload }) {
   const [loadedComments, setLoadedComments] = useState(false);
   const [alteredText, setAlteredText] = useState(text);
   const [error, setError] = useState(false);
-  const [counter, setCounter] = useState(post.commentCount);
+  const [commentCounter, setCommentCounter] = useState(post.commentCount);
+  const [repostCounter, setRepostCounter] = useState(post.repostCount);
   function editToggle() {
     if (isLoading) {
       return;
@@ -55,11 +57,16 @@ export default function Post({ post, reload }) {
           <Likes post={post}></Likes>
           <CommentsButton
             post={post}
-            counter={counter}
+            counter={commentCounter}
             loadedComments={loadedComments}
             setLoadedComments={setLoadedComments}
             showingComments={showingComments}
             setShowingComments={setShowingComments}
+          />
+          <RepostButton
+            post={post}
+            counter={repostCounter}
+            setCounter={setRepostCounter}
           />
         </div>
         <div className="post-right">
@@ -125,7 +132,7 @@ export default function Post({ post, reload }) {
       </div>
       <div className="comment-section">
         {loadedComments ? (
-          <CommentsSection post={post} setCounter={setCounter} />
+          <CommentsSection post={post} setCounter={setCommentCounter} />
         ) : null}
       </div>
     </PostStyle>
