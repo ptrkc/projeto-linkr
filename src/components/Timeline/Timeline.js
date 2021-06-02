@@ -6,7 +6,6 @@ import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
 import CreatePost from "./CreatePost";
 import PostsList from "./PostsList";
-import Trending from "../Trending/Trending";
 import useInterval from "../useInterval/useInterval";
 
 export default function Timeline() {
@@ -42,7 +41,7 @@ export default function Timeline() {
       setPosts(response.data);
       setIsLoading(false);
     });
-    request.catch((error) => {
+    request.catch(() => {
       setIsLoading(false);
       setError(true);
     });
@@ -73,11 +72,7 @@ export default function Timeline() {
             <PostsList posts={posts} reload={getPosts} />
           )}
         </div>
-        <div className="page-right">
-          <div className="trending">
-            <Trending />
-          </div>
-        </div>
+        <div className="page-right"></div>
       </div>
     </StyledTimeline>
   );
