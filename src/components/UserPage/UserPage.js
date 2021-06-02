@@ -36,7 +36,7 @@ export default function UserPage() {
 
     getFollows();
     getPosts();
-  }, [user]);
+  }, [user, userId]);
 
   function getPosts() {
     const config = {
@@ -132,7 +132,7 @@ export default function UserPage() {
       config
     );
 
-    request.then((response) => {
+    request.then(() => {
       setFollowing(false);
       setLoadingFollow(false);
     });
