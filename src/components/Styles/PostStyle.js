@@ -145,63 +145,63 @@ const PostStyle = styled.div`
         }
       }
     }
+    @media (max-width: 740px) {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 0px;
+
+      div.post-left {
+        a.user-image {
+          margin-bottom: 15px;
+        }
+        img {
+          height: 40px;
+          width: 40px;
+        }
+        p.likes {
+          font-size: 9px;
+          line-height: 11px;
+        }
+      }
+      div.post-right {
+        width: calc(100% - 50px);
+        a.username {
+          font-size: 17px;
+          line-height: 20px;
+        }
+        p.user-text {
+          font-size: 15px;
+          line-height: 18px;
+        }
+        a.link {
+          .texts {
+            margin: 8px;
+            max-width: calc(100% - 110px);
+          }
+          p.link-title {
+            font-size: 11px;
+            line-height: 13px;
+          }
+          p.link-description {
+            font-size: 9px;
+            line-height: 11px;
+          }
+          p.link-url {
+            font-size: 9px;
+            line-height: 11px;
+          }
+          .image {
+            width: 95px;
+          }
+        }
+      }
+    }
   }
   .comment-section {
     position: relative;
     max-height: ${(props) => (props.showingComments ? "600px" : "0px")};
     transition: 0.5s;
     overflow: hidden;
-  }
-  @media (max-width: 740px) {
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 0px;
-
-    div.post-left {
-      a.user-image {
-        margin-bottom: 15px;
-      }
-      img {
-        height: 40px;
-        width: 40px;
-      }
-      p.likes {
-        font-size: 9px;
-        line-height: 11px;
-      }
-    }
-    div.post-right {
-      width: calc(100% - 50px);
-      a.username {
-        font-size: 17px;
-        line-height: 20px;
-      }
-      p.user-text {
-        font-size: 15px;
-        line-height: 18px;
-      }
-      a.link {
-        .texts {
-          margin: 8px;
-          max-width: calc(100% - 110px);
-        }
-        p.link-title {
-          font-size: 11px;
-          line-height: 13px;
-        }
-        p.link-description {
-          font-size: 9px;
-          line-height: 11px;
-        }
-        p.link-url {
-          font-size: 9px;
-          line-height: 11px;
-        }
-        .image {
-          width: 95px;
-        }
-      }
-    }
   }
 `;
 
