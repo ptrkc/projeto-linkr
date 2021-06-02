@@ -12,6 +12,7 @@ import useInterval from "../useInterval/useInterval";
 export default function HashtagPage() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(false);
   const { user, setUser } = useContext(UserContext);
   const { hashtag } = useParams();
@@ -34,24 +35,50 @@ export default function HashtagPage() {
       },
     };
 
-    const request = axios.get(
-      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts`,
-      config
-    );
+    if (posts && posts.length > 0) {
+      const request = axios.get(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts?olderThan=${
+          posts[posts.length - 1].id
+        }`,
+        config
+      );
 
-    request.then((response) => {
-      setPosts(response.data);
-      setIsLoading(false);
-    });
-    request.catch((error) => {
-      setIsLoading(false);
-      setError(true);
-    });
+      request.then((response) => {
+        if (response.data.posts.length < 10) {
+          setHasMore(false);
+        }
+        const refreshPosts = [...posts, ...response.data.posts];
+        setPosts(refreshPosts);
+        setIsLoading(false);
+      });
+      request.catch((error) => {
+        setHasMore(false);
+        setIsLoading(false);
+        setError(true);
+      });
+    } else {
+      const request = axios.get(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts`,
+        config
+      );
+
+      request.then((response) => {
+        if (response.data.posts.length < 10) {
+          setHasMore(false);
+        }
+        setPosts(response.data.posts);
+        setIsLoading(false);
+      });
+      request.catch((error) => {
+        setIsLoading(false);
+        setError(true);
+      });
+    }
   }
 
-  useInterval(() => {
-    getPosts();
-  }, 15000);
+  // useInterval(() => {
+  //   getPosts();
+  // }, 15000);
 
   return (
     <StyledTimeline>
@@ -70,7 +97,7 @@ export default function HashtagPage() {
           ) : posts.length === 0 ? (
             <p className="warning">Nenhum post encontrado</p>
           ) : (
-            <PostsList posts={posts} reload={getPosts} />
+            <PostsList posts={posts} reload={getPosts} hasMore={hasMore} />
           )}
         </div>
         <div className="page-right">

@@ -14,6 +14,7 @@ import useInterval from "../useInterval/useInterval";
 export default function UserPage() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(false);
   const { user, setUser } = useContext(UserContext);
   const { userId } = useParams();
@@ -45,21 +46,50 @@ export default function UserPage() {
       },
     };
 
-    const request = axios.get(
-      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/posts`,
-      config
-    );
+    if (posts && posts.length > 0) {
+      const request = axios.get(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/posts?olderThan=${
+          posts[posts.length - 1].id
+        }`,
+        config
+      );
 
-    request.then((response) => {
-      setPosts(response.data);
-      setIsLoading(false);
-    });
-    request.catch((error) => {
-      setIsLoading(false);
-      setError(true);
-      alert(error.response.data.message);
-    });
+      request.then((response) => {
+        if (response.data.posts.length < 10) {
+          setHasMore(false);
+        }
+        const refreshPosts = [...posts, ...response.data.posts];
+        setPosts(refreshPosts);
+        setIsLoading(false);
+      });
+      request.catch((error) => {
+        setHasMore(false);
+        setIsLoading(false);
+        setError(true);
+      });
+    } else {
+      const request = axios.get(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/posts`,
+        config
+      );
+
+      request.then((response) => {
+        if (response.data.posts.length < 10) {
+          setHasMore(false);
+        }
+        setPosts(response.data.posts);
+        setIsLoading(false);
+      });
+      request.catch((error) => {
+        setIsLoading(false);
+        setError(true);
+      });
+    }
   }
+
+  // useInterval(() => {
+  //   getPosts();
+  // }, 15000);
 
   function getFollows() {
     const config = {
@@ -88,11 +118,6 @@ export default function UserPage() {
       alert(error.response.data.message);
     });
   }
-
-  useInterval(() => {
-    getFollows();
-    getPosts();
-  }, 15000);
 
   function follow() {
     setLoadingFollow(true);
@@ -147,11 +172,11 @@ export default function UserPage() {
       <h1 className="userpagefix">
         {posts === null ? (
           ""
-        ) : posts.posts.length >= 0 ? (
+        ) : posts.length >= 0 ? (
           <Introduction>
             <div>
-              <Avatar url={posts.posts[0].user.avatar} />
-              <h1>{posts.posts[0].user.username}'s posts</h1>
+              <Avatar url={posts[0].user.avatar} />
+              <h1>{posts[0].user.username}'s posts</h1>
             </div>
             <FollowButton
               onClick={following ? unfollow : follow}
@@ -177,10 +202,10 @@ export default function UserPage() {
             ) : (
               ""
             )
-          ) : posts.posts.length === 0 ? (
+          ) : posts.length === 0 ? (
             <p className="warning">Nenhum post encontrado</p>
           ) : (
-            <PostsList posts={posts} reload={getPosts} />
+            <PostsList posts={posts} reload={getPosts} hasMore={hasMore} />
           )}
         </div>
         <div className="page-right">
