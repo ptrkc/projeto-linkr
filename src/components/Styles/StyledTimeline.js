@@ -28,14 +28,9 @@ const StyledTimeline = styled.div`
     }
     .page-right {
       margin-left: 25px;
-      width: 100%;
-      max-width: 300px;
-      .trending {
-        width: 100%;
-        max-width: 300px;
-        background-color: #171717;
-        border-radius: 16px;
-      }
+      width: 300px;
+      flex-shrink: 0;
+
       @media (max-width: 740px) {
         display: none;
       }
@@ -49,8 +44,8 @@ const StyledTimeline = styled.div`
       margin-bottom: 19px;
       font-size: 33px;
     }
-    .userpagefix{
-      padding-left:0;
+    .userpagefix {
+      padding-left: 0;
     }
   }
 `;
