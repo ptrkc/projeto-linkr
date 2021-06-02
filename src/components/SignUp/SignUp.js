@@ -37,39 +37,40 @@ export default function SignUp() {
 
       request.catch((error) => {
         if (error.response.status === 403) {
-          alert(
-            "Registration error. Email already registered."
-          );
+          alert("Registration error. Email already registered.");
         } else {
-            if(error.response.data.message){
-              alert(`Registration error. ${error.response.data.message}. Please try again.`);
-            } else {
-              alert("Registration error. Please try again.");
-            }
+          if (error.response.data.message) {
+            alert(
+              `Registration error. ${error.response.data.message}. Please try again.`
+            );
+          } else {
+            alert("Registration error. Please try again.");
+          }
         }
         setLoading(false);
       });
     } else {
-        if(!validateEmail(email)){
-          alert("Incorrect format email.");
-          return;
-        }
-        if(!isURL(image)){
-          alert("Incorrect format URL.");
-          return;
-        }
-        if(password.trim().length === 0){
-          alert("Password field filled in blank.");
-          return;
-        }
-        if(name.trim().length === 0){
-          alert("Name field filled in blank.");
-        }
+      if (!validateEmail(email)) {
+        alert("Please check your email.");
+        return;
+      }
+      if (!isURL(image)) {
+        alert("Please check your image URL.");
+        return;
+      }
+      if (password.trim().length === 0) {
+        alert("Plase type a password.");
+        return;
+      }
+      if (name.trim().length === 0) {
+        alert("Please type your name.");
+      }
     }
   }
   function validateEmail(email) {
     // eslint-disable-next-line
-    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re =
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
   }
   function isURL(url) {
@@ -121,11 +122,7 @@ export default function SignUp() {
             required
           ></input>
           <button disabled={loading} type="submit">
-            {loading ? (
-              <>Signing Up...</>
-            ) : (
-              <>Sign Up</>
-            )}
+            {loading ? <>Signing Up...</> : <>Sign Up</>}
           </button>
         </Form>
         <StyledLink to="/">
@@ -173,7 +170,7 @@ const Introduction = styled.div`
 
   @media (max-width: 740px) {
     width: 100%;
-    height: 175px;
+    height: 165px;
     align-items: center;
     justify-content: flex-start;
     padding: 10px 0px 0px;
@@ -227,12 +224,12 @@ const Form = styled.form`
     padding: 15px;
     color: #151515;
     border: none;
-    margin-bottom: 15px;
+    margin-bottom: 13px;
     font-size: 27px;
     line-height: 40px;
   }
-  input:disabled { 
-    filter: brightness(.7);
+  input:disabled {
+    filter: brightness(0.7);
   }
   input::placeholder {
     font-size: 27px;
@@ -249,12 +246,12 @@ const Form = styled.form`
     line-height: 40px;
     color: #ffffff;
   }
-  button:disabled { 
-    filter: brightness(.7);
+  button:disabled {
+    filter: brightness(0.7);
   }
 
   @media (max-width: 740px) {
-    margin-top: 40px;
+    margin-top: 20px;
 
     input {
       height: 55px;
@@ -269,7 +266,7 @@ const Form = styled.form`
 `;
 
 const StyledLink = styled(Link)`
-  margin-top: 20px;
+  margin-top: 10px;
   opacity: ${(props) => (props.disabled ? "0.7" : "1")};
   pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
   p {
@@ -285,6 +282,6 @@ const StyledLink = styled(Link)`
   @media (max-width: 740px) {
     font-size: 17px;
     line-height: 20px;
-    margin-bottom: 65px;
+    margin-bottom: 20px;
   }
 `;
