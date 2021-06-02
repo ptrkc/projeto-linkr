@@ -9,6 +9,7 @@ import PostsList from "../Timeline/PostsList";
 
 import styled from "styled-components";
 import useInterval from "../useInterval/useInterval";
+import filterPosts from "../filterPosts/filterPosts";
 
 export default function UserPage() {
   const [posts, setPosts] = useState();
@@ -39,14 +40,14 @@ export default function UserPage() {
     getInfo();
   }, [user, userId]);
 
-  function getPosts() {
+  function getPosts(newPosts) {
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
     };
 
-    if (posts && posts.length > 0) {
+    if (posts && posts.length > 0 && !newPosts) {
       const request = axios.get(
         `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/posts?olderThan=${
           posts[posts.length - 1].id
@@ -77,7 +78,11 @@ export default function UserPage() {
         if (response.data.posts.length < 10) {
           setHasMore(false);
         }
-        setPosts(response.data.posts);
+        if (newPosts) {
+          filterPosts(response.data.posts, posts, setPosts);
+        } else {
+          setPosts(response.data.posts);
+        }
         setIsLoading(false);
       });
       request.catch((error) => {
@@ -87,9 +92,9 @@ export default function UserPage() {
     }
   }
 
-  // useInterval(() => {
-  //   getPosts();
-  // }, 15000);
+  useInterval(() => {
+    getPosts(true);
+  }, 15000);
 
   function getFollows() {
     const config = {

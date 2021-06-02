@@ -5,7 +5,6 @@ import UserContext from "../../contexts/UserContexts";
 import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
 import PostsList from "../Timeline/PostsList";
-import useInterval from "../useInterval/useInterval";
 
 export default function LikedPosts() {
   const [posts, setPosts] = useState(null);
@@ -72,10 +71,6 @@ export default function LikedPosts() {
       });
     }
   }
-
-  // useInterval(() => {
-  //   getPosts();
-  // }, 15000);
 
   return (
     <StyledTimeline>

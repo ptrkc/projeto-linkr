@@ -7,6 +7,7 @@ import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
 import PostsList from "../Timeline/PostsList";
 import useInterval from "../useInterval/useInterval";
+import filterPosts from "../filterPosts/filterPosts";
 
 export default function HashtagPage() {
   const [posts, setPosts] = useState(null);
@@ -27,14 +28,14 @@ export default function HashtagPage() {
     getPosts();
   }, [user, hashtag]);
 
-  function getPosts() {
+  function getPosts(newPosts) {
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
     };
 
-    if (posts && posts.length > 0) {
+    if (posts && posts.length > 0 && !newPosts) {
       const request = axios.get(
         `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts?olderThan=${
           posts[posts.length - 1].id
@@ -65,7 +66,11 @@ export default function HashtagPage() {
         if (response.data.posts.length < 10) {
           setHasMore(false);
         }
-        setPosts(response.data.posts);
+        if (newPosts) {
+          filterPosts(response.data.posts, posts, setPosts);
+        } else {
+          setPosts(response.data.posts);
+        }
         setIsLoading(false);
       });
       request.catch((error) => {
@@ -75,9 +80,9 @@ export default function HashtagPage() {
     }
   }
 
-  // useInterval(() => {
-  //   getPosts();
-  // }, 15000);
+  useInterval(() => {
+    getPosts(true);
+  }, 15000);
 
   return (
     <StyledTimeline>

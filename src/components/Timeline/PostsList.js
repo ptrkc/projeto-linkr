@@ -2,7 +2,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import styled from "styled-components";
 import Post from "./Post";
 
-import MorePosts from "../Styles/MorePosts";
 import scrollLoading from "../../assets/scrollLoading.gif";
 
 export default function PostsList({ posts, reload, hasMore }) {
