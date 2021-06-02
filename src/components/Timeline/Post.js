@@ -13,7 +13,6 @@ import Likes from "../Likes/Likes";
 import CommentsButton from "../Comments/CommentsButton";
 import CommentsSection from "../Comments/CommentsSection";
 import LocationIndicator from "./LocationIndicator";
-import { Link } from "react-router-dom";
 
 export default function Post({ post, reload, userId }) {
   const {
