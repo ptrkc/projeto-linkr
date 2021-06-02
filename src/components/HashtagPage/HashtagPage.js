@@ -65,7 +65,7 @@ export default function HashtagPage() {
               ""
             )
           ) : posts.length === 0 ? (
-            <p className="warning">No post found.</p>
+            <p className="warning">No posts with this hashtag.</p>
           ) : (
             <PostsList posts={posts} reload={getPosts} />
           )}

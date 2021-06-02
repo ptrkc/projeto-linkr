@@ -14,6 +14,7 @@ export default function UserPage() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
   const { user, setUser } = useContext(UserContext);
   const { userId } = useParams();
 
@@ -32,10 +33,34 @@ export default function UserPage() {
     if (user.id === Number(userId)) {
       setDisplayButton(false);
     }
-
+    getInfo();
     getFollows();
     getPosts();
   }, [user, userId]);
+
+  function getInfo() {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const request = axios.get(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}`,
+      config
+    );
+
+    request.then((response) => {
+      setUserInfo(response.data.user);
+      console.log(response.data.user);
+      setIsLoading(false);
+    });
+    request.catch((error) => {
+      setIsLoading(false);
+      setError(true);
+      alert(error.response.data.message);
+    });
+  }
 
   function getPosts() {
     const config = {
@@ -45,7 +70,8 @@ export default function UserPage() {
     };
 
     const request = axios.get(
-      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/posts`,
+      `
+      https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/posts`,
       config
     );
 
@@ -107,7 +133,7 @@ export default function UserPage() {
       config
     );
 
-    request.then((response) => {
+    request.then(() => {
       setFollowing(true);
       setLoadingFollow(false);
     });
@@ -149,8 +175,8 @@ export default function UserPage() {
         ) : posts.posts.length >= 0 ? (
           <Introduction>
             <div>
-              <Avatar url={posts.posts[0].user.avatar} />
-              <h1>{posts.posts[0].user.username}'s posts</h1>
+              <Avatar url={userInfo && userInfo.avatar} />
+              <h1>{userInfo && userInfo.username}'s posts</h1>
             </div>
             <FollowButton
               onClick={following ? unfollow : follow}
@@ -171,13 +197,13 @@ export default function UserPage() {
           {posts === null ? (
             error ? (
               <p className="warning">
-                Houve uma falha ao obter os posts, por favor atualize a página
+                Could not get posts right now. Please try again.
               </p>
             ) : (
               ""
             )
           ) : posts.posts.length === 0 ? (
-            <p className="warning">Nenhum post encontrado</p>
+            <p className="warning">This person has not posted yet!</p>
           ) : (
             <PostsList posts={posts} reload={getPosts} />
           )}
