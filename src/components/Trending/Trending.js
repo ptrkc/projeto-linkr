@@ -20,7 +20,6 @@ export default function Trending() {
   }, [user]);
 
   useEffect(() => {
-    console.log(location.pathname, Date.now() - lastUpdate);
     if (Date.now() - lastUpdate > 60000) {
       setLastUpdate(Date.now());
       getTrending();
