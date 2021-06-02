@@ -198,7 +198,7 @@ export default function UserPage() {
           <FollowButton
             onClick={following ? unfollow : follow}
             followinguser={following}
-            display={displayButton}
+            show={displayButton}
             disabled={loadingFollow}
           >
             {following ? "Unfollow" : "Follow"}
@@ -272,7 +272,7 @@ const Introduction = styled.div`
 `;
 
 const FollowButton = styled.button`
-  display: ${(props) => (props.display ? "block" : "none")};
+  display: ${(props) => (props.show ? "block" : "none")};
   width: 112px;
   height: 31px;
   background: ${(props) => (props.followinguser ? "white" : "#1877F2")};
