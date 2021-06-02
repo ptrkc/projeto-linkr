@@ -7,6 +7,7 @@ import StyledTimeline from "../Styles/StyledTimeline";
 import CreatePost from "./CreatePost";
 import PostsList from "./PostsList";
 import Trending from "../Trending/Trending";
+import useInterval from "../useInterval/useInterval";
 
 export default function Timeline() {
   const [posts, setPosts] = useState(null);
@@ -19,7 +20,7 @@ export default function Timeline() {
       if (localStorage.user) {
         const userStorage = JSON.parse(localStorage.user);
         setUser(userStorage);
-        return; 
+        return;
       }
     }
     getPosts();
@@ -46,6 +47,11 @@ export default function Timeline() {
       setError(true);
     });
   }
+
+  useInterval(() => {
+    getPosts();
+  }, 15000);
+
   return (
     <StyledTimeline>
       <h1>timeline</h1>
@@ -64,7 +70,7 @@ export default function Timeline() {
           ) : posts.posts.length === 0 ? (
             <p className="warning">Nenhum post encontrado</p>
           ) : (
-            <PostsList posts={posts} reload={getPosts}/>
+            <PostsList posts={posts} reload={getPosts} />
           )}
         </div>
         <div className="page-right">

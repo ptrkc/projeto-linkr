@@ -6,6 +6,7 @@ import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
 import PostsList from "../Timeline/PostsList";
 import Trending from "../Trending/Trending";
+import useInterval from "../useInterval/useInterval";
 
 export default function LikedPosts() {
   const [posts, setPosts] = useState(null);
@@ -45,6 +46,11 @@ export default function LikedPosts() {
       setError(true);
     });
   }
+
+  useInterval(() => {
+    getPosts();
+  }, 15000);
+
   return (
     <StyledTimeline>
       <h1>my likes</h1>
@@ -62,7 +68,7 @@ export default function LikedPosts() {
           ) : posts.posts.length === 0 ? (
             <p className="warning">Nenhum post encontrado</p>
           ) : (
-            <PostsList posts={posts} reload={getPosts}/>
+            <PostsList posts={posts} reload={getPosts} />
           )}
         </div>
         <div className="page-right">
