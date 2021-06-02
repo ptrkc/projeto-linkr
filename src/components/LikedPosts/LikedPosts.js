@@ -59,7 +59,7 @@ export default function LikedPosts() {
           {posts === null ? (
             error ? (
               <p className="warning">
-                Could not get posts right now. Pleae try again.
+                Could not get posts right now. Please try again.
               </p>
             ) : (
               ""
