@@ -15,7 +15,6 @@ export default function SearchBar() {
   const [userInput, setUserInput] = useState("");
 
   function searchPeople(text) {
-    console.log(1);
     if (text.length < 3) {
       return;
     }
@@ -70,7 +69,6 @@ export default function SearchBar() {
               onSubmit={searchPeople}
               placeholder="Search for people and friends"
               onBlur={() => {
-                console.log(this);
                 onBlurInput();
               }}
               onFocus={onFocusInput}

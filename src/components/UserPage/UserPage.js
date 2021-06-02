@@ -52,7 +52,6 @@ export default function UserPage() {
 
     request.then((response) => {
       setUserInfo(response.data.user);
-      console.log(response.data.user);
       setIsLoading(false);
     });
     request.catch((error) => {
