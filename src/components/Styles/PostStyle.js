@@ -6,6 +6,11 @@ const PostStyle = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 16px;
   transition: 0.5s;
+
+  @media (max-width: 740px) {
+    border-radius: 0px;
+  }
+
   div.repost {
     height: 33px;
     display: flex;
@@ -29,6 +34,7 @@ const PostStyle = styled.div`
       }
     }
   }
+
   .post-content {
     display: flex;
     width: 100%;
@@ -168,7 +174,7 @@ const PostStyle = styled.div`
       }
     }
     @media (max-width: 740px) {
-      margin-top: 15px;
+      margin-top: 0px;
       padding: 10px;
       border-radius: 0px;
 

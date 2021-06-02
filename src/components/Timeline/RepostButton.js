@@ -111,7 +111,7 @@ const ModalContent = styled.div`
     font-weight: bold;
     font-size: 34px;
     line-height: 41px;
-    margin-bottom: 47px;
+    margin: 0px 30px 47px;
   }
   div {
     display: flex;
@@ -135,6 +135,15 @@ const ModalContent = styled.div`
     }
     button:disabled {
       filter: brightness(0.7);
+    }
+  }
+  @media (max-width: 740px) {
+    border-radius: 16px;
+    p {
+      font-size: 24px;
+    }
+    button {
+      margin: 0px 5px;
     }
   }
 `;

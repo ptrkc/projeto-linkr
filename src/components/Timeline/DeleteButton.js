@@ -135,6 +135,22 @@ const ModalContent = styled.div`
       filter: brightness(0.7);
     }
   }
+  @media (max-width: 740px) {
+    border-radius: 16px;
+    p {
+      max-width: 100%;
+      font-size: 24px;
+      margin: 0px 35px 47px;
+    }
+    div {
+      max-width: 360px;
+      margin: 0px auto;
+      button {
+        width: 134px;
+        margin: 0px 5px;
+      }
+    }
+  }
 `;
 const Overlay = styled.div`
   position: fixed;
