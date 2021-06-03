@@ -9,7 +9,6 @@ import PostsList from "../Timeline/PostsList";
 
 import styled from "styled-components";
 import useInterval from "../useInterval/useInterval";
-import filterPosts from "../filterPosts/filterPosts";
 
 export default function UserPage() {
   const [posts, setPosts] = useState();
@@ -236,7 +235,7 @@ export default function UserPage() {
           ) : (
             <PostsList
               posts={posts}
-              reload={getPosts}
+              getPosts={getPosts}
               hasMore={hasMore}
               removePost={removePost}
             />

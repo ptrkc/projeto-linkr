@@ -21,13 +21,7 @@ import { VscChromeClose } from "react-icons/vsc";
 
 Modal.setAppElement("#root");
 
-export default function Post({
-  post,
-  reload,
-  userId,
-  getNewPosts,
-  removePost,
-}) {
+export default function Post({ post, getPosts, userId, removePost }) {
   const {
     linkImage,
     linkTitle,
@@ -106,7 +100,7 @@ export default function Post({
             showingComments={showingComments}
             setShowingComments={setShowingComments}
           />
-          <RepostButton post={post} getNewPosts={getNewPosts} />
+          <RepostButton post={post} getPosts={getPosts} />
         </div>
         <div className="post-right">
           <div className="top">

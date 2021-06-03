@@ -8,13 +8,7 @@ import "./ModalStyle.css";
 
 Modal.setAppElement("#root");
 
-export default function DeleteButton({
-  postId,
-  userId,
-  reload,
-  repost,
-  removePost,
-}) {
+export default function DeleteButton({ postId, userId, repost, removePost }) {
   const { user } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

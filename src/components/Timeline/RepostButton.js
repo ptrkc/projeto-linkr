@@ -8,7 +8,7 @@ import { useContext, useState } from "react";
 
 Modal.setAppElement("#root");
 
-export default function RepostButton({ post, getNewPosts }) {
+export default function RepostButton({ post, getPosts }) {
   const { user } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +29,7 @@ export default function RepostButton({ post, getNewPosts }) {
     repostRequest.then(() => {
       setIsOpen(false);
       setIsLoading(false);
-      getNewPosts(true);
+      getPosts(true);
     });
     repostRequest.catch(() => {
       setError(true);

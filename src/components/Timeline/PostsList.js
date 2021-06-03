@@ -7,19 +7,13 @@ import { useContext } from "react";
 
 import scrollLoading from "../../assets/scrollLoading.gif";
 
-export default function PostsList({
-  posts,
-  reload,
-  hasMore,
-  getNewPosts,
-  removePost,
-}) {
+export default function PostsList({ posts, getPosts, hasMore, removePost }) {
   const { user } = useContext(UserContext);
   return (
     <Container>
       <InfiniteScroll
         dataLength={posts.length}
-        next={reload}
+        next={getPosts}
         hasMore={hasMore}
         loader={
           <MorePosts>
@@ -39,9 +33,8 @@ export default function PostsList({
             <Post
               post={post}
               key={postKey}
-              reload={reload}
+              getPosts={getPosts}
               userId={user.id}
-              getNewPosts={reload}
               removePost={removePost}
             />
           );
