@@ -92,6 +92,16 @@ export default function MyPosts() {
       alert("Could not get new posts right now");
     });
   }
+  function removePost(repost, id) {
+    let filteredPosts = [];
+    if (repost) {
+      filteredPosts = posts.filter((p) => p.repostId !== id);
+    } else {
+      filteredPosts = posts.filter((p) => p.id !== id);
+    }
+    const refreshPosts = [...filteredPosts];
+    setPosts(refreshPosts);
+  }
 
   return (
     <StyledTimeline>
@@ -115,6 +125,7 @@ export default function MyPosts() {
               reload={getMyPosts}
               hasMore={hasMore}
               getNewPosts={getNewPosts}
+              removePost={removePost}
             />
           )}
         </div>

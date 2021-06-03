@@ -21,7 +21,13 @@ import { VscChromeClose } from "react-icons/vsc";
 
 Modal.setAppElement("#root");
 
-export default function Post({ post, reload, userId, getNewPosts }) {
+export default function Post({
+  post,
+  reload,
+  userId,
+  getNewPosts,
+  removePost,
+}) {
   const {
     linkImage,
     linkTitle,
@@ -80,7 +86,8 @@ export default function Post({ post, reload, userId, getNewPosts }) {
             <DeleteButton
               postId={post.repostId}
               userId={post.repostedBy.id}
-              reload={reload}
+              repost={true}
+              removePost={removePost}
             />
           )}
         </div>
@@ -122,7 +129,12 @@ export default function Post({ post, reload, userId, getNewPosts }) {
                 setError={setError}
                 setIsEditing={setIsEditing}
               />
-              <DeleteButton postId={id} userId={user.id} reload={reload} />
+              <DeleteButton
+                postId={id}
+                userId={user.id}
+                removePost={removePost}
+                repost={false}
+              />
             </div>
           </div>
           <p className="user-text">

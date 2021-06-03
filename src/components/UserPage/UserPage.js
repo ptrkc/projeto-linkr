@@ -194,6 +194,16 @@ export default function UserPage() {
       setLoadingFollow(false);
     });
   }
+  function removePost(repost, id) {
+    let filteredPosts = [];
+    if (repost) {
+      filteredPosts = posts.filter((p) => p.repostId !== id);
+    } else {
+      filteredPosts = posts.filter((p) => p.id !== id);
+    }
+    const refreshPosts = [...filteredPosts];
+    setPosts(refreshPosts);
+  }
 
   return (
     <StyledTimeline>
@@ -225,7 +235,12 @@ export default function UserPage() {
           ) : posts.length === 0 ? (
             <p className="warning">This person has not posted yet!</p>
           ) : (
-            <PostsList posts={posts} reload={getPosts} hasMore={hasMore} />
+            <PostsList
+              posts={posts}
+              reload={getPosts}
+              hasMore={hasMore}
+              removePost={removePost}
+            />
           )}
         </div>
         <div className="page-right"></div>

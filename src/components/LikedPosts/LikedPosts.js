@@ -71,6 +71,16 @@ export default function LikedPosts() {
       });
     }
   }
+  function removePost(repost, id) {
+    let filteredPosts = [];
+    if (repost) {
+      filteredPosts = posts.filter((p) => p.repostId !== id);
+    } else {
+      filteredPosts = posts.filter((p) => p.id !== id);
+    }
+    const refreshPosts = [...filteredPosts];
+    setPosts(refreshPosts);
+  }
 
   return (
     <StyledTimeline>
@@ -89,7 +99,12 @@ export default function LikedPosts() {
           ) : posts.length === 0 ? (
             <p className="warning">No liked posts yet!</p>
           ) : (
-            <PostsList posts={posts} reload={getPosts} hasMore={hasMore} />
+            <PostsList
+              posts={posts}
+              reload={getPosts}
+              hasMore={hasMore}
+              removePost={removePost}
+            />
           )}
         </div>
         <div className="page-right"></div>

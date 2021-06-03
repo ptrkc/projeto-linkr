@@ -89,6 +89,17 @@ export default function HashtagPage() {
     getPosts(true);
   }, 15000);
 
+  function removePost(repost, id) {
+    let filteredPosts = [];
+    if (repost) {
+      filteredPosts = posts.filter((p) => p.repostId !== id);
+    } else {
+      filteredPosts = posts.filter((p) => p.id !== id);
+    }
+    const refreshPosts = [...filteredPosts];
+    setPosts(refreshPosts);
+  }
+
   return (
     <StyledTimeline>
       <h1># {hashtag}</h1>
@@ -104,7 +115,12 @@ export default function HashtagPage() {
           ) : posts.length === 0 ? (
             <p className="warning">No posts with this hashtag.</p>
           ) : (
-            <PostsList posts={posts} reload={getPosts} hasMore={hasMore} />
+            <PostsList
+              posts={posts}
+              reload={getPosts}
+              hasMore={hasMore}
+              removePost={removePost}
+            />
           )}
         </div>
         <div className="page-right"></div>

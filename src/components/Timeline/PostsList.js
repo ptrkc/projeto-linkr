@@ -7,7 +7,13 @@ import { useContext } from "react";
 
 import scrollLoading from "../../assets/scrollLoading.gif";
 
-export default function PostsList({ posts, reload, hasMore, getNewPosts }) {
+export default function PostsList({
+  posts,
+  reload,
+  hasMore,
+  getNewPosts,
+  removePost,
+}) {
   const { user } = useContext(UserContext);
   return (
     <Container>
@@ -36,6 +42,7 @@ export default function PostsList({ posts, reload, hasMore, getNewPosts }) {
               reload={reload}
               userId={user.id}
               getNewPosts={getNewPosts}
+              removePost={removePost}
             />
           );
         })}
