@@ -17,7 +17,7 @@ export default function CommentSection({ post, getComments }) {
       inputRef.current.focus();
       return;
     }
-    setIsLoading(true)
+    setIsLoading(true);
     const body = { text: comment.trim() };
     const config = {
       headers: {
@@ -32,11 +32,16 @@ export default function CommentSection({ post, getComments }) {
     postComment.then(() => {
       setComment("");
       getComments();
-      setIsLoading(false)
+      setIsLoading(false);
+      inputRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "start",
+      });
     });
     postComment.catch(() => {
       alert("Could not post comment at this time");
-      setIsLoading(false)
+      setIsLoading(false);
       inputRef.current.focus();
     });
   }
@@ -51,7 +56,7 @@ export default function CommentSection({ post, getComments }) {
         placeholder={"write a comment..."}
         disabled={isLoading}
       ></input>
-      <button disabled={isLoading}> 
+      <button disabled={isLoading}>
         <IoPaperPlaneOutline />
       </button>
     </CreateCommentContainer>
@@ -95,6 +100,6 @@ const CreateCommentContainer = styled.form`
 
   input:disabled,
   button:disabled {
-    filter: brightness(.5);
+    filter: brightness(0.5);
   }
 `;
