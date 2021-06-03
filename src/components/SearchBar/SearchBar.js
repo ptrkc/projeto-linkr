@@ -130,7 +130,6 @@ const ContainerSupport = styled.div`
   position: absolute;
   top: 12px;
   border-radius: 8px 8px 0 0;
-  //border: 1px solid green;
 `;
 
 const ContainerShow = styled.div`
@@ -173,7 +172,6 @@ const ContainerSearch = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 8px 8px 0 0;
-  //border: 1px solid red;
 
   .search-input {
     width: 563px;
@@ -198,7 +196,6 @@ const ContainerSearch = styled.div`
   }
 
   > form {
-    //border: 1px solid yellow;
     border-radius: 8px 8px
       ${(props) => (props.inputStatus ? "0px 0px" : "8px 8px")};
     background-color: red;
