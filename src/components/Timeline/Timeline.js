@@ -7,11 +7,13 @@ import StyledTimeline from "../Styles/StyledTimeline";
 import CreatePost from "./CreatePost";
 import PostsList from "./PostsList";
 import useInterval from "../useInterval/useInterval";
+import filterPosts from "../filterPosts/filterPosts";
 
 export default function Timeline() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
@@ -25,30 +27,81 @@ export default function Timeline() {
     getPosts();
   }, [user]);
 
-  function getPosts() {
+  function getNewPosts() {
+    const latestId = posts[0].repostId ? posts[0].repostId : posts[0].id;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const request = axios.get(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts?earlierThan=${latestId}`,
+      config
+    );
+
+    request.then((response) => {
+      const refreshPosts = [...response.data.posts, ...posts];
+      setPosts(refreshPosts);
+    });
+    request.catch(() => {
+      alert("Could not get new posts right now");
+    });
+  }
+
+  function getPosts(newPosts) {
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
     };
 
-    const request = axios.get(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts",
-      config
-    );
+    if (posts && posts.length > 0 && !newPosts) {
+      const request = axios.get(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts?olderThan=${
+          posts[posts.length - 1].id
+        }`,
+        config
+      );
 
-    request.then((response) => {
-      setPosts(response.data);
-      setIsLoading(false);
-    });
-    request.catch(() => {
-      setIsLoading(false);
-      setError(true);
-    });
+      request.then((response) => {
+        if (response.data.posts.length < 10) {
+          setHasMore(false);
+        }
+        const refreshPosts = [...posts, ...response.data.posts];
+        setPosts(refreshPosts);
+        setIsLoading(false);
+      });
+      request.catch((error) => {
+        setHasMore(false);
+        setIsLoading(false);
+        setError(true);
+      });
+    } else {
+      const request = axios.get(
+        "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts",
+        config
+      );
+
+      request.then((response) => {
+        if (response.data.posts.length < 10) {
+          setHasMore(false);
+        }
+        if (newPosts) {
+          filterPosts(response.data.posts, posts, setPosts);
+        } else {
+          setPosts(response.data.posts);
+        }
+        setIsLoading(false);
+      });
+      request.catch((error) => {
+        setIsLoading(false);
+        setError(true);
+      });
+    }
   }
 
   useInterval(() => {
-    getPosts();
+    getPosts(true);
   }, 15000);
 
   return (
@@ -66,10 +119,15 @@ export default function Timeline() {
             ) : (
               ""
             )
-          ) : posts.posts.length === 0 ? (
+          ) : posts.length === 0 ? (
             <p className="warning">You still don't follow anyone!</p>
           ) : (
-            <PostsList posts={posts} reload={getPosts} />
+            <PostsList
+              posts={posts}
+              reload={getPosts}
+              hasMore={hasMore}
+              getNewPosts={getNewPosts}
+            />
           )}
         </div>
         <div className="page-right"></div>

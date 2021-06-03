@@ -1,17 +1,18 @@
 import ReactHashtag from "react-hashtag";
-import React, { useState } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { BiRepost } from "react-icons/bi";
 
 import PostStyle from "../Styles/PostStyle";
 
 import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
+import RepostButton from "./RepostButton";
 import EditArea from "./EditArea";
-
 import Likes from "../Likes/Likes";
 import CommentsButton from "../Comments/CommentsButton";
 import CommentsSection from "../Comments/CommentsSection";
 import LocationIndicator from "./LocationIndicator";
-import { Link } from "react-router-dom";
 
 import styled from "styled-components";
 import "./ModalStyle.css";
@@ -20,7 +21,7 @@ import { VscChromeClose } from "react-icons/vsc";
 
 Modal.setAppElement("#root");
 
-export default function Post({ post, reload }) {
+export default function Post({ post, reload, userId, getNewPosts }) {
   const {
     linkImage,
     linkTitle,
@@ -37,8 +38,8 @@ export default function Post({ post, reload }) {
   const [loadedComments, setLoadedComments] = useState(false);
   const [alteredText, setAlteredText] = useState(text);
   const [error, setError] = useState(false);
-  const [counter, setCounter] = useState(post.commentCount);
-  const [modalIsOpen, setIsOpen] = React.useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [commentCounter, setCommentCounter] = useState(post.commentCount);
 
   function editToggle() {
     if (isLoading) {
@@ -66,6 +67,24 @@ export default function Post({ post, reload }) {
       image={linkImage}
       showingComments={showingComments}
     >
+      {post.repostId && (
+        <div className="repost">
+          <div>
+            <BiRepost />
+            Reposted by{" "}
+            <Link to={`/user/${post.repostedBy.id}`}>
+              {post.repostedBy.id === userId ? "you" : post.repostedBy.username}
+            </Link>
+          </div>
+          {post.repostedBy.id === userId && (
+            <DeleteButton
+              postId={post.repostId}
+              userId={post.repostedBy.id}
+              reload={reload}
+            />
+          )}
+        </div>
+      )}
       <div className="post-content">
         <div className="post-left">
           <Link className="user-image" to={`/user/${user.id}`}>
@@ -74,12 +93,13 @@ export default function Post({ post, reload }) {
           <Likes post={post}></Likes>
           <CommentsButton
             post={post}
-            counter={counter}
+            counter={commentCounter}
             loadedComments={loadedComments}
             setLoadedComments={setLoadedComments}
             showingComments={showingComments}
             setShowingComments={setShowingComments}
           />
+          <RepostButton post={post} getNewPosts={getNewPosts} />
         </div>
         <div className="post-right">
           <div className="top">
@@ -168,7 +188,7 @@ export default function Post({ post, reload }) {
       </div>
       <div className="comment-section">
         {loadedComments ? (
-          <CommentsSection post={post} setCounter={setCounter} />
+          <CommentsSection post={post} setCounter={setCommentCounter} />
         ) : null}
       </div>
     </PostStyle>

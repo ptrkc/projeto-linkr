@@ -5,11 +5,11 @@ import UserContext from "../../contexts/UserContexts";
 import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
 import PostsList from "../Timeline/PostsList";
-import useInterval from "../useInterval/useInterval";
 
 export default function MyPosts() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(false);
   const { user, setUser } = useContext(UserContext);
 
@@ -31,24 +31,67 @@ export default function MyPosts() {
       },
     };
 
+    if (posts && posts.length > 0) {
+      const request = axios.get(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${
+          user.id
+        }/posts?olderThan=${posts[posts.length - 1].id}`,
+        config
+      );
+
+      request.then((response) => {
+        if (response.data.posts.length < 10) {
+          setHasMore(false);
+        }
+        const refreshPosts = [...posts, ...response.data.posts];
+        setPosts(refreshPosts);
+        setIsLoading(false);
+      });
+      request.catch((error) => {
+        setHasMore(false);
+        setIsLoading(false);
+        setError(true);
+      });
+    } else {
+      const request = axios.get(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${user.id}/posts`,
+        config
+      );
+
+      request.then((response) => {
+        if (response.data.posts.length < 10) {
+          setHasMore(false);
+        }
+        setPosts(response.data.posts);
+        setIsLoading(false);
+      });
+      request.catch((error) => {
+        setIsLoading(false);
+        setError(true);
+      });
+    }
+  }
+
+  function getNewPosts() {
+    const latestId = posts[0].repostId ? posts[0].repostId : posts[0].id;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
     const request = axios.get(
-      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${user.id}/posts`,
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${user.id}/posts?earlierThan=${latestId}`,
       config
     );
 
     request.then((response) => {
-      setPosts(response.data);
-      setIsLoading(false);
+      const refreshPosts = [...response.data.posts, ...posts];
+      setPosts(refreshPosts);
     });
-    request.catch((error) => {
-      setIsLoading(false);
-      setError(true);
+    request.catch(() => {
+      alert("Could not get new posts right now");
     });
   }
-
-  useInterval(() => {
-    getMyPosts();
-  }, 15000);
 
   return (
     <StyledTimeline>
@@ -64,10 +107,15 @@ export default function MyPosts() {
             ) : (
               ""
             )
-          ) : posts.posts.length === 0 ? (
+          ) : posts.length === 0 ? (
             <p className="warning">You have not posted yet!</p>
           ) : (
-            <PostsList posts={posts} reload={getMyPosts} />
+            <PostsList
+              posts={posts}
+              reload={getMyPosts}
+              hasMore={hasMore}
+              getNewPosts={getNewPosts}
+            />
           )}
         </div>
         <div className="page-right"></div>
