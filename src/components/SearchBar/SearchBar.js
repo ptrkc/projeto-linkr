@@ -137,6 +137,8 @@ const ContainerShow = styled.div`
   display: ${(props) => (props.inputStatus ? "flex" : "none")};
   flex-direction: column;
   width: 100%;
+  max-height: 70vh;
+  overflow: auto;
   color: #6d6d6d;
   border-radius: 0 0 8px 8px;
   background-color: #e7e7e7;
