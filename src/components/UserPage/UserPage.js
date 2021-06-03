@@ -9,10 +9,12 @@ import PostsList from "../Timeline/PostsList";
 
 import styled from "styled-components";
 import useInterval from "../useInterval/useInterval";
+import filterPosts from "../filterPosts/filterPosts";
 
 export default function UserPage() {
   const [posts, setPosts] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const { user, setUser } = useContext(UserContext);
@@ -61,29 +63,61 @@ export default function UserPage() {
     });
   }
 
-  function getPosts() {
+  function getPosts(newPosts) {
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
     };
 
-    const request = axios.get(
-      `
-      https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/posts`,
-      config
-    );
+    if (posts && posts.length > 0 && !newPosts) {
+      const request = axios.get(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/posts?olderThan=${
+          posts[posts.length - 1].id
+        }`,
+        config
+      );
 
-    request.then((response) => {
-      setPosts(response.data);
-      setIsLoading(false);
-    });
-    request.catch((error) => {
-      setIsLoading(false);
-      setError(true);
-      alert(error.response.data.message);
-    });
+      request.then((response) => {
+        if (response.data.posts.length < 10) {
+          setHasMore(false);
+        }
+        const refreshPosts = [...posts, ...response.data.posts];
+        setPosts(refreshPosts);
+        setIsLoading(false);
+      });
+      request.catch((error) => {
+        setHasMore(false);
+        setIsLoading(false);
+        setError(true);
+      });
+    } else {
+      const request = axios.get(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/posts`,
+        config
+      );
+
+      request.then((response) => {
+        if (response.data.posts.length < 10) {
+          setHasMore(false);
+        }
+        if (newPosts) {
+          filterPosts(response.data.posts, posts, setPosts);
+        } else {
+          setPosts(response.data.posts);
+        }
+        setIsLoading(false);
+      });
+      request.catch((error) => {
+        setIsLoading(false);
+        setError(true);
+      });
+    }
   }
+
+  useInterval(() => {
+    getPosts(true);
+  }, 15000);
 
   function getFollows() {
     const config = {
@@ -112,11 +146,6 @@ export default function UserPage() {
       alert(error.response.data.message);
     });
   }
-
-  useInterval(() => {
-    getFollows();
-    getPosts();
-  }, 15000);
 
   function follow() {
     setLoadingFollow(true);
@@ -215,10 +244,10 @@ export default function UserPage() {
             ) : (
               ""
             )
-          ) : posts.posts.length === 0 ? (
+          ) : posts.length === 0 ? (
             <p className="warning">This person has not posted yet!</p>
           ) : (
-            <PostsList posts={posts} reload={getPosts} />
+            <PostsList posts={posts} reload={getPosts} hasMore={hasMore} />
           )}
         </div>
         <div className="page-right"></div>

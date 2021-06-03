@@ -7,10 +7,12 @@ import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
 import PostsList from "../Timeline/PostsList";
 import useInterval from "../useInterval/useInterval";
+import filterPosts from "../filterPosts/filterPosts";
 
 export default function HashtagPage() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(false);
   const { user, setUser } = useContext(UserContext);
   const { hashtag } = useParams();
@@ -26,30 +28,60 @@ export default function HashtagPage() {
     getPosts();
   }, [user, hashtag]);
 
-  function getPosts() {
+  function getPosts(newPosts) {
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
     };
 
-    const request = axios.get(
-      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts`,
-      config
-    );
+    if (posts && posts.length > 0 && !newPosts) {
+      const request = axios.get(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts?olderThan=${
+          posts[posts.length - 1].id
+        }`,
+        config
+      );
 
-    request.then((response) => {
-      setPosts(response.data);
-      setIsLoading(false);
-    });
-    request.catch(() => {
-      setIsLoading(false);
-      setError(true);
-    });
+      request.then((response) => {
+        if (response.data.posts.length < 10) {
+          setHasMore(false);
+        }
+        const refreshPosts = [...posts, ...response.data.posts];
+        setPosts(refreshPosts);
+        setIsLoading(false);
+      });
+      request.catch((error) => {
+        setHasMore(false);
+        setIsLoading(false);
+        setError(true);
+      });
+    } else {
+      const request = axios.get(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts`,
+        config
+      );
+
+      request.then((response) => {
+        if (response.data.posts.length < 10) {
+          setHasMore(false);
+        }
+        if (newPosts) {
+          filterPosts(response.data.posts, posts, setPosts);
+        } else {
+          setPosts(response.data.posts);
+        }
+        setIsLoading(false);
+      });
+      request.catch((error) => {
+        setIsLoading(false);
+        setError(true);
+      });
+    }
   }
 
   useInterval(() => {
-    getPosts();
+    getPosts(true);
   }, 15000);
 
   return (
@@ -67,7 +99,7 @@ export default function HashtagPage() {
           ) : posts.length === 0 ? (
             <p className="warning">No posts with this hashtag.</p>
           ) : (
-            <PostsList posts={posts} reload={getPosts} />
+            <PostsList posts={posts} reload={getPosts} hasMore={hasMore} />
           )}
         </div>
         <div className="page-right"></div>
