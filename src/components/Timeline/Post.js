@@ -14,6 +14,13 @@ import CommentsButton from "../Comments/CommentsButton";
 import CommentsSection from "../Comments/CommentsSection";
 import LocationIndicator from "./LocationIndicator";
 
+import styled from "styled-components";
+import "./ModalStyle.css";
+import Modal from "react-modal";
+import { VscChromeClose } from "react-icons/vsc";
+
+Modal.setAppElement("#root");
+
 export default function Post({ post, reload, userId }) {
   const {
     linkImage,
@@ -42,6 +49,16 @@ export default function Post({ post, reload, userId }) {
     } else {
       setIsEditing(true);
     }
+  }
+
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
   }
 
   return (
@@ -136,7 +153,36 @@ export default function Post({ post, reload, userId }) {
               </ReactHashtag>
             )}
           </p>
-          <a href={link} className="link" target="_blank" rel="noreferrer">
+          <Modal
+            className="location preview"
+            overlayClassName="overlay"
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            contentLabel="Example Modal"
+          >
+            <Preview>
+              <Top>
+                <a href={link} target="_blank" rel="noreferrer">
+                  Open in a new tab
+                </a>
+                <VscChromeClose fontSize="24px" onClick={closeModal} />
+              </Top>
+              <iframe
+                className="i-frame"
+                title="preview"
+                src={link}
+                loading="lazy"
+                fullscreen
+              ></iframe>
+            </Preview>
+          </Modal>
+          <a
+            href={link}
+            className="link"
+            target="_blank"
+            rel="noreferrer"
+            onMouseDown={openModal}
+          >
             <div className="texts">
               <p className="link-title">{linkTitle}</p>
               <p className="link-description">{linkDescription}</p>
@@ -154,3 +200,40 @@ export default function Post({ post, reload, userId }) {
     </PostStyle>
   );
 }
+const Preview = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 16px;
+
+  .i-frame {
+    background: white;
+    width: 100%;
+    height: 520px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 780px) {
+    margin-top: 10px;
+    margin-bottom: 30px;
+    height: 500px;
+  }
+`;
+const Top = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0;
+
+  a {
+    width: 138px;
+    height: 31px;
+    background: #1877f2;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
