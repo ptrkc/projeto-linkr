@@ -13,9 +13,8 @@ export default function SearchBar() {
   const [tab, setTab] = useState(false);
   const [input, setInput] = useState(false);
   const [userInput, setUserInput] = useState("");
-
   function searchPeople(text) {
-    if (text.length < 3) {
+    if (text.trim().length < 3) {
       return;
     }
     let param = text;
@@ -55,6 +54,7 @@ export default function SearchBar() {
     setOrderedUsers(null);
     setTab(false);
   }
+
   return (
     <Container>
       <ContainerSupport>
@@ -71,6 +71,7 @@ export default function SearchBar() {
               onBlur={() => {
                 onBlurInput();
               }}
+              onKeyDown={(e) => e.key === "Escape" && e.target.blur()}
               onFocus={onFocusInput}
               debounceTimeout={500}
               onChange={(event) => {
