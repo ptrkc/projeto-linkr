@@ -15,10 +15,10 @@ import { Link } from "react-router-dom";
 
 import styled from "styled-components";
 import "./ModalStyle.css";
-import Modal from 'react-modal';
+import Modal from "react-modal";
 import { VscChromeClose } from "react-icons/vsc";
 
-Modal.setAppElement('#root')
+Modal.setAppElement("#root");
 
 export default function Post({ post, reload }) {
   const {
@@ -38,6 +38,8 @@ export default function Post({ post, reload }) {
   const [alteredText, setAlteredText] = useState(text);
   const [error, setError] = useState(false);
   const [counter, setCounter] = useState(post.commentCount);
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+
   function editToggle() {
     if (isLoading) {
       return;
@@ -50,18 +52,13 @@ export default function Post({ post, reload }) {
     }
   }
 
-  var subtitle;
-  const [modalIsOpen,setIsOpen] = React.useState(false);
-
   function openModal() {
     setIsOpen(true);
   }
 
-  function closeModal(){
+  function closeModal() {
     setIsOpen(false);
   }
-
-
 
   return (
     <PostStyle
@@ -145,25 +142,28 @@ export default function Post({ post, reload }) {
           >
             <Preview>
               <Top>
-                <a href={link} target="_blank" rel="noreferrer">Open in a new tab</a>
-                <VscChromeClose fontSize="24px" onClick={closeModal}/>
+                <a href={link} target="_blank" rel="noreferrer">
+                  Open in a new tab
+                </a>
+                <VscChromeClose fontSize="24px" onClick={closeModal} />
               </Top>
-              <iframe className="i-frame"
-                title="preview" 
-                src={link}    
+              <iframe
+                className="i-frame"
+                title="preview"
+                src={link}
                 loading="lazy"
                 fullscreen
               ></iframe>
-            </Preview>  
+            </Preview>
           </Modal>
-          <a href={link} className="link" target="_blank" rel="noreferrer" onMouseDown={openModal}>
+          <div className="link" onClick={openModal}>
             <div className="texts">
               <p className="link-title">{linkTitle}</p>
               <p className="link-description">{linkDescription}</p>
               <p className="link-url">{link}</p>
             </div>
             <div className="image"></div>
-          </a>
+          </div>
         </div>
       </div>
       <div className="comment-section">
@@ -180,19 +180,19 @@ const Preview = styled.div`
   justify-content: center;
   align-items: center;
   padding: 0 16px;
-  
+
   .i-frame {
     background: white;
     width: 100%;
-    height: 520px; 
+    height: 520px;
     margin-bottom: 20px;
   }
 
   @media (max-width: 780px) {
-      margin-top: 10px;
-      margin-bottom: 30px;
-      height: 500px;
-    }
+    margin-top: 10px;
+    margin-bottom: 30px;
+    height: 500px;
+  }
 `;
 const Top = styled.div`
   display: flex;
@@ -201,14 +201,16 @@ const Top = styled.div`
   width: 100%;
   padding: 10px 0;
 
-    a {
-      width: 138px;
-      height: 31px;
-      background: #1877F2;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
+  a {
+    width: 138px;
+    height: 31px;
+    background: #1877f2;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  svg {
+    cursor: pointer;
+  }
 `;
