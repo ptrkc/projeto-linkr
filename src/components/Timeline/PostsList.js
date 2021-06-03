@@ -41,7 +41,7 @@ export default function PostsList({
               key={postKey}
               reload={reload}
               userId={user.id}
-              getNewPosts={getNewPosts}
+              getNewPosts={reload}
               removePost={removePost}
             />
           );

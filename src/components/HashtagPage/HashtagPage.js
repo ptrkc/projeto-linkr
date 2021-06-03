@@ -7,10 +7,9 @@ import Loading from "../Loading/Loading";
 import StyledTimeline from "../Styles/StyledTimeline";
 import PostsList from "../Timeline/PostsList";
 import useInterval from "../useInterval/useInterval";
-import filterPosts from "../filterPosts/filterPosts";
 
 export default function HashtagPage() {
-  const [posts, setPosts] = useState(null);
+  const [posts, setPosts] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(false);
@@ -21,77 +20,72 @@ export default function HashtagPage() {
     if (user) {
       getPosts();
     }
-  }, [user, hashtag]);
+  }, [user]);
 
   useEffect(() => {
-    setPosts(null);
-    setIsLoading(true);
+    if (user) {
+      getPosts(true, true);
+      setIsLoading(true);
+    }
   }, [hashtag]);
 
-  function getPosts(newPosts) {
+  function getPosts(tenFirst, reset) {
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
     };
-
-    if (posts && posts.length > 0 && !newPosts) {
-      const referenceId = posts[posts.length - 1].repostId
-        ? posts[posts.length - 1].repostId
-        : posts[posts.length - 1].id;
-      const request = axios.get(
-        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts?olderThan=${referenceId}`,
-        config
-      );
-
-      request.then((response) => {
-        if (response.data.posts.length < 10) {
-          setHasMore(false);
-        }
-        const refreshPosts = [...posts, ...response.data.posts];
-        setPosts(refreshPosts);
-        setIsLoading(false);
-      });
-      request.catch((error) => {
-        setHasMore(false);
-        setIsLoading(false);
-        setError(true);
-      });
-    } else {
-      const request = axios.get(
-        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts`,
-        config
-      );
-
-      request.then((response) => {
-        if (response.data.posts.length < 10) {
-          setHasMore(false);
-        }
-        if (newPosts) {
-          filterPosts(response.data.posts, posts, setPosts);
-        } else {
-          setPosts(response.data.posts);
-        }
-        setIsLoading(false);
-      });
-      request.catch((error) => {
-        setIsLoading(false);
-        setError(true);
-      });
+    let url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts`;
+    let referenceId;
+    if (!tenFirst) {
+      if (posts && posts.length > 0) {
+        referenceId = posts[posts.length - 1].id;
+        url = `${url}?olderThan=${referenceId}`;
+      }
     }
+    const request = axios.get(url, config);
+    let refreshPosts;
+    request.then((response) => {
+      if (tenFirst && !reset) {
+        if (posts) {
+          const filteredResponse = response.data.posts.filter(
+            (np) => !posts.find((p) => p.id === np.id)
+          );
+          refreshPosts = [...filteredResponse, ...posts];
+        } else {
+          refreshPosts = [...response.data.posts];
+        }
+      } else {
+        if (reset) {
+          refreshPosts = [...response.data.posts];
+        } else {
+          refreshPosts = posts
+            ? [...posts, ...response.data.posts]
+            : [...response.data.posts];
+        }
+        if (response.data.posts.length < 10) {
+          setHasMore(false);
+        }
+      }
+      setPosts(refreshPosts);
+      setIsLoading(false);
+    });
+
+    request.catch(() => {
+      setHasMore(false);
+      setIsLoading(false);
+      setError(true);
+    });
   }
 
   useInterval(() => {
-    getPosts(true);
+    if (hasMore) {
+      getPosts(true);
+    }
   }, 15000);
 
   function removePost(repost, id) {
-    let filteredPosts = [];
-    if (repost) {
-      filteredPosts = posts.filter((p) => p.repostId !== id);
-    } else {
-      filteredPosts = posts.filter((p) => p.id !== id);
-    }
+    const filteredPosts = posts.filter((p) => p.id !== id);
     const refreshPosts = [...filteredPosts];
     setPosts(refreshPosts);
   }
@@ -101,8 +95,9 @@ export default function HashtagPage() {
       <h1># {hashtag}</h1>
       <div className="main-content">
         <div className="page-left">
-          {isLoading ? <Loading /> : ""}
-          {posts === null ? (
+          {isLoading ? (
+            <Loading />
+          ) : posts === undefined ? (
             error ? (
               <p className="warning">Error getting posts, please try again.</p>
             ) : (

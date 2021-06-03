@@ -33,7 +33,7 @@ export default function RepostButton({ post, getNewPosts }) {
         window.location.pathname === "/timeline" ||
         window.location.pathname === "/my-posts"
       ) {
-        getNewPosts();
+        getNewPosts(true);
       }
     });
     repostRequest.catch(() => {
