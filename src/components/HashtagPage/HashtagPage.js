@@ -26,9 +26,12 @@ export default function HashtagPage() {
     getPosts();
   }, [user, hashtag]);
 
-  function getPosts() {
+  useEffect(() => {
     setPosts(null);
     setIsLoading(true);
+  }, [hashtag]);
+
+  function getPosts() {
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
