@@ -74,7 +74,6 @@ export default function MyPosts() {
 
   function getNewPosts() {
     const latestId = posts[0].repostId ? posts[0].repostId : posts[0].id;
-    console.log(posts[0]);
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -86,7 +85,6 @@ export default function MyPosts() {
     );
 
     request.then((response) => {
-      console.log(response.data);
       const refreshPosts = [...response.data.posts, ...posts];
       setPosts(refreshPosts);
     });
