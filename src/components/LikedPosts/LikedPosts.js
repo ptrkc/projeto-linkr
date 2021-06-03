@@ -32,10 +32,11 @@ export default function LikedPosts() {
     };
 
     if (posts && posts.length > 0) {
+      const referenceId = posts[posts.length - 1].repostId
+        ? posts[posts.length - 1].repostId
+        : posts[posts.length - 1].id;
       const request = axios.get(
-        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked?olderThan=${
-          posts[posts.length - 1].id
-        }`,
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked?olderThan=${referenceId}`,
         config
       );
 

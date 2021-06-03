@@ -71,10 +71,11 @@ export default function UserPage() {
     };
 
     if (posts && posts.length > 0 && !newPosts) {
+      const referenceId = posts[posts.length - 1].repostId
+        ? posts[posts.length - 1].repostId
+        : posts[posts.length - 1].id;
       const request = axios.get(
-        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/posts?olderThan=${
-          posts[posts.length - 1].id
-        }`,
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/posts?olderThan=${referenceId}`,
         config
       );
 

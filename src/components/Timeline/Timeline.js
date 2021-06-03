@@ -35,10 +35,11 @@ export default function Timeline() {
     };
 
     if (posts && posts.length > 0 && !newPosts) {
+      const referenceId = posts[posts.length - 1].repostId
+        ? posts[posts.length - 1].repostId
+        : posts[posts.length - 1].id;
       const request = axios.get(
-        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts?olderThan=${
-          posts[posts.length - 1].id
-        }`,
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts?olderThan=${referenceId}`,
         config
       );
 

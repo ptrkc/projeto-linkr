@@ -32,10 +32,11 @@ export default function MyPosts() {
     };
 
     if (posts && posts.length > 0) {
+      const referenceId = posts[posts.length - 1].repostId
+        ? posts[posts.length - 1].repostId
+        : posts[posts.length - 1].id;
       const request = axios.get(
-        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${
-          user.id
-        }/posts?olderThan=${posts[posts.length - 1].id}`,
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${user.id}/posts?olderThan=${referenceId}`,
         config
       );
 
