@@ -120,7 +120,7 @@ export default function Timeline() {
       <h1>timeline</h1>
       <div className="main-content">
         <div className="page-left">
-          <CreatePost getPosts={getPosts} user={user} />
+          <CreatePost getNewPosts={getNewPosts} user={user} />
           {isLoading ? <Loading /> : ""}
           {posts === null ? (
             error ? (

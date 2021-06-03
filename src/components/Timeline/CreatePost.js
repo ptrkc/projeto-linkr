@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import LocationButton from "./LocationButton";
 
-export default function CreatePost({ getPosts, user }) {
+export default function CreatePost({ getNewPosts, user }) {
   const [url, setUrl] = useState("");
   const [text, setText] = useState("");
   const [urlError, setUrlError] = useState(false);
@@ -47,9 +47,9 @@ export default function CreatePost({ getPosts, user }) {
       setUrl("");
       setText("");
       setIsLoading(false);
-      getPosts();
+      getNewPosts();
     });
-    createPostRequest.catch((error) => {
+    createPostRequest.catch(() => {
       alert("There was an error publishing your link");
       setIsLoading(false);
     });
