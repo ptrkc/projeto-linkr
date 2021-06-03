@@ -3,8 +3,6 @@ import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import UserContext from "../../contexts/UserContexts";
 
-import SearchBar from "../SearchBar/SearchBar";
-
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const history = useHistory();
@@ -34,7 +32,6 @@ export default function Header() {
         <Link to="/timeline">
           <Logo>linkr</Logo>
         </Link>
-        <SearchBar/>
         <ShowMenuButton onClick={toggleMenu}>
           <Chevron isMenuOpen={isMenuOpen} /> <UserImage avatar={avatar} />
         </ShowMenuButton>

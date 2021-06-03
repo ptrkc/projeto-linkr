@@ -48,6 +48,9 @@ const StyledTimeline = styled.div`
       padding-left: 0;
     }
   }
+  @media (max-width: 600px) {
+    margin-top: 125px;
+  }
 `;
 
 export default StyledTimeline;

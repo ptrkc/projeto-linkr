@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { HiSearch } from "react-icons/hi";
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -117,12 +117,19 @@ export default function SearchBar() {
 }
 
 const Container = styled.div`
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #e7e7e7;
-  @media (max-width: 374px) {
-    display: none;
+  @media (max-width: 600px) {
+    position: absolute;
+    top: 70px;
+    z-index: 1;
   }
 `;
 
@@ -133,6 +140,10 @@ const ContainerSupport = styled.div`
 `;
 
 const ContainerShow = styled.div`
+  position: absolute;
+  top: 45px;
+  left: 50%;
+  transform: translate(-50%, 0);
   display: ${(props) => (props.inputStatus ? "flex" : "none")};
   flex-direction: column;
   width: 100%;
@@ -233,8 +244,8 @@ const ContainerSearch = styled.div`
       margin-right: 5px;
     }
   }
-  @media (max-width: 560px) {
-    width: 112px;
+  @media (max-width: 600px) {
+    width: calc(100vw - 20px);
   }
 `;
 

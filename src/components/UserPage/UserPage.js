@@ -188,22 +188,20 @@ export default function UserPage() {
 
   return (
     <StyledTimeline>
-      <h1 className="userpagefix">
-        <Introduction>
-          <div>
-            <Avatar url={userInfo && userInfo.avatar} />
-            {userInfo && <h1>{userInfo.username}'s posts</h1>}
-          </div>
-          <FollowButton
-            onClick={following ? unfollow : follow}
-            followinguser={following}
-            show={displayButton}
-            disabled={loadingFollow}
-          >
-            {following ? "Unfollow" : "Follow"}
-          </FollowButton>
-        </Introduction>
-      </h1>
+      <Introduction>
+        <div>
+          <Avatar url={userInfo && userInfo.avatar} />
+          {userInfo && <h1>{userInfo.username}'s posts</h1>}
+        </div>
+        <FollowButton
+          onClick={following ? unfollow : follow}
+          followinguser={following}
+          show={displayButton}
+          disabled={loadingFollow}
+        >
+          {following ? "Unfollow" : "Follow"}
+        </FollowButton>
+      </Introduction>
       <div className="main-content">
         <div className="page-left">
           {isLoading ? <Loading /> : ""}
@@ -231,6 +229,7 @@ const Introduction = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 44px;
 
   > div {
     display: flex;
@@ -267,6 +266,10 @@ const Introduction = styled.div`
     button {
       margin-right: 10px;
     }
+  }
+  @media (max-width: 600px) {
+    flex-direction: column;
+    margin-bottom: 10px;
   }
 `;
 
