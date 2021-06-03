@@ -26,10 +26,11 @@ export default function HashtagPage() {
     if (user) {
       getPosts(true, true);
       setIsLoading(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [hashtag]);
 
-  function getPosts(tenFirst, reset) {
+  function getPosts(earlier, reset) {
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -37,21 +38,27 @@ export default function HashtagPage() {
     };
     let url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts`;
     let referenceId;
-    if (!tenFirst) {
-      if (posts && posts.length > 0) {
-        referenceId = posts[posts.length - 1].id;
-        url = `${url}?olderThan=${referenceId}`;
+    if (!reset) {
+      if (earlier) {
+        if (posts) {
+          referenceId = posts[0].repostId ? posts[0].repostId : posts[0].id;
+          url = `${url}?earlierThan=${referenceId}`;
+        }
+      } else {
+        if (posts && posts.length > 0) {
+          referenceId = posts[posts.length - 1].repostId
+            ? posts[posts.length - 1].repostId
+            : posts[posts.length - 1].id;
+          url = `${url}?olderThan=${referenceId}`;
+        }
       }
     }
     const request = axios.get(url, config);
     let refreshPosts;
     request.then((response) => {
-      if (tenFirst && !reset) {
+      if (earlier && !reset) {
         if (posts) {
-          const filteredResponse = response.data.posts.filter(
-            (np) => !posts.find((p) => p.id === np.id)
-          );
-          refreshPosts = [...filteredResponse, ...posts];
+          refreshPosts = [...response.data.posts, ...posts];
         } else {
           refreshPosts = [...response.data.posts];
         }
@@ -78,6 +85,55 @@ export default function HashtagPage() {
     });
   }
 
+  // function getPosts(tenFirst, reset) {
+  //   const config = {
+  //     headers: {
+  //       Authorization: `Bearer ${user.token}`,
+  //     },
+  //   };
+  //   let url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${hashtag}/posts`;
+  //   let referenceId;
+  //   if (!tenFirst) {
+  //     if (posts && posts.length > 0) {
+  //       referenceId = posts[posts.length - 1].id;
+  //       url = `${url}?olderThan=${referenceId}`;
+  //     }
+  //   }
+  //   const request = axios.get(url, config);
+  //   let refreshPosts;
+  //   request.then((response) => {
+  //     if (tenFirst && !reset) {
+  //       if (posts) {
+  //         const filteredResponse = response.data.posts.filter(
+  //           (np) => !posts.find((p) => p.id === np.id)
+  //         );
+  //         refreshPosts = [...filteredResponse, ...posts];
+  //       } else {
+  //         refreshPosts = [...response.data.posts];
+  //       }
+  //     } else {
+  //       if (reset) {
+  //         refreshPosts = [...response.data.posts];
+  //       } else {
+  //         refreshPosts = posts
+  //           ? [...posts, ...response.data.posts]
+  //           : [...response.data.posts];
+  //       }
+  //       if (response.data.posts.length < 10) {
+  //         setHasMore(false);
+  //       }
+  //     }
+  //     setPosts(refreshPosts);
+  //     setIsLoading(false);
+  //   });
+
+  //   request.catch(() => {
+  //     setHasMore(false);
+  //     setIsLoading(false);
+  //     setError(true);
+  //   });
+  // }
+
   useInterval(() => {
     if (hasMore) {
       getPosts(true);
@@ -85,7 +141,12 @@ export default function HashtagPage() {
   }, 15000);
 
   function removePost(repost, id) {
-    const filteredPosts = posts.filter((p) => p.id !== id);
+    let filteredPosts = [];
+    if (repost) {
+      filteredPosts = posts.filter((p) => p.repostId !== id);
+    } else {
+      filteredPosts = posts.filter((p) => p.id !== id);
+    }
     const refreshPosts = [...filteredPosts];
     setPosts(refreshPosts);
   }

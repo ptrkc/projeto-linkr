@@ -56,17 +56,19 @@ export default function UserPage() {
     };
     let url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/posts`;
     let referenceId;
-    if (earlier) {
-      if (posts) {
-        referenceId = posts[0].repostId ? posts[0].repostId : posts[0].id;
-        url = `${url}?earlierThan=${referenceId}`;
-      }
-    } else {
-      if (posts && posts.length > 0) {
-        referenceId = posts[posts.length - 1].repostId
-          ? posts[posts.length - 1].repostId
-          : posts[posts.length - 1].id;
-        url = `${url}?olderThan=${referenceId}`;
+    if (!reset) {
+      if (earlier) {
+        if (posts) {
+          referenceId = posts[0].repostId ? posts[0].repostId : posts[0].id;
+          url = `${url}?earlierThan=${referenceId}`;
+        }
+      } else {
+        if (posts && posts.length > 0) {
+          referenceId = posts[posts.length - 1].repostId
+            ? posts[posts.length - 1].repostId
+            : posts[posts.length - 1].id;
+          url = `${url}?olderThan=${referenceId}`;
+        }
       }
     }
     const request = axios.get(url, config);
