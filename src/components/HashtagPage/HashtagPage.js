@@ -14,18 +14,13 @@ export default function HashtagPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(false);
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const { hashtag } = useParams();
 
   useEffect(() => {
-    if (!user) {
-      if (localStorage.user) {
-        const userStorage = JSON.parse(localStorage.user);
-        setUser(userStorage);
-        return;
-      }
+    if (user) {
+      getPosts();
     }
-    getPosts();
   }, [user, hashtag]);
 
   useEffect(() => {

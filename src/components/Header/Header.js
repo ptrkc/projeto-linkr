@@ -10,8 +10,19 @@ export default function Header() {
   const [avatar, setAvatar] = useState("");
 
   useEffect(() => {
+    if (!user) {
+      if (localStorage.user) {
+        const userStorage = JSON.parse(localStorage.user);
+        setUser(userStorage);
+        return;
+      } else {
+        history.push("/");
+        return;
+      }
+    }
     if (user) {
       setAvatar(user ? user.avatar : "");
+      return;
     }
   }, [user]);
 

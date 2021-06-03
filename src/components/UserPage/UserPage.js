@@ -25,22 +25,17 @@ export default function UserPage() {
   const [loadingFollow, setLoadingFollow] = useState(false);
 
   useEffect(() => {
-    if (!user) {
-      if (localStorage.user) {
-        const userStorage = JSON.parse(localStorage.user);
-        setUser(userStorage);
-        return;
+    if (user) {
+      if (user.id === Number(userId)) {
+        setDisplayButton(false);
       }
+      setIsLoading(true);
+      setUserInfo("");
+      setPosts();
+      getInfo();
+      getPosts();
+      getFollows();
     }
-    if (user.id === Number(userId)) {
-      setDisplayButton(false);
-    }
-    setIsLoading(true);
-    setUserInfo("");
-    setPosts();
-    getInfo();
-    getPosts();
-    getFollows();
   }, [user, userId]);
 
   function getInfo() {
