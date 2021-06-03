@@ -1,15 +1,14 @@
 import axios from "axios";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import styled from "styled-components";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import UserContext from "../../contexts/UserContexts";
 import Avatar from "./Avatar";
 
-export default function CommentSection({ post, getComments }) {
+export default function CommentSection({ post, getComments, inputRef }) {
   const { user } = useContext(UserContext);
   const [comment, setComment] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const inputRef = useRef();
 
   function sendComment(e) {
     e.preventDefault();

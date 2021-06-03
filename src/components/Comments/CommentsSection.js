@@ -11,6 +11,7 @@ export default function CommentSection({ post, setCounter }) {
   const [comments, setComments] = useState([]);
   const [following, setFollowing] = useState([]);
   const commentsRef = useRef();
+  const inputRef = useRef();
 
   useEffect(() => {
     getComments();
@@ -57,19 +58,21 @@ export default function CommentSection({ post, setCounter }) {
   }
 
   function focusComments() {
-    if (comments > 0) {
-      setInterval(() => {
-        commentsRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-          inline: "start",
-        });
-      }, 300);
-    }
+    commentsRef.current.scrollTo({
+      top: commentsRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+    setTimeout(() => {
+      inputRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "start",
+      });
+    }, 500);
   }
   return (
     <StyledCommentsSection initial={!comments.length}>
-      <div className="comments">
+      <div ref={commentsRef} className="comments">
         {comments.length === 0 ? (
           post.commentCount !== 0 ? (
             <div className="comment-box">Loading...</div>
@@ -81,7 +84,7 @@ export default function CommentSection({ post, setCounter }) {
         )}
         {comments.map((comment) => {
           return (
-            <div ref={commentsRef} className="comment-box" key={comment.id}>
+            <div className="comment-box" key={comment.id}>
               <Avatar avatar={comment.user.avatar} id={comment.user.id} />
               <div>
                 <p>
@@ -99,7 +102,11 @@ export default function CommentSection({ post, setCounter }) {
           );
         })}
       </div>
-      <CreateComment post={post} getComments={getComments} />
+      <CreateComment
+        inputRef={inputRef}
+        post={post}
+        getComments={getComments}
+      />
     </StyledCommentsSection>
   );
 }
