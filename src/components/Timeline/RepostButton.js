@@ -29,12 +29,7 @@ export default function RepostButton({ post, getNewPosts }) {
     repostRequest.then(() => {
       setIsOpen(false);
       setIsLoading(false);
-      if (
-        window.location.pathname === "/timeline" ||
-        window.location.pathname === "/my-posts"
-      ) {
-        getNewPosts(true);
-      }
+      getNewPosts(true);
     });
     repostRequest.catch(() => {
       setError(true);
