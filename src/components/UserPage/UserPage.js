@@ -33,6 +33,9 @@ export default function UserPage() {
     if (user.id === Number(userId)) {
       setDisplayButton(false);
     }
+    setIsLoading(true);
+    setUserInfo("");
+    setPosts();
     getInfo();
     getPosts();
     getFollows();
