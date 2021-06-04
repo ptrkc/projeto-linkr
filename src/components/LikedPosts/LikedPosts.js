@@ -35,7 +35,6 @@ export default function LikedPosts() {
     const request = axios.get(url, config);
     let refreshPosts;
     request.then((response) => {
-      console.log(response.data);
       refreshPosts = posts
         ? [...posts, ...response.data.posts]
         : [...response.data.posts];
