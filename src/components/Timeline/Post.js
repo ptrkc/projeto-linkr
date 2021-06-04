@@ -265,8 +265,8 @@ const VideoPlayer = styled.div`
   display: flex;
   flex-direction: column;
   height: 280px;
-  width: 500px;
   overflow: hidden;
+  margin-bottom: 5px;
 
   @media (max-width: 740px) {
     width: 100%;
