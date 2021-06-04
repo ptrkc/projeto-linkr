@@ -18,6 +18,8 @@ import styled from "styled-components";
 import "./ModalStyle.css";
 import Modal from "react-modal";
 import { VscChromeClose } from "react-icons/vsc";
+import getYouTubeID from "get-youtube-id";
+import ReactPlayer from "react-player/youtube";
 
 Modal.setAppElement("#root");
 
@@ -53,6 +55,12 @@ export default function Post({ post, getPosts, userId, removePost }) {
     }
   }
 
+<<<<<<< HEAD
+=======
+  var subtitle;
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+
+>>>>>>> feature/youtube
   function openModal() {
     setIsOpen(true);
   }
@@ -159,30 +167,46 @@ export default function Post({ post, getPosts, userId, removePost }) {
               </ReactHashtag>
             )}
           </p>
-          <Modal
-            className="location preview"
-            overlayClassName="overlay"
-            isOpen={modalIsOpen}
-            onRequestClose={closeModal}
-            contentLabel="Example Modal"
-          >
-            <Preview>
-              <Top>
-                <a href={link} target="_blank" rel="noreferrer">
-                  Open in a new tab
-                </a>
-                <VscChromeClose fontSize="24px" onClick={closeModal} />
-              </Top>
-              <iframe
-                className="i-frame"
-                title="preview"
-                src={link}
-                loading="lazy"
-                fullscreen
-              ></iframe>
-            </Preview>
-          </Modal>
-          <div className="link" onClick={openModal}>
+          {getYouTubeID(post.link) !== null ? (
+            <>
+              <VideoPlayer>
+                <ReactPlayer
+                  url={post.link}
+                  controls="true"
+                  width="100%"
+                  height="100%"
+                />{" "}
+              </VideoPlayer>
+              <a href={post.link} target="_blank" rel="noreferrer">
+                {post.link}
+              </a>
+            </>
+          ) : (
+            <>
+              <Modal
+                className="location preview"
+                overlayClassName="overlay"
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel="Example Modal"
+              >
+                <Preview>
+                  <Top>
+                    <a href={link} target="_blank" rel="noreferrer">
+                      Open in a new tab
+                    </a>
+                    <VscChromeClose fontSize="24px" onClick={closeModal} />
+                  </Top>
+                  <iframe
+                    className="i-frame"
+                    title="preview"
+                    src={link}
+                    loading="lazy"
+                    fullscreen
+                  ></iframe>
+                </Preview>
+              </Modal>
+              <div className="link" onClick={openModal}>
             <div className="texts">
               <p className="link-title">{linkTitle}</p>
               <p className="link-description">{linkDescription}</p>
@@ -190,6 +214,8 @@ export default function Post({ post, getPosts, userId, removePost }) {
             </div>
             <div className="image"></div>
           </div>
+            </>
+          )}
         </div>
       </div>
       <div className="comment-section">
@@ -238,5 +264,18 @@ const Top = styled.div`
   }
   svg {
     cursor: pointer;
+  }
+`;
+
+const VideoPlayer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 280px;
+  width: 500px;
+  overflow: hidden;
+
+  @media (max-width: 740px) {
+    width: 100%;
+    height: calc((100vw - 100px) * 0.56);
   }
 `;
