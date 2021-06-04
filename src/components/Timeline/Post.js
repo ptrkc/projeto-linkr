@@ -55,12 +55,6 @@ export default function Post({ post, getPosts, userId, removePost }) {
     }
   }
 
-<<<<<<< HEAD
-=======
-  var subtitle;
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-
->>>>>>> feature/youtube
   function openModal() {
     setIsOpen(true);
   }
@@ -207,13 +201,13 @@ export default function Post({ post, getPosts, userId, removePost }) {
                 </Preview>
               </Modal>
               <div className="link" onClick={openModal}>
-            <div className="texts">
-              <p className="link-title">{linkTitle}</p>
-              <p className="link-description">{linkDescription}</p>
-              <p className="link-url">{link}</p>
-            </div>
-            <div className="image"></div>
-          </div>
+                <div className="texts">
+                  <p className="link-title">{linkTitle}</p>
+                  <p className="link-description">{linkDescription}</p>
+                  <p className="link-url">{link}</p>
+                </div>
+                <div className="image"></div>
+              </div>
             </>
           )}
         </div>
