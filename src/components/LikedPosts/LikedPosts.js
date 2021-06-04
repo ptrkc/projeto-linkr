@@ -19,54 +19,40 @@ export default function LikedPosts() {
     }
   }, [user]);
 
-  function getPosts() {
+  function getPosts(earlier, reset) {
+    if (earlier || reset) {
+      return;
+    }
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
     };
-
+    let url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked`;
     if (posts && posts.length > 0) {
-      const referenceId = posts[posts.length - 1].repostId
-        ? posts[posts.length - 1].repostId
-        : posts[posts.length - 1].id;
-      const request = axios.get(
-        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked?olderThan=${referenceId}`,
-        config
-      );
-
-      request.then((response) => {
-        if (response.data.posts.length < 10) {
-          setHasMore(false);
-        }
-        const refreshPosts = [...posts, ...response.data.posts];
-        setPosts(refreshPosts);
-        setIsLoading(false);
-      });
-      request.catch((error) => {
-        setHasMore(false);
-        setIsLoading(false);
-        setError(true);
-      });
-    } else {
-      const request = axios.get(
-        "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked",
-        config
-      );
-
-      request.then((response) => {
-        if (response.data.posts.length < 10) {
-          setHasMore(false);
-        }
-        setPosts(response.data.posts);
-        setIsLoading(false);
-      });
-      request.catch((error) => {
-        setIsLoading(false);
-        setError(true);
-      });
+      url = `${url}?offset=${posts.length}`;
     }
+    const request = axios.get(url, config);
+    let refreshPosts;
+    request.then((response) => {
+      console.log(response.data);
+      refreshPosts = posts
+        ? [...posts, ...response.data.posts]
+        : [...response.data.posts];
+      if (response.data.posts.length < 10) {
+        setHasMore(false);
+      }
+      setPosts(refreshPosts);
+      setIsLoading(false);
+    });
+
+    request.catch(() => {
+      setHasMore(false);
+      setIsLoading(false);
+      setError(true);
+    });
   }
+
   function removePost(repost, id) {
     let filteredPosts = [];
     if (repost) {
@@ -83,8 +69,9 @@ export default function LikedPosts() {
       <h1>my likes</h1>
       <div className="main-content">
         <div className="page-left">
-          {isLoading ? <Loading /> : ""}
-          {posts === null ? (
+          {isLoading ? (
+            <Loading />
+          ) : posts === null ? (
             error ? (
               <p className="warning">
                 Could not get posts right now. Please try again.
@@ -97,7 +84,7 @@ export default function LikedPosts() {
           ) : (
             <PostsList
               posts={posts}
-              reload={getPosts}
+              getPosts={getPosts}
               hasMore={hasMore}
               removePost={removePost}
             />
