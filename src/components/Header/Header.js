@@ -8,7 +8,7 @@ export default function Header() {
   const history = useHistory();
   const { user, setUser } = useContext(UserContext);
   const [avatar, setAvatar] = useState("");
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (!user) {
       if (localStorage.user) {
@@ -22,6 +22,9 @@ export default function Header() {
     }
     if (user) {
       setAvatar(user ? user.avatar : "");
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
       return;
     }
   }, [user]);
@@ -39,6 +42,7 @@ export default function Header() {
 
   return (
     <>
+      <LoadingOverlay user={user} loading={setLoading} />
       <StyledHeader>
         <Link to="/timeline">
           <Logo>linkr</Logo>
@@ -63,6 +67,18 @@ export default function Header() {
     </>
   );
 }
+const LoadingOverlay = styled.div`
+  top: 0;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  transition: 0.5s;
+  z-index: 10;
+  position: fixed;
+  background-color: #333333;
+  opacity: ${(props) => (props.user ? "0" : "1")};
+  display: ${(props) => (props.loading ? "block" : "none")};
+`;
 const Logo = styled.h1`
   font-family: Passion One;
   font-weight: bold;
